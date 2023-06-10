@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Create model for student information.
+model Student {
+  id          String       @id @default(uuid())
+  createdAt   DateTime     @default(now())
+  firstName   String
+  lastName    String
+  gender      Gender
+  email       String       @unique
+  phone       String
+  isAlumni    Boolean      @default(false)
+  city        String?
+  area        String?
+  program     Program      @relation(fields: [programId], references: [id])
+  programId   String
+  qrCode      QRCode?
+  qrCodeId    String?
+  attendances Attendance[]
+  Hub         Hub?         @relation(fields: [hubId], references: [id])
+  hubId       String?
+  cohort      Cohort       @relation(fields: [cohortId], references: [id])
+  cohortId    String
+}
+
+// Create model for Admin
+model Admin {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  firstName String?
+  lastName  String?
+  email     String   @unique
+  password  String
+  role      Role     @default(Attendant)
+}
+
+// Create model for QRCode of each student.
+model QRCode {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  code      String   @unique
+  path      String
+  student   Student  @relation(fields: [studentId], references: [id])
+  studentId String   @unique
+}
+
+// Create model for Attendance
+model Attendance {
+  id             String    @id @default(uuid())
+  createdAt      DateTime  @default(now())
+  checkInTime    DateTime  @default(now())
+  checkOutTime   DateTime?
+  totalTimeSpent DateTime?
+  student        Student   @relation(fields: [studentId], references: [id])
+  studentId      String
+}
+
+// Create model for specific Program.
+model Program {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  name      String    @unique
+  students  Student[]
+  cohorts   Cohort[]
+}
+
+// Create model for Cohort in each program.
+model Cohort {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  name      String
+  program   Program   @relation(fields: [programId], references: [id])
+  programId String
+  students  Student[]
+}
+
+// Create model for student Hubs
+model Hub {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  name      String    @unique
+  students  Student[]
+}
+
+// Create enum for Gender.
+enum Gender {
+  Male
+  Female
+  Other
+}
+
+// Creae enum for admin Role.
+enum Role {
+  Admin
+  Attendant
+}

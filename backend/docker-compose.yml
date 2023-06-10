@@ -1,0 +1,15 @@
+# Set the version of docker compose to use
+version: '3.9'
+
+# The containers that compose the project
+services:
+  db:
+    image: postgres
+    restart: always
+    container_name: std-mgt
+    ports:
+      - '5434:5432'
+    environment:
+      POSTGRES_USER: std-mgt
+      POSTGRES_PASSWORD: std-mgt
+      POSTGRES_DB: std-mgt-backend
