@@ -32,11 +32,13 @@ export const cohortController = {
       }
       // Check if the cohort name already exists.
       const cohorts = await cohortStore.index();
-      // Filter the cohorts by name.
+      // Filter the cohorts by name and progarmId.
       const existingCohort = cohorts.filter(
-        (cohort) => cohort.name === cohortData.name
+        (cohort) =>
+          cohort.name === cohortData.name &&
+          cohort.programId === cohortData.programId
       );
-      // If the cohort name already exists.
+      // If the cohort name already exists the program.
       if (existingCohort.length > 0) {
         // Return an error.
         return res.status(400).json({ error: 'Cohort name already exists' });
