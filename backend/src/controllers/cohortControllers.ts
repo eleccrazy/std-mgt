@@ -1,6 +1,6 @@
 import { CohortStore } from '../models/cohortModel';
 import { Request, Response } from 'express';
-import { ProgramStore } from '../models/progamModel';
+import { ProgramStore } from '../models/programModel';
 
 // Create a new instance of the CohortStore class.
 const cohortStore = new CohortStore();

@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 
 // Create an instance of a HubStore class
 const hubStore = new HubStore();
-
 // Define the hub controller
 export const hubController = {
   // Define the createHub method
@@ -17,7 +16,11 @@ export const hubController = {
         // Return an error
         return res.status(400).json({ error: 'Hub name is required' });
       }
-
+      // Check if there is another argument sent from the client side other than name
+      if (Object.keys(req.body).length > 1) {
+        // Return an error
+        return res.status(400).json({ error: 'Only name is required' });
+      }
       // Check if the hub name already exists
       const existingHub = await hubStore.showByName(name);
 
