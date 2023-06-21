@@ -6,7 +6,7 @@ const port = 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/api/v1', indexRouter);
+app.use('/api', indexRouter);
 
 app.get('/', (req: Request, res: Response) => {
   // Redirect all requests from the / endpoint to /api endpoint.

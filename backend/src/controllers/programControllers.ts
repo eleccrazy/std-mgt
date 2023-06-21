@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ProgramStore } from '../models/programModel';
+import { ProgramStore } from '../models/progamModel';
 
 // Create an instance of the program model
 const programStore = new ProgramStore();
@@ -25,11 +25,6 @@ export const programController = {
       if (existingProgram) {
         // Return an error
         return res.status(400).json({ error: 'Program name already exists' });
-      }
-      // Check if there is another argument in the request body other than the program name
-      if (Object.keys(req.body).length > 1) {
-        // Return an error
-        return res.status(400).json({ error: 'Only name is required' });
       }
       const program = await programStore.create(name);
       // Return the program
