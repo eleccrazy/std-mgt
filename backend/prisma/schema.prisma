@@ -60,6 +60,8 @@ model Attendance {
   totalTimeSpent DateTime?
   student        Student   @relation(fields: [studentId], references: [id])
   studentId      String
+  hub            Hub       @relation(fields: [hubId], references: [id])
+  hubId          String
 }
 
 // Create model for specific Program.
@@ -83,10 +85,11 @@ model Cohort {
 
 // Create model for student Hubs
 model Hub {
-  id        String    @id @default(uuid())
-  createdAt DateTime  @default(now())
-  name      String    @unique
-  students  Student[]
+  id          String       @id @default(uuid())
+  createdAt   DateTime     @default(now())
+  name        String       @unique
+  students    Student[]
+  Attendances Attendance[]
 }
 
 // Create enum for Gender.

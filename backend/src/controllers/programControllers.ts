@@ -26,6 +26,11 @@ export const programController = {
         // Return an error
         return res.status(400).json({ error: 'Program name already exists' });
       }
+      // Check if there is another argument in the request body other than the program name
+      if (Object.keys(req.body).length > 1) {
+        // Return an error
+        return res.status(400).json({ error: 'Only name is required' });
+      }
       const program = await programStore.create(name);
       // Return the program
       return res.json(program);
