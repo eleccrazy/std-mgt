@@ -27,7 +27,7 @@ export interface PropertyProps {
   creator: string;
 }
 
-export interface FormProps {
+export interface StudentRegisterFormProps {
   type: string;
   register: any;
   onFinish: (
@@ -36,4 +36,9 @@ export interface FormProps {
   formLoading: boolean;
   handleSubmit: FormEventHandler<HTMLFormElement> | undefined;
   onFinishHandler: (data: FieldValues) => Promise<void> | void;
+  programs: string[];
+  hubs: string[];
+  cohorts: string[];
+  watch: UseFormWatch<FieldValues>;
+  setValue: UseFormSetValue<FieldValues>;
 }

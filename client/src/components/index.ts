@@ -14,6 +14,9 @@ import AgentCard from './agent/AgentCard';
 // home
 import TopAgent from './home/TopAgent';
 
+// Student register form
+import StudentRegisterForm from './forms/StudentRegisterForm';
+
 export {
   Profile,
   PropertyCard,
@@ -23,4 +26,5 @@ export {
   AgentCard,
   TopAgent,
   StudentsPerProgram,
+  StudentRegisterForm,
 };

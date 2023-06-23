@@ -30,6 +30,7 @@ const CustomButton = ({
         },
       }}
       onClick={handleClick}
+      type={type === 'submit' ? 'submit' : 'button'}
     >
       {icon}
       {title}
