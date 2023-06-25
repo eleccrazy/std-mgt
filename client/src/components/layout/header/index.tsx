@@ -30,8 +30,8 @@ export const Header: React.FC = () => {
     <AppBar
       color='default'
       position='sticky'
-      elevation={0}
-      sx={{ background: '#ffffff' }}
+      elevation={1}
+      sx={{ backgroundColor:'rgba(255,255,255,.8)', color:'black', boarderBottom:'1px solid #D3D3D3'}}
     >
       <Toolbar>
         <Stack
@@ -41,7 +41,7 @@ export const Header: React.FC = () => {
           alignItems='center'
         >
           <Typography variant='subtitle2'>
-            ALX Student Attendance Tracking System
+            ALX Learner Tracking System
           </Typography>
           <Stack direction='row' gap='16px' alignItems='center'>
             {/* Settings button */}

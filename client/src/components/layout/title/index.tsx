@@ -8,7 +8,7 @@ export const Title: React.FC<TitleProps> = ({ collapsed }) => {
   const { Link } = useRouterContext();
 
   return (
-    <Button fullWidth variant='text' disableRipple>
+    <Button fullWidth variant='text' disableRipple sx={{ marginTop: '10px'}}>
       <Link to='/'>
         {collapsed ? (
           <img src={alx} alt='ALX' width='28px' />
