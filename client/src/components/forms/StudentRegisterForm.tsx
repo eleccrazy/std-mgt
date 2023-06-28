@@ -140,6 +140,7 @@ const StudentRegisterForm = ({
               </FormHelperText>
               <TextField
                 fullWidth
+                placeholder='e.g. +251....'
                 id='outlined-basic'
                 color='info'
                 required
