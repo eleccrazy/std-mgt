@@ -1,0 +1,4 @@
+node_modules
+npm-debug.lo
+public/profileImages/*
+public/qrcodes/*

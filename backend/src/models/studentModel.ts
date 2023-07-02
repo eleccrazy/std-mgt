@@ -8,7 +8,7 @@ export type CreateStudentType = {
   email: string;
   phone: string;
   gender: Gender;
-  isAlumuni: boolean;
+  isAlumni: boolean;
   city: string;
   area: string;
   programId: string;
@@ -23,7 +23,7 @@ export type UpdateStudentType = {
   email?: string;
   phone?: string;
   gender?: Gender;
-  isAlumuni?: boolean;
+  isAlumni?: boolean;
   city?: string;
   area?: string;
   programId?: string;
