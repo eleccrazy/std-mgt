@@ -6,7 +6,6 @@ import { useTable } from '@refinedev/core';
 import StudentData from 'interfaces/student';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-
 import CustomDataTable from 'components/tables/CustomDataTable';
 
 const AllStudents = () => {

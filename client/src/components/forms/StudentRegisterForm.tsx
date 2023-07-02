@@ -24,7 +24,6 @@ const StudentRegisterForm = ({
   hubs,
   cohorts,
   watch,
-  setValue,
 }: StudentRegisterFormProps) => {
   const programId = watch('programId');
 

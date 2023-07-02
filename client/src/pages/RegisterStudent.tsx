@@ -6,9 +6,11 @@ import { FieldValues } from 'react-hook-form';
 import { StudentRegisterForm } from 'components';
 import axios from 'axios';
 import { useNotification } from '@refinedev/core';
+import CustomBackdrop from 'components/common/CustomBackdrop';
 
 const RegisterStudent = () => {
   const navigation = useNavigation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     refineCore: { onFinish, formLoading },
     register,
@@ -30,6 +32,7 @@ const RegisterStudent = () => {
   });
 
   const onFinishHandler = async (data: FieldValues) => {
+    setIsSubmitting(true);
     // Make an api call to /students with axios
     try {
       const response = await api.post('/students', {
@@ -50,6 +53,7 @@ const RegisterStudent = () => {
         description: error.response.data.error,
       });
     }
+    setIsSubmitting(false);
   };
 
   useEffect(() => {
@@ -88,19 +92,22 @@ const RegisterStudent = () => {
   }, []);
 
   return (
-    <StudentRegisterForm
-      type='Register'
-      register={register}
-      onFinish={onFinish}
-      formLoading={formLoading}
-      handleSubmit={handleSubmit}
-      onFinishHandler={onFinishHandler}
-      programs={programs}
-      cohorts={cohorts}
-      hubs={hubs}
-      watch={watch}
-      setValue={setValue}
-    ></StudentRegisterForm>
+    <>
+      {isSubmitting && <CustomBackdrop />}
+      <StudentRegisterForm
+        type='Register'
+        register={register}
+        onFinish={onFinish}
+        formLoading={formLoading}
+        handleSubmit={handleSubmit}
+        onFinishHandler={onFinishHandler}
+        programs={programs}
+        cohorts={cohorts}
+        hubs={hubs}
+        watch={watch}
+        setValue={setValue}
+      ></StudentRegisterForm>
+    </>
   );
 };
 
