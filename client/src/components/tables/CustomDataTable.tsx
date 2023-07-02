@@ -9,10 +9,11 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
-import { Box, Stack } from '@mui/material';
-import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
+import { Box, Stack, Tooltip, Typography } from '@mui/material';
 import TablePagination from '@mui/material/TablePagination';
 import { useNavigation } from '@refinedev/core';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 const rowsPerPageOptions = [10, 20, 30];
 
@@ -40,9 +41,9 @@ export default function CustomDataTable({ rows }: any) {
 
   const handleClick = (id: string, isAlumni: boolean) => {
     if (isAlumni) {
-      navigation.push(`/guests/edit?id=${id}`);
+      navigation.push(`/guests/show?id=${id}`);
     } else {
-      navigation.push(`/students/edit?id=${id}`);
+      navigation.push(`/students/show?id=${id}`);
     }
   };
 
@@ -99,7 +100,7 @@ export default function CustomDataTable({ rows }: any) {
               <TableCell align='left' sx={{ fontWeight: 700 }}>
                 Preferred Hub
               </TableCell>
-              <TableCell align='left' sx={{ fontWeight: 700 }}>
+              <TableCell align='center' sx={{ fontWeight: 700 }}>
                 Action
               </TableCell>
             </TableRow>
@@ -122,11 +123,28 @@ export default function CustomDataTable({ rows }: any) {
                     <TableCell align='left'>{row.gender}</TableCell>
                     <TableCell align='left'>{row.program}</TableCell>
                     <TableCell align='left'>{row.hub}</TableCell>
-                    <TableCell align='left'>
+                    <TableCell align='center'>
+                      <Tooltip
+                        title={
+                          <Typography
+                            sx={{ color: '#03fca1', bgcolor: 'none' }}
+                          >
+                            Check-in Action
+                          </Typography>
+                        }
+                        placement='top'
+                        sx={{ color: 'green' }}
+                      >
+                        <IconButton
+                          onClick={() => handleClick(row.id, row.isAlumni)}
+                        >
+                          <CheckCircleOutlineIcon />
+                        </IconButton>
+                      </Tooltip>
                       <IconButton
                         onClick={() => handleClick(row.id, row.isAlumni)}
                       >
-                        <CreateOutlinedIcon />
+                        <VisibilityIcon />
                       </IconButton>
                     </TableCell>
                   </TableRow>
