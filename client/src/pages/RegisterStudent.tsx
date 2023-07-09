@@ -2,11 +2,15 @@ import { useState, useEffect } from 'react';
 import { useNavigation } from '@refinedev/core';
 import { useForm } from '@refinedev/react-hook-form';
 import { FieldValues } from 'react-hook-form';
+import { Box, Typography, Stack } from '@mui/material';
+import { CustomButton } from 'components';
 
 import { StudentRegisterForm } from 'components';
 import axios from 'axios';
 import { useNotification } from '@refinedev/core';
-import CustomBackdrop from 'components/common/CustomBackdrop';
+
+import ExcelDataUploadDialog from 'components/forms/ExcelDataUploadDialog';
+import { AppRegistration } from '@mui/icons-material';
 
 const RegisterStudent = () => {
   const navigation = useNavigation();
@@ -17,6 +21,7 @@ const RegisterStudent = () => {
     handleSubmit,
     watch,
     setValue,
+    formState: { errors },
   } = useForm();
 
   // Get some data from the backend
@@ -25,6 +30,8 @@ const RegisterStudent = () => {
   const [hubs, setHub] = useState([]);
 
   const { open } = useNotification();
+
+  const [excelOpen, setExcelOpen] = useState(false);
 
   // Create the base axios api endpoint for fetching our data
   const api = axios.create({
@@ -91,11 +98,32 @@ const RegisterStudent = () => {
     getCohorts();
   }, []);
 
+  const handleClose = () => {
+    setExcelOpen(false);
+  };
+
+  const handleOpen = () => {
+    setExcelOpen(true);
+  };
+
   return (
-    <>
-      {isSubmitting && <CustomBackdrop />}
+    <Box>
+      <Stack direction='row' justifyContent='space-between' alignItems='center'>
+        <Typography fontSize={25} fontWeight={700} color='#11142d'>
+          Register a Student
+        </Typography>
+        <CustomButton
+          title='Register From Excel'
+          handleClick={() => {
+            handleOpen();
+          }}
+          backgroundColor='#475be8'
+          color='#fcfcfc'
+          icon={<AppRegistration />}
+        />
+        <ExcelDataUploadDialog open={excelOpen} onClose={handleClose} />
+      </Stack>
       <StudentRegisterForm
-        type='Register'
         register={register}
         onFinish={onFinish}
         formLoading={formLoading}
@@ -106,8 +134,9 @@ const RegisterStudent = () => {
         hubs={hubs}
         watch={watch}
         setValue={setValue}
+        errors={errors}
       ></StudentRegisterForm>
-    </>
+    </Box>
   );
 };
 

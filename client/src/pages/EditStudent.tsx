@@ -1,5 +1,7 @@
+import StudentUpdateTabs from 'components/edit/StudentUpdateTabs';
+
 const EditStudent = () => {
-  return <div>EditStudent</div>;
+  return <StudentUpdateTabs />;
 };
 
 export default EditStudent;

@@ -5,9 +5,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
-import Button from '@mui/material/Button';
+import { Typography, Button, Box, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import StudentData from 'interfaces/student';
 
 interface QRDialogeProps {
@@ -15,11 +14,8 @@ interface QRDialogeProps {
   onClose: () => void;
   onSendMail: () => void;
   id: string;
+  studentData: StudentData | null;
 }
-
-const api = axios.create({
-  baseURL: 'http://localhost:3000/api/v1/students',
-});
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -30,18 +26,24 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction='up' ref={ref} {...props} />;
 });
 
-const QRDialoge = ({ open, onClose, id, onSendMail }: QRDialogeProps) => {
+const QRDialoge = ({
+  open,
+  onClose,
+  id,
+  onSendMail,
+  studentData,
+}: QRDialogeProps) => {
   // Get the student QR code image from the backend
   const [qrCode, setQrCode] = useState('');
-  const [studentData, setStudentData] = useState<StudentData | null>(null);
+  const [defaultSubject, setDefaultSubject] = useState('');
+  const [defaultContent, setDefaultConent] = useState('');
 
   useEffect(() => {
     setQrCode(`http://localhost:3000/api/v1/images/qrcodes/${id}.png`);
-    async function getStudentData() {
-      const { data } = await api.get(`/${id}`);
-      setStudentData(data);
-    }
-    getStudentData();
+    setDefaultSubject('QR Attendance Information');
+    setDefaultConent(
+      'Some sort of default content that is being sent to the student or guest. Some sort of default content that is being sent to the student or guest.',
+    );
   }, []);
   return (
     <Dialog
@@ -52,17 +54,47 @@ const QRDialoge = ({ open, onClose, id, onSendMail }: QRDialogeProps) => {
       aria-describedby='alert-dialog-slide-description'
     >
       <DialogTitle>
-        {`Information of ${
-          studentData && studentData.firstName + ' ' + studentData.lastName
-        } is embedded on this QR code`}
+        <Typography textAlign='center' fontSize={17}>
+          <span style={{ fontWeight: '700' }}>Mailing Address: </span>
+          <span style={{ color: '#051149' }}>
+            {studentData && `${studentData.email}`}
+          </span>
+        </Typography>
       </DialogTitle>
       <DialogContent>
         {/* Insert an image to the dialog */}
-        {qrCode && <img src={qrCode} alt='QR Code' />}
+        <Box display='flex' flexDirection='row' alignItems='center'>
+          {qrCode && <img src={qrCode} alt='QR Code' />}
+          <Box display='flex' flexDirection='column' gap={2} paddingTop={1}>
+            <TextField
+              id='outlined-read-only-input'
+              label='Subject:'
+              variant='outlined'
+              value={defaultSubject}
+              inputProps={{
+                readOnly: true,
+              }}
+            />
+            <TextField
+              id='outlined-multiline-static'
+              label='Content:'
+              defaultValue={defaultContent}
+              multiline
+              rows={4}
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          </Box>
+        </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onSendMail}>Mail it</Button>
-        <Button onClick={onClose}>Close</Button>
+        <Button variant='outlined' onClick={onSendMail}>
+          Mail it
+        </Button>
+        <Button variant='outlined' onClick={onClose}>
+          Close
+        </Button>
       </DialogActions>
     </Dialog>
   );
