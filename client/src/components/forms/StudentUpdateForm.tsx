@@ -1,4 +1,5 @@
-import React, { useState, FormEvent, useEffect, ChangeEvent } from 'react';
+import React, { useState, FormEvent, ChangeEvent } from 'react';
+import { SelectChangeEvent } from '@mui/material/Select';
 import {
   Box,
   FormControl,
@@ -14,6 +15,7 @@ import {
 import StudentData from 'interfaces/student';
 import CustomButton from 'components/common/CustomButton';
 import axios from 'axios';
+import { useNotification, useNavigation } from '@refinedev/core';
 
 type FormData = {
   firstName: string;
@@ -35,7 +37,7 @@ const style = {
 
 interface StudentUpdateFormProps {
   hubs: string[];
-  student: StudentData | null;
+  student: StudentData;
 }
 
 const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
@@ -49,40 +51,57 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
     gender: student ? student.gender : '',
     hubId: student ? student.hubId : '',
   });
-
-  console.log(student?.id);
-
+  const [hubId, setHubId] = useState(student.hubId);
   const api = axios.create({
     baseURL: `http://localhost:3000/api/v1/students`,
   });
+
+  const { open } = useNotification();
+  const { goBack } = useNavigation();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleHubChange = (event: SelectChangeEvent<string>) => {
+    setHubId(event.target.value);
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Filter only changed data so that we don't send unecessary data to the server to update.
-    const filteredFormData = Object.entries(formData).reduce(
-      (acc: Record<string, string>, [key, value]) => {
-        if (student && student[key as keyof StudentData] !== value) {
-          acc[key] = value;
-        }
-        return acc;
-      },
-      {} as Partial<FormData>,
-    );
+    const filteredFormData = Object.entries({
+      ...formData,
+      hubId: hubId,
+    }).reduce((acc: Record<string, string>, [key, value]) => {
+      if (student && student[key as keyof StudentData] !== value) {
+        acc[key] = value;
+      }
+      return acc;
+    }, {} as Partial<FormData>);
     // Make an api call to the server to update the student data.
     try {
       const response = await api.put(`/${student?.id}`, {
         ...filteredFormData,
       });
-      if (response) {
-        alert('Student Updated Successfully!');
+      if (response.data.message && response.data.type) {
+        const type = response.data.type;
+        if (type === 'success') {
+          goBack();
+        }
+        open?.({
+          type: type,
+          message: type === 'success' ? 'Success' : 'Warning',
+          description: response.data.message,
+        });
       }
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      open?.({
+        type: 'error',
+        message: 'Error',
+        description: error.response.data.error,
+      });
     }
   };
 
@@ -195,10 +214,12 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
               <Select
                 variant='outlined'
                 color='info'
+                name='hubId'
                 displayEmpty
                 required
                 defaultValue={student ? student.hubId : ''}
                 inputProps={{ 'aria-label': 'Without label' }}
+                onChange={handleHubChange}
               >
                 {hubs.length > 0 &&
                   hubs.map((hub: any, index: any) => (
@@ -226,6 +247,7 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
                 aria-required
                 sx={{ mx: 0.5 }}
                 defaultValue={student ? student.gender : ''}
+                onChange={handleChange}
               >
                 <FormControlLabel
                   value='Male'

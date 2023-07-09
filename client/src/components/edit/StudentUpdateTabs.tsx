@@ -8,10 +8,14 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import axios from 'axios';
 import StudentData from 'interfaces/student';
 import StudentUpdateForm from 'components/forms/StudentUpdateForm';
+import ChangeProgramCohort from './ChangeProgramCohort';
+import ReGenerateQRCode from './ReGenerateQRCode';
 
 function StudentUpdateTabs() {
   const [value, setValue] = useState('basic-info');
   const [hubs, setHubs] = useState([]);
+  const [programs, setPrograms] = useState([]);
+  const [cohorts, setCohorts] = useState([]);
   const [student, setStudent] = useState<StudentData | null>(null);
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -45,6 +49,28 @@ function StudentUpdateTabs() {
         console.log(error);
       }
     }
+
+    // Get all programs
+    async function getPrograms() {
+      try {
+        const response = await api.get('/programs');
+        setPrograms(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    // Get all cohorts
+    async function getCohorts() {
+      try {
+        const response = await api.get('/cohorts');
+        setCohorts(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getPrograms();
+    getCohorts();
     getHubs();
     getStudent();
   }, []);
@@ -105,14 +131,22 @@ function StudentUpdateTabs() {
         </TabList>
         <TabPanel value='basic-info'>
           <Box>
-            <StudentUpdateForm student={student} hubs={hubs} />
+            {student && <StudentUpdateForm student={student} hubs={hubs} />}
           </Box>
         </TabPanel>
         <TabPanel value='program-cohort'>
-          <Box>Program</Box>
+          <Box>
+            {student && (
+              <ChangeProgramCohort
+                programs={programs}
+                cohorts={cohorts}
+                student={student}
+              />
+            )}
+          </Box>
         </TabPanel>
         <TabPanel value='generate-qr'>
-          <Box>QR Code</Box>
+          <Box>{student && <ReGenerateQRCode />}</Box>
         </TabPanel>
       </Box>
     </TabContext>

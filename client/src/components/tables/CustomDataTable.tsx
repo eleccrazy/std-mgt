@@ -94,12 +94,6 @@ export default function CustomDataTable({ rows }: any) {
               <TableCell align='left' sx={{ fontWeight: 700 }}>
                 Gender
               </TableCell>
-              <TableCell align='left' sx={{ fontWeight: 700 }}>
-                Program
-              </TableCell>
-              <TableCell align='left' sx={{ fontWeight: 700 }}>
-                Preferred Hub
-              </TableCell>
               <TableCell align='center' sx={{ fontWeight: 700 }}>
                 Action
               </TableCell>
@@ -121,8 +115,6 @@ export default function CustomDataTable({ rows }: any) {
                     <TableCell align='left'>{row.email}</TableCell>
                     <TableCell align='left'>{row.phone}</TableCell>
                     <TableCell align='left'>{row.gender}</TableCell>
-                    <TableCell align='left'>{row.program}</TableCell>
-                    <TableCell align='left'>{row.hub}</TableCell>
                     <TableCell align='center'>
                       <Tooltip
                         title={

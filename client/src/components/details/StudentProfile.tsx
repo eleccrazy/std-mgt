@@ -56,6 +56,7 @@ const StudentProfile = ({ type }: { type: string }) => {
   const [studentData, setStudentData] = useState<StudentData | null>(null);
   const [programName, setProgramName] = useState('');
   const [cohortName, setCohortName] = useState('');
+  const [hubName, setHubName] = useState('');
 
   useEffect(() => {
     async function getStudentData() {
@@ -68,6 +69,10 @@ const StudentProfile = ({ type }: { type: string }) => {
       if (data.cohortId) {
         const { data: cohort } = await api.get(`cohorts/${data.cohortId}`);
         setCohortName(cohort.name);
+      }
+      if (data.hubId) {
+        const { data: hub } = await api.get(`hubs/${data.hubId}`);
+        setHubName(hub.name);
       }
     }
     getStudentData();
@@ -121,6 +126,7 @@ const StudentProfile = ({ type }: { type: string }) => {
             <StudentInfoDisplay title='Gender' value={studentData?.gender} />
             <StudentInfoDisplay title='Programme' value={programName} />
             <StudentInfoDisplay title='Cohort' value={cohortName} />
+            <StudentInfoDisplay title='Preferred Hub' value={hubName} />
             <StudentInfoDisplay
               title='Email Address'
               value={studentData?.email}
