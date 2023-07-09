@@ -9,5 +9,6 @@ studentRouter.get('/:id', studentController.getStudent);
 studentRouter.post('/', studentController.createStudent);
 studentRouter.get('/:id/qr-image', studentController.getStudentQRCode);
 studentRouter.delete('/:id', studentController.deleteStudent);
+studentRouter.put('/:id', studentController.updateStudent);
 
 export default studentRouter;
