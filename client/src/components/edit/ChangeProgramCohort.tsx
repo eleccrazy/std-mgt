@@ -17,6 +17,8 @@ import { FormEvent } from 'react';
 import StudentData from 'interfaces/student';
 import axios from 'axios';
 import { useNotification, useNavigation } from '@refinedev/core';
+import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
+import ConfirmationDialog from 'components/common/ConfirmationDialog';
 
 interface ChangeProgramCohortProps {
   programs: string[];
@@ -41,8 +43,10 @@ function ChangeProgramCohort({
   const [programName, setProgramName] = useState('');
   const [cohortName, setCohortName] = useState('');
 
+  const [openDialog, setOpenDialog] = useState(false);
+
   const { open } = useNotification();
-  const { goBack } = useNavigation();
+  const { goBack, push } = useNavigation();
 
   // Create the base axios api endpoint for fetching our data
   const api = axios.create({
@@ -55,6 +59,40 @@ function ChangeProgramCohort({
 
   const handleCohortChange = (event: SelectChangeEvent<string>) => {
     setCohortId(event.target.value);
+  };
+
+  const handlePromoteClick = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handlePromote = async () => {
+    setOpenDialog(false);
+    try {
+      const response = await api.put(`/students/${student?.id}`, {
+        isAlumni: !student.isAlumni,
+      });
+      if (response.data.message && response.data.type) {
+        const type = response.data.type;
+        if (type === 'success') {
+          push(student.isAlumni ? '/students' : '/guests');
+        }
+        open?.({
+          type: type,
+          message: type === 'success' ? 'Success' : 'Warning',
+          description: response.data.message,
+        });
+      }
+    } catch (error: any) {
+      open?.({
+        type: 'error',
+        message: 'Error',
+        description: error.response.data.error,
+      });
+    }
   };
 
   useEffect(() => {
@@ -147,6 +185,26 @@ function ChangeProgramCohort({
             <span style={{ fontWeight: 700 }}>Cohort: </span>
             {cohortName}
           </Typography>
+        </CardContent>
+        <CardContent sx={{ textAlign: 'right' }}>
+          <CustomButton
+            type='button'
+            title={student.isAlumni ? 'Promote to Student' : 'Promote to Guest'}
+            backgroundColor='#edf5ee'
+            color='#070808'
+            icon={<ChangeCircleIcon />}
+            handleClick={handlePromoteClick}
+          />
+          <ConfirmationDialog
+            dialogTitle='Are you sure you want to promote?'
+            dialogDescription='Warning: Proceeding with this action will change the attendees status
+          from a student to a guest or vice versa. This action can be undone
+          later if needed. However, please note that it moves attendees from
+          students list to guests and viceversa.'
+            open={openDialog}
+            handleClose={handleCloseDialog}
+            handleConfirm={handlePromote}
+          />
         </CardContent>
         <CardContent>
           <Box mt={5} borderRadius='25px' bgcolor='#fff' mx={6} px={2}>

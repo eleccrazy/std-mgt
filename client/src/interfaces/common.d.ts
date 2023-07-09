@@ -48,3 +48,11 @@ export interface InfoCardProps {
   value: string;
   action?: React.ReactNode;
 }
+
+export interface ConfirmationDialogProps {
+  open: boolean;
+  handleClose: () => void;
+  handleConfirm: () => void;
+  dialogTitle: string;
+  dialogDescription: string;
+}
