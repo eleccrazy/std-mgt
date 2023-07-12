@@ -1,5 +1,5 @@
 import { Box, Grid, Typography } from '@mui/material';
-import ProgramCard from '../components/common/ProgramCard';
+import ProgramCard from '../components/common/CustomCard';
 
 const Customization = () => {
   return (
