@@ -28,7 +28,6 @@ export interface PropertyProps {
 }
 
 export interface StudentRegisterFormProps {
-  type: string;
   register: any;
   onFinish: (
     values: FieldValues,
@@ -41,4 +40,19 @@ export interface StudentRegisterFormProps {
   cohorts: string[];
   watch: UseFormWatch<FieldValues>;
   setValue: UseFormSetValue<FieldValues>;
+  errors: FieldErrors<FieldValues>;
+}
+
+export interface InfoCardProps {
+  title: string;
+  value: string;
+  action?: React.ReactNode;
+}
+
+export interface ConfirmationDialogProps {
+  open: boolean;
+  handleClose: () => void;
+  handleConfirm: () => void;
+  dialogTitle: string;
+  dialogDescription: string;
 }

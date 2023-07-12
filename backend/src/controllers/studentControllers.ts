@@ -258,5 +258,131 @@ export const studentController = {
       // Return an error message
       return res.status(500).json(`Could not delete student. Error: ${error}`);
     }
+  },
+
+  // Update a student
+  async updateStudent(req: Request, res: Response) {
+    try {
+      // Get the student id from the request params
+      const { id } = req.params;
+      // Get the student details from the request body
+      const studentDetails = req.body;
+      // Filter keys that are not empty
+      for (let key in studentDetails) {
+        if (studentDetails.hasOwnProperty(key) && studentDetails[key] === '') {
+          delete studentDetails[key];
+        }
+      }
+      // If we have nothing to update, we will return some success message
+      if (Object.keys(studentDetails).length === 0) {
+        return res
+          .status(200)
+          .json({ message: 'Nothing to update', type: 'warning' });
+      }
+      // Check if the argument sent from the client is not included in expected arguments
+      const extraArgs = Object.keys(studentDetails).filter(
+        (arg) => !expectedArgs.includes(arg)
+      );
+      // If extra arguments are present
+      if (extraArgs.length > 0) {
+        // Return an error message
+        return res
+          .status(400)
+          .json({ error: `${extraArgs.join(', ')} are not required` });
+      }
+      // Check if other properties except isAlumni are strings
+      const nonStringProperties = Object.keys(studentDetails).filter(
+        (arg) => arg !== 'isAlumni'
+      );
+      const nonStringPropertiesWithInvalidType = nonStringProperties.filter(
+        (arg) => typeof studentDetails[arg] !== 'string'
+      );
+      if (nonStringPropertiesWithInvalidType.length > 0) {
+        return res.status(400).json({
+          error: `${nonStringPropertiesWithInvalidType.join(
+            ', '
+          )} must be a string`
+        });
+      }
+      // Check if the student exists
+      const student = await studentStore.show(id);
+      // If the student does not exist
+      if (!student) {
+        // Return an error message
+        return res.status(404).json({ error: 'Student not found' });
+      }
+      // Check if the hub with the hubId exists
+      if (studentDetails.hubId) {
+        const hub = await hubStore.show(studentDetails.hubId);
+        // If the hub does not exist
+        if (!hub) {
+          // Return an error message
+          return res.status(404).json({ error: 'Hub not found' });
+        }
+      }
+      const students = await studentStore.index();
+      if (studentDetails.email) {
+        // Check if the student with the email exists
+        const existingStudent = students.find(
+          (student) => student.email === studentDetails.email
+        );
+        // If the student with the email exists
+        if (existingStudent) {
+          // Return an error message
+          return res.status(400).json({ error: 'Email exists' });
+        }
+      }
+      if (studentDetails.phone) {
+        // Check if the student with the phone exists
+        const existingStudentWithPhone = students.find(
+          (student) => student.phone === studentDetails.phone
+        );
+        // If the student with the phone exists
+        if (existingStudentWithPhone) {
+          return res.status(400).json({ error: 'Phone number exists ' });
+        }
+      }
+      if (studentDetails.programId) {
+        // Check if programId exists
+        const program = await programStore.show(studentDetails.programId);
+        if (!program) {
+          return res.status(404).json({ error: 'Program not found' });
+        }
+      }
+      if (studentDetails.gender) {
+        // Check if the gender is a valid gender
+        if (!validGenders.includes(studentDetails.gender)) {
+          return res.status(400).json({
+            erorr:
+              'Students gender must be one of the following: Male, Female, Other'
+          });
+        }
+      }
+
+      if (studentDetails.cohortId) {
+        // Check if the cohort with  cohortId exists
+        const cohort = await cohortStore.show(studentDetails.cohortId);
+        if (!cohort) {
+          // Return an error message
+          return res.status(404).json({ error: 'Cohort not found' });
+        }
+        // Check if the cohort exists in the program
+        const programId = studentDetails.programId
+          ? studentDetails.programId
+          : student.programId;
+        if (cohort.programId !== programId) {
+          return res
+            .status(400)
+            .json({ error: 'Cohort does not exist in the program' });
+        }
+      }
+      // Update the student
+      const updatedStudent = await studentStore.update(id, studentDetails);
+      return res.json({ message: 'Successfully Updated', type: 'success' });
+    } catch (error) {
+      // Return an error message
+      console.error(error);
+      return res.status(500).json(`Could not update student. Error: ${error}`);
+    }
   }
 };

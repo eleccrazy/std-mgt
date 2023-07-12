@@ -15,7 +15,7 @@ const StudentAttendanceRate = () => {
       borderRadius='15px'
     >
       <Typography fontSize={18} fontWeight={600} color='#11142d'>
-        Stuent Attendance Rate
+        Student Attendance Rate
       </Typography>
       <Stack direction='row' gap={4} flexWrap={'wrap'} my='20px'>
         <Typography fontSize={28} fontWeight={700} color='#11142d'>

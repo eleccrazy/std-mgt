@@ -5,19 +5,79 @@ import {
   CardContent,
   Typography,
   CardHeader,
+  Stack,
 } from '@mui/material';
 import CustomButton from 'components/common/CustomButton';
 import EditIcon from '@mui/icons-material/Edit';
 import Grid from '@mui/material/Grid';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
 import QRDialoge from './QRDialog';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import StudentData from 'interfaces/student';
+import { useNavigation } from '@refinedev/core';
 
-const StudentProfile = () => {
+const api = axios.create({
+  baseURL: 'http://localhost:3000/api/v1',
+});
+// Custom component for displaying student profile
+const StudentInfoDisplay = ({
+  title,
+  value,
+}: {
+  title: string;
+  value: string | undefined;
+}) => {
+  return (
+    <Grid item xs={8}>
+      <Typography fontSize={16}>
+        <span
+          style={{
+            fontWeight: '700',
+            display: 'inline-block',
+            width: '250px',
+            color: '#331e4a',
+          }}
+        >
+          {title}:
+        </span>
+        <span>{value}</span>
+      </Typography>
+    </Grid>
+  );
+};
+
+const StudentProfile = ({ type }: { type: string }) => {
   // Manage the state of the dialog
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get('id');
+  const navigation = useNavigation();
+  const [studentData, setStudentData] = useState<StudentData | null>(null);
+  const [programName, setProgramName] = useState('');
+  const [cohortName, setCohortName] = useState('');
+  const [hubName, setHubName] = useState('');
+
+  useEffect(() => {
+    async function getStudentData() {
+      const { data } = await api.get(`${type}/${id}`);
+      setStudentData(data);
+      if (data.programId) {
+        const { data: program } = await api.get(`programs/${data.programId}`);
+        setProgramName(program.name);
+      }
+      if (data.cohortId) {
+        const { data: cohort } = await api.get(`cohorts/${data.cohortId}`);
+        setCohortName(cohort.name);
+      }
+      if (data.hubId) {
+        const { data: hub } = await api.get(`hubs/${data.hubId}`);
+        setHubName(hub.name);
+      }
+    }
+    getStudentData();
+  }, []);
+
   const handleOpenDialog = () => {
     setIsDialogOpen(true);
   };
@@ -29,19 +89,20 @@ const StudentProfile = () => {
   const handleSendingMail = () => {
     alert('Mail Sent');
   };
-
   return (
     <Card sx={{ minWidth: 275, boxShadow: 'none' }}>
       <CardHeader
-        title='Student Informtion'
+        title={
+          type === 'students' ? 'Student Information' : 'Guest Information'
+        }
         sx={{ display: 'flex', justifyContent: 'space-between' }}
         action={
           <CustomButton
             title='Edit Information'
             handleClick={() => {
-              alert('Update Students Information');
+              navigation.push(`/${type}/edit?id=${id}`);
             }}
-            backgroundColor='transparent'
+            backgroundColor='#f5f5f5'
             color='#3fa164'
             icon={<EditIcon />}
           />
@@ -54,27 +115,30 @@ const StudentProfile = () => {
             spacing={2}
             sx={{ display: 'flex', alignItems: 'center' }}
           >
-            <Grid item xs={8}>
-              <Typography>Full Name: Gizachew Bayness Kassa</Typography>
-            </Grid>
-            <Grid item xs={8}>
-              <Typography>Gender: Male</Typography>
-            </Grid>
-            <Grid item xs={8}>
-              <Typography>Programme: AWS Cloud Practioner</Typography>
-            </Grid>
-            <Grid item xs={8}>
-              <Typography>Cohort: July 2023</Typography>
-            </Grid>
-            <Grid item xs={8}>
-              <Typography>Email Address: eleccrazy24@gmail.com</Typography>
-            </Grid>
-            <Grid item xs={8}>
-              <Typography>Phone Number: +251918309763</Typography>
-            </Grid>
-            <Grid item xs={8}>
-              <Typography>Address Information: Addis Ababa, Kaliti</Typography>
-            </Grid>
+            <StudentInfoDisplay
+              title='First Name'
+              value={studentData?.firstName}
+            />
+            <StudentInfoDisplay
+              title='Last Name'
+              value={studentData?.lastName}
+            />
+            <StudentInfoDisplay title='Gender' value={studentData?.gender} />
+            <StudentInfoDisplay title='Programme' value={programName} />
+            <StudentInfoDisplay title='Cohort' value={cohortName} />
+            <StudentInfoDisplay title='Preferred Hub' value={hubName} />
+            <StudentInfoDisplay
+              title='Email Address'
+              value={studentData?.email}
+            />
+            <StudentInfoDisplay
+              title='Phone Number'
+              value={studentData?.phone}
+            />
+            <StudentInfoDisplay
+              title='Address Information'
+              value={`${studentData?.city},  ${studentData?.area}`}
+            />
           </Grid>
         </Box>
       </CardContent>
@@ -84,12 +148,13 @@ const StudentProfile = () => {
           handleClick={() => {
             handleOpenDialog();
           }}
-          backgroundColor='transparent'
+          backgroundColor='#f5f5f5'
           color='#1e36e8'
           icon={<QrCode2Icon />}
         />
         {/* Pass the state of the dialog to the QRDialog component */}
         <QRDialoge
+          studentData={studentData}
           open={isDialogOpen}
           onClose={handleCloseDialog}
           id={id as unknown as string}

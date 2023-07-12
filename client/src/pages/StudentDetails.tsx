@@ -15,7 +15,7 @@ const StudentDetails = () => {
       bgcolor='#ffffff'
       p={3}
     >
-      <StudentProfile />
+      <StudentProfile type='students' />
       <AttendanceSection />
     </Box>
   );

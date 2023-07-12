@@ -1,7 +1,7 @@
-import React from 'react';
+import StudentUpdateTabs from 'components/edit/StudentUpdateTabs';
 
 const EditGuests = () => {
-  return <div>EditGuests</div>;
+  return <StudentUpdateTabs />;
 };
 
 export default EditGuests;
