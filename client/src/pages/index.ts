@@ -1,5 +1,4 @@
 import Home from './Home';
-import { Login } from './login';
 import AllStudents from './AllStudents';
 import StudentDetails from './StudentDetails';
 import RegisterStudent from './RegisterStudent';
@@ -23,7 +22,6 @@ export {
   GuestDetails,
   EditGuests,
   RegisterGuests,
-  Login,
   LeaderBoard,
   Reports,
   Customization,

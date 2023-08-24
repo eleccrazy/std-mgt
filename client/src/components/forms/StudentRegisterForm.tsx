@@ -33,17 +33,15 @@ const StudentRegisterForm = ({
   errors,
 }: StudentRegisterFormProps) => {
   const programId = watch('programId');
-
   // Handle student cohort change on the form according to the corresponding program change
   const [filteredCohorts, setFilteredCohorts] = useState(['']);
   // Use the useEffect hook to change the value of the cohorts depending on the associated program
   useEffect(() => {
     const filtered = cohorts.filter(
-      (cohort: any) => cohort.programId === programId,
+      (cohort: any) => cohort.program.id === programId,
     );
     setFilteredCohorts(filtered);
   }, [programId]);
-
   return (
     <Box
       mt={5}
