@@ -38,8 +38,8 @@ function ChangeProgramCohort({
 }: ChangeProgramCohortProps) {
   // Handle student cohort change on the form according to the corresponding program change
   const [filteredCohorts, setFilteredCohorts] = useState(['']);
-  const [programId, setProgramId] = useState(student.programId);
-  const [cohortId, setCohortId] = useState(student.cohortId);
+  const [programId, setProgramId] = useState(student.program.id);
+  const [cohortId, setCohortId] = useState(student.cohort.id);
   const [programName, setProgramName] = useState('');
   const [cohortName, setCohortName] = useState('');
 
@@ -72,20 +72,17 @@ function ChangeProgramCohort({
   const handlePromote = async () => {
     setOpenDialog(false);
     try {
-      const response = await api.put(`/students/${student?.id}`, {
+      const response = await api.patch(`/students/${student?.id}/promote`, {
         isAlumni: !student.isAlumni,
       });
-      if (response.data.message && response.data.type) {
-        const type = response.data.type;
-        if (type === 'success') {
-          push(student.isAlumni ? '/students' : '/guests');
-        }
-        open?.({
-          type: type,
-          message: type === 'success' ? 'Success' : 'Warning',
-          description: response.data.message,
-        });
+      if (response.status === 200) {
+        push(student.isAlumni ? '/students' : '/guests');
       }
+      open?.({
+        type: 'success',
+        message: 'Success',
+        description: response.data.message,
+      });
     } catch (error: any) {
       open?.({
         type: 'error',
@@ -98,7 +95,7 @@ function ChangeProgramCohort({
   useEffect(() => {
     async function getCohortName() {
       try {
-        const cohort = await api.get(`/cohorts/${student.cohortId}`);
+        const cohort = await api.get(`/cohorts/${student.cohort.id}`);
         setCohortName(cohort.data.name);
       } catch (error) {
         console.log(error);
@@ -106,7 +103,7 @@ function ChangeProgramCohort({
     }
     async function getProgramName() {
       try {
-        const program = await api.get(`/programs/${student.programId}`);
+        const program = await api.get(`/programs/${student.program.id}`);
         setProgramName(program.data.name);
       } catch (error) {
         console.log(error);
@@ -120,7 +117,7 @@ function ChangeProgramCohort({
   // Use the useEffect hook to change the value of the cohorts depending on the associated program
   useEffect(() => {
     const filtered = cohorts.filter(
-      (cohort: any) => cohort.programId === programId,
+      (cohort: any) => cohort.program.id === programId,
     );
     setFilteredCohorts(filtered);
   }, [programId]);
@@ -139,33 +136,33 @@ function ChangeProgramCohort({
     }, {} as Partial<FormData>);
     try {
       const cohort = await api.get(`/cohorts/${cohortId}`);
-      if (cohort.data.programId !== programId) {
+      if (cohort.data.program.id !== programId) {
         open?.({
           type: 'error',
           message: 'Error',
           description: 'Please select the matched cohort',
         });
       } else {
-        const response = await api.put(`/students/${student?.id}`, {
-          ...filteredFormData,
-        });
-        if (response.data.message && response.data.type) {
-          const type = response.data.type;
-          if (type === 'success') {
-            goBack();
-          }
-          open?.({
-            type: type,
-            message: type === 'success' ? 'Success' : 'Warning',
-            description: response.data.message,
-          });
+        const response = await api.patch(
+          `/students/${student?.id}/change-program-cohort`,
+          {
+            ...filteredFormData,
+          },
+        );
+        if (response.status === 200) {
+          goBack();
         }
+        open?.({
+          type: 'success',
+          message: 'Success',
+          description: 'Successfully Updated',
+        });
       }
     } catch (error: any) {
       open?.({
         type: 'error',
         message: 'Error',
-        description: error.response.data.error,
+        description: error.response.data.message,
       });
     }
   };
@@ -228,7 +225,7 @@ function ChangeProgramCohort({
                     required
                     inputProps={{ 'aria-label': 'Without label' }}
                     name='programId'
-                    defaultValue={student ? student.programId : ''}
+                    defaultValue={student ? student.program.id : ''}
                     onChange={handleProgramChange}
                   >
                     <MenuItem value='' disabled>
@@ -259,7 +256,7 @@ function ChangeProgramCohort({
                     color='info'
                     displayEmpty
                     required
-                    defaultValue={student ? student.cohortId : ''}
+                    defaultValue={student ? student.cohort.id : ''}
                     inputProps={{ 'aria-label': 'Without label' }}
                     onChange={handleCohortChange}
                   >

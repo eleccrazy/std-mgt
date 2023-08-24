@@ -49,9 +49,9 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
     city: student ? student.city : '',
     area: student ? student.area : '',
     gender: student ? student.gender : '',
-    hubId: student ? student.hubId : '',
+    hubId: student ? student.hub.id : '',
   });
-  const [hubId, setHubId] = useState(student.hubId);
+  const [hubId, setHubId] = useState(student.hub.id);
   const api = axios.create({
     baseURL: `http://localhost:3000/api/v1/students`,
   });
@@ -82,25 +82,22 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
     }, {} as Partial<FormData>);
     // Make an api call to the server to update the student data.
     try {
-      const response = await api.put(`/${student?.id}`, {
+      const response = await api.patch(`/${student?.id}`, {
         ...filteredFormData,
       });
-      if (response.data.message && response.data.type) {
-        const type = response.data.type;
-        if (type === 'success') {
-          goBack();
-        }
-        open?.({
-          type: type,
-          message: type === 'success' ? 'Success' : 'Warning',
-          description: response.data.message,
-        });
+      if (response.status === 200) {
+        goBack();
       }
+      open?.({
+        type: 'success',
+        message: 'Success',
+        description: 'Successfully Updated',
+      });
     } catch (error: any) {
       open?.({
         type: 'error',
         message: 'Error',
-        description: error.response.data.error,
+        description: error.response.data.message,
       });
     }
   };
@@ -217,7 +214,7 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
                 name='hubId'
                 displayEmpty
                 required
-                defaultValue={student ? student.hubId : ''}
+                defaultValue={student ? student.hub.id : ''}
                 inputProps={{ 'aria-label': 'Without label' }}
                 onChange={handleHubChange}
               >

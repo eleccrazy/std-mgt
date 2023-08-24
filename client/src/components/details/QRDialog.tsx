@@ -39,7 +39,7 @@ const QRDialoge = ({
   const [defaultContent, setDefaultConent] = useState('');
 
   useEffect(() => {
-    setQrCode(`http://localhost:3000/api/v1/images/qrcodes/${id}.png`);
+    setQrCode(`http://localhost:3000/api/v1/static/images/${id}.png`);
     setDefaultSubject('QR Attendance Information');
     setDefaultConent(
       'Some sort of default content that is being sent to the student or guest. Some sort of default content that is being sent to the student or guest.',

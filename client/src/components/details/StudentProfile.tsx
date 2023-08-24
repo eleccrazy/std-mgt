@@ -54,26 +54,11 @@ const StudentProfile = ({ type }: { type: string }) => {
   const id = urlParams.get('id');
   const navigation = useNavigation();
   const [studentData, setStudentData] = useState<StudentData | null>(null);
-  const [programName, setProgramName] = useState('');
-  const [cohortName, setCohortName] = useState('');
-  const [hubName, setHubName] = useState('');
 
   useEffect(() => {
     async function getStudentData() {
-      const { data } = await api.get(`${type}/${id}`);
+      const { data } = await api.get(`students/${id}`);
       setStudentData(data);
-      if (data.programId) {
-        const { data: program } = await api.get(`programs/${data.programId}`);
-        setProgramName(program.name);
-      }
-      if (data.cohortId) {
-        const { data: cohort } = await api.get(`cohorts/${data.cohortId}`);
-        setCohortName(cohort.name);
-      }
-      if (data.hubId) {
-        const { data: hub } = await api.get(`hubs/${data.hubId}`);
-        setHubName(hub.name);
-      }
     }
     getStudentData();
   }, []);
@@ -124,9 +109,18 @@ const StudentProfile = ({ type }: { type: string }) => {
               value={studentData?.lastName}
             />
             <StudentInfoDisplay title='Gender' value={studentData?.gender} />
-            <StudentInfoDisplay title='Programme' value={programName} />
-            <StudentInfoDisplay title='Cohort' value={cohortName} />
-            <StudentInfoDisplay title='Preferred Hub' value={hubName} />
+            <StudentInfoDisplay
+              title='Programme'
+              value={studentData?.program.name}
+            />
+            <StudentInfoDisplay
+              title='Cohort'
+              value={studentData?.cohort.name}
+            />
+            <StudentInfoDisplay
+              title='Preferred Hub'
+              value={studentData?.hub.name}
+            />
             <StudentInfoDisplay
               title='Email Address'
               value={studentData?.email}

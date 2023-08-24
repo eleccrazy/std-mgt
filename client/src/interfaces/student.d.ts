@@ -8,9 +8,9 @@ interface StudentData {
   isAlumni: boolean;
   city: string;
   area: string;
-  programId: string;
-  hubId: string;
-  cohortId: string;
+  program: ProgramData;
+  hub: HubData;
+  cohort: CohortData;
   createdAt: string;
   updatedAt: string;
 }
@@ -22,6 +22,30 @@ export interface StudentDataRegister {
   phone: string;
   program: string;
   cohort: string;
+}
+
+export interface HubData {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  students?: StudentData[];
+}
+
+export interface ProgramData {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  cohorts?: CohortData[];
+}
+
+export interface CohortData {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  program?: ProgramData;
 }
 
 export default StudentData;
