@@ -12,6 +12,16 @@ import CustomButton from 'components/common/CustomButton';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import InfoCard from 'components/common/InfoCard';
 import StudentAttendanceGraph from 'components/charts/StudentAttendanceGraph';
+import AttendanceActionDialog from './AttendanceActionDialog';
+import { useEffect, useState } from 'react';
+import { useNotification } from '@refinedev/core';
+import StudentData from 'interfaces/student';
+import axios from 'axios';
+
+// Define base api endpoint
+const api = axios.create({
+  baseURL: 'http://localhost:3000/api/v1',
+});
 
 const CustomAttendanceInfo = ({
   title,
@@ -37,6 +47,59 @@ const CustomAttendanceInfo = ({
 };
 
 const AttendanceSection = () => {
+  const [isAttendanceDialogOpen, setIsAttendanceDialgoOpen] = useState(false);
+  const [student, setStudent] = useState<StudentData | null>(null);
+
+  const { open } = useNotification();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get('id');
+
+  useEffect(() => {
+    async function getStudent() {
+      const { data } = await api.get(`/students/${id}`);
+      setStudent(data);
+    }
+    getStudent();
+  }, []);
+
+  // Handle attendance action dialog open and close
+  const handleOpenAttendanceDialog = () => {
+    setIsAttendanceDialgoOpen(true);
+  };
+  const handleCloseAttendanceDialog = () => {
+    setIsAttendanceDialgoOpen(false);
+  };
+
+  const handleAttendanceAction = async () => {
+    setIsAttendanceDialgoOpen(false);
+    // Attendance action goes here
+    const message = student?.attendanceId ? 'Out' : 'In';
+    try {
+      const data = !student?.attendanceId
+        ? await api.post('attendances/check-in', {
+            studentId: id,
+          })
+        : await api.patch(`attendances/${student?.attendanceId}/check-out`, {
+            studentId: id,
+          });
+      if (data.status === 201 || data.status === 200) {
+        window.location.reload();
+        open?.({
+          type: 'success',
+          message: 'Success',
+          description: `Student Checked ${message} Successfully`,
+        });
+      }
+    } catch (error: any) {
+      open?.({
+        type: 'error',
+        message: 'Error',
+        description: error.response.data.error,
+      });
+    }
+  };
+
   return (
     <Card sx={{ minWidth: 275, boxShadow: 'none' }}>
       <CardHeader
@@ -45,9 +108,7 @@ const AttendanceSection = () => {
         action={
           <CustomButton
             title='Check In/Out'
-            handleClick={() => {
-              alert('Check In Check Out Students');
-            }}
+            handleClick={handleOpenAttendanceDialog}
             backgroundColor='#f5f5f5'
             color='#3fa164'
             icon={<CheckCircleOutlineIcon />}
@@ -87,6 +148,12 @@ const AttendanceSection = () => {
           Get More Information
         </Button>
       </CardActions>
+      <AttendanceActionDialog
+        open={isAttendanceDialogOpen}
+        onClose={handleCloseAttendanceDialog}
+        id={id as unknown as string}
+        onAttendanceAction={handleAttendanceAction}
+      />
     </Card>
   );
 };

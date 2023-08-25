@@ -14,6 +14,7 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import RoomPreferencesIcon from '@mui/icons-material/RoomPreferences';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 
 import dataProvider from '@refinedev/simple-rest';
 import routerProvider from '@refinedev/react-router-v6/legacy';
@@ -37,6 +38,7 @@ import {
   EditGuests,
   GuestDetails,
   RegisterGuests,
+  ScannerPage,
 } from 'pages';
 
 const axiosInstance = axios.create();
@@ -167,6 +169,12 @@ function App() {
               name: 'customization',
               list: Customization,
               icon: <RoomPreferencesIcon />,
+            },
+            {
+              name: 'scan',
+              options: { label: 'Scanner' },
+              list: ScannerPage,
+              icon: <DocumentScannerIcon />,
             },
             {
               name: 'account',

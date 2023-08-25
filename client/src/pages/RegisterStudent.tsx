@@ -54,10 +54,11 @@ const RegisterStudent = () => {
         description: 'Student Registered Successfully',
       });
     } catch (error: any) {
+      console.log(error.response.data);
       open?.({
         type: 'error',
         message: 'Error',
-        description: error.response.data.error,
+        description: error.response.data.message,
       });
     }
     setIsSubmitting(false);

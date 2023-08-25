@@ -50,6 +50,7 @@ const StudentInfoDisplay = ({
 const StudentProfile = ({ type }: { type: string }) => {
   // Manage the state of the dialog
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get('id');
   const navigation = useNavigation();
@@ -63,17 +64,18 @@ const StudentProfile = ({ type }: { type: string }) => {
     getStudentData();
   }, []);
 
+  // Handle qr code dialog open and close
   const handleOpenDialog = () => {
     setIsDialogOpen(true);
   };
-
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
   };
-
   const handleSendingMail = () => {
+    // Mail sending logic goes here
     alert('Mail Sent');
   };
+
   return (
     <Card sx={{ minWidth: 275, boxShadow: 'none' }}>
       <CardHeader

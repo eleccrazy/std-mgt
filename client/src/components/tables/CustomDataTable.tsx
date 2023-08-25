@@ -11,14 +11,31 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import { Box, Stack, Tooltip, Typography } from '@mui/material';
 import TablePagination from '@mui/material/TablePagination';
-import { useNavigation } from '@refinedev/core';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
+import AttendanceActionDialog from 'components/details/AttendanceActionDialog';
+import { useNotification, useNavigation } from '@refinedev/core';
+
+import axios from 'axios';
+
 const rowsPerPageOptions = [10, 20, 30];
 
+// Define base api endpoint
+const api = axios.create({
+  baseURL: 'http://localhost:3000/api/v1',
+});
+
 export default function CustomDataTable({ rows }: any) {
+  // Manage the state of the dialog
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [id, setId] = React.useState('');
+  const [attendanceId, setAttendanceId] = React.useState('');
+
+  const { open } = useNotification();
+
   const navigation = useNavigation();
+
   const [filter, setFilter] = React.useState('');
   const [filterBy, setFilterBy] = React.useState('email');
   const [page, setPage] = React.useState(0);
@@ -39,7 +56,47 @@ export default function CustomDataTable({ rows }: any) {
     setPage(0);
   };
 
-  const handleClick = (id: string, isAlumni: boolean) => {
+  const handleOpenDialog = (id: string, attendanceId: string) => {
+    setId(id);
+    setAttendanceId(attendanceId);
+    console.log(attendanceId, id);
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+  };
+
+  const handleAttendanceAction = async () => {
+    setIsDialogOpen(false);
+    // Attendance action goes here
+    const message = attendanceId ? 'Out' : 'In';
+    try {
+      const data = !attendanceId
+        ? await api.post('attendances/check-in', {
+            studentId: id,
+          })
+        : await api.patch(`attendances/${attendanceId}/check-out`, {
+            studentId: id,
+          });
+      if (data.status === 201 || data.status === 200) {
+        window.location.reload();
+        open?.({
+          type: 'success',
+          message: 'Success',
+          description: `Student Checked ${message} Successfully`,
+        });
+      }
+    } catch (error: any) {
+      open?.({
+        type: 'error',
+        message: 'Error',
+        description: error.response.data.error,
+      });
+    }
+  };
+
+  const handleDetailsClick = (id: string, isAlumni: boolean) => {
     if (isAlumni) {
       navigation.push(`/guests/show?id=${id}`);
     } else {
@@ -94,6 +151,9 @@ export default function CustomDataTable({ rows }: any) {
               <TableCell align='left' sx={{ fontWeight: 700 }}>
                 Gender
               </TableCell>
+              <TableCell align='left' sx={{ fontWeight: 700 }}>
+                Status
+              </TableCell>
               <TableCell align='center' sx={{ fontWeight: 700 }}>
                 Action
               </TableCell>
@@ -115,6 +175,9 @@ export default function CustomDataTable({ rows }: any) {
                     <TableCell align='left'>{row.email}</TableCell>
                     <TableCell align='left'>{row.phone}</TableCell>
                     <TableCell align='left'>{row.gender}</TableCell>
+                    <TableCell align='left'>
+                      {row.attendanceId ? 'Checked In' : 'Checked Out'}
+                    </TableCell>
                     <TableCell align='center'>
                       <Tooltip
                         title={
@@ -128,16 +191,32 @@ export default function CustomDataTable({ rows }: any) {
                         sx={{ color: 'green' }}
                       >
                         <IconButton
-                          onClick={() => handleClick(row.id, row.isAlumni)}
+                          onClick={() =>
+                            handleOpenDialog(row.id, row.attendanceId)
+                          }
                         >
                           <CheckCircleOutlineIcon />
                         </IconButton>
                       </Tooltip>
-                      <IconButton
-                        onClick={() => handleClick(row.id, row.isAlumni)}
+                      <Tooltip
+                        title={
+                          <Typography
+                            sx={{ color: '#03fca1', bgcolor: 'none' }}
+                          >
+                            View details
+                          </Typography>
+                        }
+                        placement='top'
+                        sx={{ color: '#4260f5' }}
                       >
-                        <VisibilityIcon />
-                      </IconButton>
+                        <IconButton
+                          onClick={() =>
+                            handleDetailsClick(row.id, row.isAlumni)
+                          }
+                        >
+                          <VisibilityIcon />
+                        </IconButton>
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -156,6 +235,12 @@ export default function CustomDataTable({ rows }: any) {
           />
         )}
       </TableContainer>
+      <AttendanceActionDialog
+        id={id}
+        open={isDialogOpen}
+        onClose={handleCloseDialog}
+        onAttendanceAction={handleAttendanceAction}
+      />
     </Box>
   );
 }

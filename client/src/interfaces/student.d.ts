@@ -8,6 +8,7 @@ interface StudentData {
   isAlumni: boolean;
   city: string;
   area: string;
+  attendanceId: string;
   program: ProgramData;
   hub: HubData;
   cohort: CohortData;

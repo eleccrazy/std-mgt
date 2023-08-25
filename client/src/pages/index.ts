@@ -11,6 +11,7 @@ import LeaderBoard from './LeaderBoard';
 import Reports from './Reports';
 import Customization from './Customization';
 import ProfilePage from './ProfilePage';
+import ScannerPage from './ScannerPage';
 
 export {
   Home,
@@ -26,4 +27,5 @@ export {
   Reports,
   Customization,
   ProfilePage,
+  ScannerPage,
 };
