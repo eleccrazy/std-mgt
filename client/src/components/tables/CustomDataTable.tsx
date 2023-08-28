@@ -30,6 +30,7 @@ export default function CustomDataTable({ rows }: any) {
   // Manage the state of the dialog
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [id, setId] = React.useState('');
+  const [isAlumni, setIsAlumni] = React.useState(false);
   const [attendanceId, setAttendanceId] = React.useState('');
 
   const { open } = useNotification();
@@ -56,10 +57,14 @@ export default function CustomDataTable({ rows }: any) {
     setPage(0);
   };
 
-  const handleOpenDialog = (id: string, attendanceId: string) => {
+  const handleOpenDialog = (
+    id: string,
+    attendanceId: string,
+    isAlumiValue: boolean,
+  ) => {
     setId(id);
     setAttendanceId(attendanceId);
-    console.log(attendanceId, id);
+    setIsAlumni(isAlumiValue);
     setIsDialogOpen(true);
   };
 
@@ -80,7 +85,9 @@ export default function CustomDataTable({ rows }: any) {
             studentId: id,
           });
       if (data.status === 201 || data.status === 200) {
-        window.location.reload();
+        navigation.push(
+          isAlumni ? `/guests/show?id=${id}` : `/students/show?id=${id}`,
+        );
         open?.({
           type: 'success',
           message: 'Success',
@@ -192,7 +199,11 @@ export default function CustomDataTable({ rows }: any) {
                       >
                         <IconButton
                           onClick={() =>
-                            handleOpenDialog(row.id, row.attendanceId)
+                            handleOpenDialog(
+                              row.id,
+                              row.attendanceId,
+                              row.isAlumni,
+                            )
                           }
                         >
                           <CheckCircleOutlineIcon />

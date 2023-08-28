@@ -4,7 +4,6 @@ import {
   CardActions,
   CardContent,
   Button,
-  Typography,
   CardHeader,
   Grid,
 } from '@mui/material';
@@ -14,9 +13,10 @@ import InfoCard from 'components/common/InfoCard';
 import StudentAttendanceGraph from 'components/charts/StudentAttendanceGraph';
 import AttendanceActionDialog from './AttendanceActionDialog';
 import { useEffect, useState } from 'react';
-import { useNotification } from '@refinedev/core';
+import { useNotification, useNavigation } from '@refinedev/core';
 import StudentData from 'interfaces/student';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 // Define base api endpoint
 const api = axios.create({
@@ -51,9 +51,11 @@ const AttendanceSection = () => {
   const [student, setStudent] = useState<StudentData | null>(null);
 
   const { open } = useNotification();
+  const navigate = useNavigate();
 
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get('id');
+  const { goBack, push } = useNavigation();
 
   useEffect(() => {
     async function getStudent() {
@@ -84,7 +86,8 @@ const AttendanceSection = () => {
             studentId: id,
           });
       if (data.status === 201 || data.status === 200) {
-        window.location.reload();
+        // Refresh the page
+        navigate(0);
         open?.({
           type: 'success',
           message: 'Success',
