@@ -49,20 +49,46 @@ const CustomAttendanceInfo = ({
 const AttendanceSection = () => {
   const [isAttendanceDialogOpen, setIsAttendanceDialgoOpen] = useState(false);
   const [student, setStudent] = useState<StudentData | null>(null);
+  const [studentStats, setStudentStats] = useState<{
+    totalAttendances: string;
+    totalHoursSpent: string;
+    currentWeekAttendances: string;
+    currentWeekTotalHours: string;
+  } | null>(null);
 
   const { open } = useNotification();
   const navigate = useNavigate();
 
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get('id');
-  const { goBack, push } = useNavigation();
 
   useEffect(() => {
     async function getStudent() {
-      const { data } = await api.get(`/students/${id}`);
-      setStudent(data);
+      try {
+        const { data } = await api.get(`/students/${id}`);
+        setStudent(data);
+      } catch (error: any) {
+        open?.({
+          type: 'error',
+          message: 'Error',
+          description: error.response.data.error,
+        });
+      }
+    }
+    async function getStudentStats() {
+      try {
+        const { data } = await api.get(`/students/${id}/attendance-stats`);
+        setStudentStats(data);
+      } catch (error: any) {
+        open?.({
+          type: 'error',
+          message: 'Error',
+          description: error.response.data.error,
+        });
+      }
     }
     getStudent();
+    getStudentStats();
   }, []);
 
   // Handle attendance action dialog open and close
@@ -121,24 +147,49 @@ const AttendanceSection = () => {
       <CardContent>
         <Box mt='20px'>
           <Grid container spacing={4}>
-            <CustomAttendanceInfo title='Total Attendances' value='56' />
-            <CustomAttendanceInfo title='Total hours Spent' value='233 hours' />
-            <CustomAttendanceInfo title='Current Week Attendances' value='4' />
+            <CustomAttendanceInfo
+              title='Total Attendances'
+              value={studentStats ? studentStats.totalAttendances : '0'}
+            />
+            <CustomAttendanceInfo
+              title='Total hours Spent'
+              value={
+                studentStats
+                  ? studentStats?.totalHoursSpent + ' hours'
+                  : '0' + ' hours'
+              }
+            />
+            <CustomAttendanceInfo
+              title='Current Week Attendances'
+              value={studentStats ? studentStats.currentWeekAttendances : '0'}
+            />
             <CustomAttendanceInfo
               title='Current Week total hours'
-              value='6 hours'
+              value={
+                studentStats
+                  ? studentStats.currentWeekTotalHours + ' hours'
+                  : '0' + ' hours'
+              }
             />
             <CustomAttendanceInfo
               title='Average hours per Week'
-              value='6.8 hours'
+              value={
+                studentStats
+                  ? studentStats.currentWeekTotalHours + ' hours'
+                  : '0' + ' hours'
+              }
             />
             <CustomAttendanceInfo
               title='Average hours per month'
-              value='35.78 hours'
+              value={
+                studentStats && studentStats.currentWeekAttendances
+                  ? studentStats.currentWeekTotalHours + ' hours'
+                  : '0' + ' hours'
+              }
             />
             <CustomAttendanceInfo
               title='Status'
-              value='Checked In @ CapStone'
+              value={student?.attendanceId ? 'Checked In' : 'Checked Out'}
             />
           </Grid>
         </Box>
