@@ -49,7 +49,6 @@ const StudentsPerProgram = ({
       color: colorInfo[index],
     };
   });
-  console.log(programs);
   return (
     <Box
       p={4}

@@ -2,11 +2,11 @@ import { Box, Typography, Stack, Table } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useNavigation } from '@refinedev/core';
 import { CustomButton } from 'components';
-import { useTable } from '@refinedev/core';
 import StudentData from 'interfaces/student';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import CustomDataTable from 'components/tables/CustomDataTable';
+import { useNotification } from '@refinedev/core';
 
 const AllStudents = () => {
   const navigation = useNavigation();
@@ -15,27 +15,18 @@ const AllStudents = () => {
     baseURL: 'http://localhost:3000/api/v1',
   });
   const [filteredData, setFilteredData] = useState<StudentData[]>([]);
-
-  /*// Use the useTable hook to fetch all students data from the backend
-  const {
-    tableQueryResult: { data, isLoading, isError },
-  } = useTable<StudentData>();
-  // Filter out only students
-  const studentData = data?.data;
-  const filteredData = Array.isArray(studentData)
-    ? studentData.filter((item) => item.isAlumni === false)
-    : []; */
+  const { open } = useNotification();
   async function getStudents() {
     try {
-      const response = await api.get('/students');
+      const response = await api.get('/students/learners');
       const studentData = response.data;
-      // Filter out only students with isAlumni === false
-      const filtered = Array.isArray(studentData)
-        ? studentData.filter((item) => item.isAlumni === false)
-        : [];
-      setFilteredData(filtered);
-    } catch (error) {
-      console.log(error);
+      setFilteredData(studentData);
+    } catch (error: any) {
+      open?.({
+        type: 'error',
+        message: 'Error',
+        description: error.response.data.error,
+      });
     }
   }
   useEffect(() => {
