@@ -49,4 +49,12 @@ export interface CohortData {
   program?: ProgramData;
 }
 
+export interface StudentStatsData {
+  totalStudents: number;
+    totalGuests: number;
+    totalLearners: number;
+    studentsPerProgram: { program: string; count: number }[];
+    perProgramPercent: { program: string; percent: number }[];
+}
+
 export default StudentData;

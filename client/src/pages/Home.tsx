@@ -1,15 +1,35 @@
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 import {
   PieChart,
   StudentsPerProgram,
   StudentAttendanceRate,
-  PropertyCard,
 } from 'components';
+import { StudentStatsData } from 'interfaces/student';
+
+// Define base api endpoint
+const api = axios.create({
+  baseURL: 'http://localhost:3000/api/v1',
+});
 
 const Home = () => {
+  const [stats, setStats] = useState<StudentStatsData | null>(null);
+  useEffect(() => {
+    const getStats = async () => {
+      try {
+        const response = await api.get('/students/stats');
+        const { data } = response;
+        setStats(data);
+      } catch (error: any) {
+        console.log(error);
+      }
+    };
+    getStats();
+  }, []);
   return (
     <Box>
       <Typography fontSize={25} fontWeight={700} color='#11142D'>
@@ -17,27 +37,27 @@ const Home = () => {
       </Typography>
       <Box mt='20px' display='flex' flexWrap='wrap' gap={4}>
         <PieChart
-          title='Total Students'
-          value={1034}
-          series={[90, 10]}
+          title='Total Learners'
+          value={stats?.totalLearners ? stats?.totalLearners : 0}
+          series={[50, 50]}
           colors={['#275be8', '#c4e8ef']}
         />
         <PieChart
           title='Total Guests'
-          value={431}
-          series={[30, 70]}
+          value={stats?.totalGuests ? stats?.totalGuests : 0}
+          series={[50, 50]}
           colors={['#275be8', '#c4e8ef']}
         />
         <PieChart
           title='Current Attendees In CapStone'
-          value={326}
+          value={0}
           series={[50, 50]}
           colors={['#275be8', '#c4e8ef']}
         />
         <PieChart
           title='Current Attendees In CityHub'
-          value={210}
-          series={[75, 25]}
+          value={0}
+          series={[50, 50]}
           colors={['#275be8', '#c4e8ef']}
         />
       </Box>
@@ -48,7 +68,7 @@ const Home = () => {
         gap={4}
       >
         <StudentAttendanceRate />
-        <StudentsPerProgram />
+        <StudentsPerProgram perProgramPercent={stats?.perProgramPercent} />
       </Stack>
     </Box>
   );

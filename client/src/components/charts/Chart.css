@@ -1,0 +1,8 @@
+.chart-container {
+  pointer-events: none; /* Disable pointer events on the chart container */
+}
+
+.chart-container .apexcharts-pie-series path:hover {
+  /* Override hover styles for individual data points */
+  fill: inherit !important;
+}

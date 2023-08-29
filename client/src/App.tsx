@@ -31,7 +31,7 @@ import {
   LeaderBoard,
   Reports,
   Customization,
-  ProfilePage,
+  AccountPage,
   EditStudent,
   RegisterStudent,
   StudentDetails,
@@ -61,7 +61,7 @@ function App() {
       try {
         // Perform your login logic here, e.g., sending a request to the server
         const response = await fetch(
-          'http://localhost:3000/api/v1/admins/login',
+          'http://192.168.8.168:3000/api/v1/admins/login',
           {
             method: 'POST',
             headers: {
@@ -179,7 +179,7 @@ function App() {
             {
               name: 'account',
               options: { label: 'Account ' },
-              list: ProfilePage,
+              list: AccountPage,
               icon: <AccountCircleOutlined />,
             },
           ]}

@@ -1,6 +1,7 @@
 import ReactApexChart from 'react-apexcharts';
 import { PieChartProps } from 'interfaces/home';
 import { Typography, Stack, Box } from '@mui/material';
+import './Chart.css';
 
 const PieChart = ({ title, value, series, colors }: PieChartProps) => {
   return (
@@ -27,17 +28,22 @@ const PieChart = ({ title, value, series, colors }: PieChartProps) => {
           {value}
         </Typography>
       </Stack>
-      <ReactApexChart
-        options={{
-          colors: colors,
-          chart: { type: 'donut' },
-          legend: { show: false },
-          dataLabels: { enabled: false },
-        }}
-        series={series}
-        type='donut'
-        width='120px'
-      ></ReactApexChart>
+      <div className='chart-container'>
+        <ReactApexChart
+          options={{
+            colors: colors,
+            chart: { type: 'donut' },
+            legend: { show: false },
+            dataLabels: { enabled: false },
+            responsive: [
+              { options: { events: { dataPointSelection: false } } },
+            ],
+          }}
+          series={series}
+          type='donut'
+          width='120px'
+        ></ReactApexChart>
+      </div>
     </Box>
   );
 };

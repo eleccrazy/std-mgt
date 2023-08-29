@@ -1,12 +1,12 @@
 import { Box, Typography } from '@mui/material';
-const ProfilePage = () => {
+const AccountPage = () => {
   return (
     <Box>
       <Typography fontSize={25} fontWeight={700} color='#11142D'>
-        Profile Page
+        Create, Manage, and Delete Admin Accounts Here
       </Typography>
     </Box>
   );
 };
 
-export default ProfilePage;
+export default AccountPage;

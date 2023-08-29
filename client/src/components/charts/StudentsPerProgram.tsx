@@ -1,5 +1,5 @@
 import { Typography, Stack, Box } from '@mui/material';
-import { propertyReferralsInfo } from 'constants/index';
+import { colorInfo } from 'constants/index';
 
 interface ProgressBarProps {
   title: string;
@@ -37,7 +37,19 @@ const ProgresBar = ({ title, color, percentage }: ProgressBarProps) => {
   );
 };
 
-const StudentsPerProgram = () => {
+const StudentsPerProgram = ({
+  perProgramPercent,
+}: {
+  perProgramPercent: { program: string; percent: number }[] | undefined;
+}) => {
+  const programs = perProgramPercent?.map((data, index) => {
+    return {
+      name: data.program,
+      percent: data.percent,
+      color: colorInfo[index],
+    };
+  });
+  console.log(programs);
   return (
     <Box
       p={4}
@@ -52,14 +64,15 @@ const StudentsPerProgram = () => {
         Registered Students Per Program
       </Typography>
       <Stack my='20px' direction='column' gap={4}>
-        {propertyReferralsInfo.map((item, index) => (
-          <ProgresBar
-            key={item.title}
-            title={item.title}
-            color={item.color}
-            percentage={item.percentage}
-          />
-        ))}
+        {programs &&
+          programs.map((program) => (
+            <ProgresBar
+              key={program.name}
+              title={program.name}
+              color={program.color}
+              percentage={program.percent}
+            />
+          ))}
       </Stack>
     </Box>
   );

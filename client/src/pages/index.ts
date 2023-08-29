@@ -10,8 +10,8 @@ import RegisterGuests from './RegisterGuests';
 import LeaderBoard from './LeaderBoard';
 import Reports from './Reports';
 import Customization from './Customization';
-import ProfilePage from './ProfilePage';
 import ScannerPage from './ScannerPage';
+import AccountPage from './AccountPage';
 
 export {
   Home,
@@ -26,6 +26,6 @@ export {
   LeaderBoard,
   Reports,
   Customization,
-  ProfilePage,
+  AccountPage,
   ScannerPage,
 };
