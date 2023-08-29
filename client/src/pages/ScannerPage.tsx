@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNotification, useNavigation } from '@refinedev/core';
 import { Box, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import receptionArt from '../assets/ALX Reception Art.png';
 
 // Define base api endpoint
 const api = axios.create({
@@ -93,7 +94,9 @@ const ScannerPage = () => {
           display='flex'
           flexDirection='column'
           borderRadius='15px'
-        ></Box>
+        >
+          <img alt="ALX Reception Art" src={receptionArt} width="100%" height="100%"/>
+        </Box>
         <Box
           p={4}
           flex={4}
@@ -108,8 +111,8 @@ const ScannerPage = () => {
             display='flex'
             justifyContent='center'
           >
-            <Typography m={3} variant='h5'>
-              Place the QRCode in front of the camera
+            <Typography m={3} variant='h6'>
+              Please place the QR Code in front of the camera
             </Typography>
           </Box>
           <QrReader
