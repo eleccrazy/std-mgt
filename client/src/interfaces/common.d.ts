@@ -56,3 +56,14 @@ export interface ConfirmationDialogProps {
   dialogTitle: string;
   dialogDescription: string;
 }
+export interface CreateProgramDialogProps {
+  isOpened: boolean;
+  handleClose: () => void;
+}
+
+export interface ProgramType {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}

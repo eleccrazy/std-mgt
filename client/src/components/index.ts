@@ -1,6 +1,5 @@
 // common
 import Profile from './common/Profile';
-import PropertyCard from './common/PropertyCard';
 import CustomButton from './common/CustomButton';
 
 // charts
@@ -19,7 +18,6 @@ import StudentRegisterForm from './forms/StudentRegisterForm';
 
 export {
   Profile,
-  PropertyCard,
   CustomButton,
   PieChart,
   StudentAttendanceRate,

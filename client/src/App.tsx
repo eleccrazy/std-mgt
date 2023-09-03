@@ -15,6 +15,7 @@ import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import RoomPreferencesIcon from '@mui/icons-material/RoomPreferences';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
+import ProgramDetails from 'components/customization/ProgramDetails';
 
 import dataProvider from '@refinedev/simple-rest';
 import routerProvider from '@refinedev/react-router-v6/legacy';
@@ -61,7 +62,8 @@ function App() {
       try {
         // Perform your login logic here, e.g., sending a request to the server
         const response = await fetch(
-          'http://192.168.8.168:3000/api/v1/admins/login',
+          'http://localhost:3000/api/v1/admins/login',
+
           {
             method: 'POST',
             headers: {
@@ -181,6 +183,10 @@ function App() {
               options: { label: 'Account ' },
               list: AccountPage,
               icon: <AccountCircleOutlined />,
+            },
+            {
+              name: 'programs',
+              show: ProgramDetails,
             },
           ]}
           Title={Title}

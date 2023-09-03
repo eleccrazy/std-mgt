@@ -49,13 +49,13 @@ const Home = () => {
           colors={['#275be8', '#c4e8ef']}
         />
         <PieChart
-          title='Current Attendees In CapStone'
+          title='Current Attendees In Cap Stone'
           value={0}
           series={[50, 50]}
           colors={['#275be8', '#c4e8ef']}
         />
         <PieChart
-          title='Current Attendees In CityHub'
+          title='Current Attendees In City Point'
           value={0}
           series={[50, 50]}
           colors={['#275be8', '#c4e8ef']}
