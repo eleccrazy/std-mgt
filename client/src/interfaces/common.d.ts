@@ -59,6 +59,8 @@ export interface ConfirmationDialogProps {
 export interface CreateProgramDialogProps {
   isOpened: boolean;
   handleClose: () => void;
+  isProgram: boolean;
+  programId?: string;
 }
 
 export interface ProgramType {
@@ -66,4 +68,12 @@ export interface ProgramType {
   name: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface EditDialogProps {
+  id: string;
+  isOpened: boolean;
+  handleClose: () => void;
+  isProgram: boolean;
+  name: string;
 }

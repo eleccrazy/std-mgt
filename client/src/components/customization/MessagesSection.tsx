@@ -18,21 +18,25 @@ const style = {
 function MessagesSection({ mb, mt }: { mb?: number; mt?: number }) {
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
+  const [sourceEmail, setSourceEmail] = useState('');
+  const [sourceEmailPassword, setSourceEmailPassword] = useState('');
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    alert(`Submitting Subject: ${subject} and Content: ${content}`);
+    alert(
+      `Submitting Source Email: ${sourceEmail} Subject: ${subject} and Content: ${content}`,
+    );
   };
 
   return (
     <Box boxShadow={2} p={2} sx={{ background: '#7cabcf' }} borderRadius={2}>
       <Typography variant='h5' sx={{ color: '#fff' }} p={2}>
-        Customize Messages for Sending Emails
+        Customize Email Credentials, Subject, and Content
       </Typography>
       <form
         style={{
           marginTop: '20px',
-          width: '90%',
+          width: '95%',
           display: 'flex',
           flexDirection: 'column',
           gap: '20px',
@@ -40,10 +44,42 @@ function MessagesSection({ mb, mt }: { mb?: number; mt?: number }) {
         onSubmit={handleSubmit}
       >
         <FormControl>
+          <FormHelperText sx={style}>Source Email</FormHelperText>
+          <TextField
+            fullWidth
+            id='sourceEmail'
+            color='info'
+            required
+            type='email'
+            variant='outlined'
+            name='sourceEmail'
+            onChange={(e: any) => setSourceEmail(e.target.value)}
+            InputProps={{
+              style: { color: '#11142d', background: '#c7e7ff' },
+            }}
+          />
+        </FormControl>
+        <FormControl>
+          <FormHelperText sx={style}>Source Email Password</FormHelperText>
+          <TextField
+            fullWidth
+            id='sourceEmailPassword'
+            color='info'
+            required
+            type='password'
+            variant='outlined'
+            name='sourceEmailPassword'
+            onChange={(e: any) => setSourceEmailPassword(e.target.value)}
+            InputProps={{
+              style: { color: '#11142d', background: '#c7e7ff' },
+            }}
+          />
+        </FormControl>
+        <FormControl>
           <FormHelperText sx={style}>Subject</FormHelperText>
           <TextField
             fullWidth
-            id='outlined-basic'
+            id='subject'
             color='info'
             required
             type='text'
@@ -59,7 +95,7 @@ function MessagesSection({ mb, mt }: { mb?: number; mt?: number }) {
           <FormHelperText sx={style}>Content</FormHelperText>
           <TextField
             fullWidth
-            id='outlined-basic'
+            id='content'
             color='info'
             required
             variant='outlined'

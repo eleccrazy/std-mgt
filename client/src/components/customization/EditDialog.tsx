@@ -4,7 +4,7 @@ import DialogContent from '@mui/material/DialogContent';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import { CreateProgramDialogProps } from 'interfaces/common';
+import { EditDialogProps } from 'interfaces/common';
 import { FormControl, FormHelperText, TextField, Box } from '@mui/material';
 import { useState } from 'react';
 import CustomButton from 'components/common/CustomButton';
@@ -24,34 +24,36 @@ const baseApi = axios.create({
   baseURL: 'http://localhost:3000/api/v1',
 });
 
-function CreateProgramDialog({
+function EditDialog({
   isOpened,
   handleClose,
   isProgram,
-  programId,
-}: CreateProgramDialogProps) {
+  id,
+  name,
+}: EditDialogProps) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const [name, setName] = useState('');
+  const [newName, setNewName] = useState('');
   const { open } = useNotification();
   const { push, goBack } = useNavigation();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await baseApi.post(
-        isProgram ? '/programs' : '/cohorts',
-        { name, programId: programId },
+      const finalName = newName === '' ? name : newName;
+      const response = await baseApi.patch(
+        isProgram ? `/programs/${id}` : `/cohorts/${id}`,
+        { name: finalName },
       );
       handleClose();
-      // Redirect it to the newely created program detail page if it is program.
-      isProgram ? push(`/programs/show?id=${response.data.id}`) : goBack();
+      // Go back to the list of programs page.
+      goBack();
       open?.({
         type: 'success',
         message: 'Success',
         description: isProgram
-          ? 'Program Created Successfully'
-          : 'Cohort Created Successfully',
+          ? 'Program Updated Successfully'
+          : 'Cohort Updated Successfully',
       });
     } catch (error: any) {
       open?.({
@@ -90,7 +92,8 @@ function CreateProgramDialog({
               type='text'
               variant='outlined'
               name='name'
-              onChange={(e: any) => setName(e.target.value)}
+              defaultValue={name}
+              onChange={(e: any) => setNewName(e.target.value)}
               InputProps={{
                 style: { color: '#11142d', background: '#c7e7ff' },
               }}
@@ -99,7 +102,7 @@ function CreateProgramDialog({
           <Box style={{ textAlign: 'center' }} marginTop={6}>
             <CustomButton
               type='submit'
-              title={'Create'}
+              title={'Save Changes'}
               backgroundColor='#230563'
               color='#fcfcfc'
             ></CustomButton>
@@ -115,4 +118,4 @@ function CreateProgramDialog({
   );
 }
 
-export default CreateProgramDialog;
+export default EditDialog;

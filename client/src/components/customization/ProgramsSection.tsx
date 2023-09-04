@@ -47,7 +47,7 @@ const ProgramsSection = ({ mb, mt }: { mb?: number; mt?: number }) => {
         {programs.map((program) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3} key={program.name}>
-              <ProgramCard name={program.name} />
+              <ProgramCard id={program.id} name={program.name} />
             </Grid>
           );
         })}
@@ -58,6 +58,7 @@ const ProgramsSection = ({ mb, mt }: { mb?: number; mt?: number }) => {
       <CreateProgramDialog
         isOpened={openDialog}
         handleClose={handleCloseDialog}
+        isProgram={true}
       />
     </Box>
   );
