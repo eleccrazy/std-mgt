@@ -41,10 +41,9 @@ function EditDialog({
     e.preventDefault();
     try {
       const finalName = newName === '' ? name : newName;
-      const response = await baseApi.patch(
-        isProgram ? `/programs/${id}` : `/cohorts/${id}`,
-        { name: finalName },
-      );
+      await baseApi.patch(isProgram ? `/programs/${id}` : `/cohorts/${id}`, {
+        name: finalName,
+      });
       handleClose();
       // Go back to the list of programs page.
       goBack();

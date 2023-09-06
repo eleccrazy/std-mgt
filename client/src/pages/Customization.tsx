@@ -1,11 +1,40 @@
+// Filename: Customization.tsx
+
 import { Box } from '@mui/material';
-import { MessagesSection, ProgramsSection } from 'components/customization';
+import { ProgramsSection, MessagesSection } from 'components/customization';
+import { useEffect, useState } from 'react';
+import { useNotification } from '@refinedev/core';
+import axios from 'axios';
+import { Message } from '@mui/icons-material';
+
+const baseApi = axios.create({
+  baseURL: 'http://localhost:3000/api/v1',
+});
 
 const Customization = () => {
+  const [setting, setSetting] = useState(null);
+  const { open } = useNotification();
+
+  useEffect(() => {
+    async function getSetting() {
+      try {
+        const response = await baseApi.get('/settings');
+        setSetting(response.data.length > 0 ? response.data[0] : null);
+      } catch (error: any) {
+        open?.({
+          type: 'error',
+          message: 'Error',
+          description: error.response.data.message,
+        });
+      }
+    }
+    getSetting();
+  }, []);
+
   return (
     <Box mb={5} display='flex' flexDirection='column' bgcolor='#ffffff' p={3}>
       <ProgramsSection mb={3} />
-      <MessagesSection />
+      <MessagesSection setting={setting} />
     </Box>
   );
 };

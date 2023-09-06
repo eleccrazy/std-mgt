@@ -1,3 +1,4 @@
+// Filename: MessagesSection.tsx
 import {
   Box,
   TextField,
@@ -6,7 +7,9 @@ import {
   FormControl,
 } from '@mui/material';
 import CustomButton from 'components/common/CustomButton';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
+import axios from 'axios';
+import { useNotification } from '@refinedev/core';
 
 const style = {
   fontWeight: 800,
@@ -15,23 +18,108 @@ const style = {
   color: '#11142d',
 };
 
-function MessagesSection({ mb, mt }: { mb?: number; mt?: number }) {
-  const [subject, setSubject] = useState('');
-  const [content, setContent] = useState('');
-  const [sourceEmail, setSourceEmail] = useState('');
-  const [sourceEmailPassword, setSourceEmailPassword] = useState('');
+const baseApi = axios.create({
+  baseURL: 'http://localhost:3000/api/v1',
+});
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+function MessagesSection({
+  mb,
+  mt,
+  setting,
+}: {
+  mb?: number;
+  mt?: number;
+  setting: {
+    id?: string;
+    password?: string;
+    subject: string;
+    content: string;
+    sourceEmail: string;
+    timeLimit?: number;
+  } | null;
+}) {
+  const [subject, setSubject] = useState(setting ? setting.subject : '');
+  const [content, setContent] = useState(setting ? setting.content : '');
+  const [sourceEmail, setSourceEmail] = useState(
+    setting ? setting.sourceEmail : '',
+  );
+  const [sourceEmailPassword, setSourceEmailPassword] = useState(
+    setting ? setting.password : '',
+  );
+  const [timeLimit, setTimeLimit] = useState(setting ? setting.timeLimit : '');
+  const [createIsSucced, setCreateIsSucced] = useState(false);
+  const [id, setId] = useState(setting ? setting.id : null);
+
+  const { open } = useNotification();
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    alert(
-      `Submitting Source Email: ${sourceEmail} Subject: ${subject} and Content: ${content}`,
-    );
+    const data = {
+      sourceEmail,
+      password: sourceEmailPassword,
+      subject,
+      content,
+      timeLimit: parseInt(timeLimit as string),
+    };
+    // Check if we have a setting object, if we do, we are updating, otherwise we are creating
+    if (setting || id) {
+      try {
+        await baseApi.patch(`/settings/${setting ? setting.id : id}`, data);
+        open?.({
+          type: 'success',
+          message: 'Success',
+          description: 'Setting updated successfully',
+        });
+      } catch (error: any) {
+        open?.({
+          type: 'error',
+          message: 'Error',
+          description: error.response.data.message,
+        });
+      }
+    } else {
+      try {
+        const response = await baseApi.post('/settings', data);
+        setId(response.data.id);
+        open?.({
+          type: 'success',
+          message: 'Success',
+          description: 'Setting created successfully',
+        });
+        setCreateIsSucced(true);
+      } catch (error: any) {
+        open?.({
+          type: 'error',
+          message: 'Error',
+          description: error.response.data.message,
+        });
+      }
+    }
   };
+
+  useEffect(() => {
+    if (setting) {
+      setSourceEmail(setting.sourceEmail);
+      setSourceEmailPassword(setting.password);
+      setSubject(setting.subject);
+      setContent(setting.content);
+      setTimeLimit(setting.timeLimit);
+      setCreateIsSucced(true);
+    }
+  }, [setting]);
+
+  useEffect(() => {
+    setSourceEmail(sourceEmail);
+    setSourceEmailPassword(sourceEmailPassword);
+    setSubject(subject);
+    setContent(content);
+    setTimeLimit(timeLimit);
+  }, [createIsSucced]);
 
   return (
     <Box boxShadow={2} p={2} sx={{ background: '#7cabcf' }} borderRadius={2}>
       <Typography variant='h5' sx={{ color: '#fff' }} p={2}>
-        Customize Email Credentials, Subject, and Content
+        Customize Email Credentials, Subject, Content, and Time Limit
       </Typography>
       <form
         style={{
@@ -53,6 +141,7 @@ function MessagesSection({ mb, mt }: { mb?: number; mt?: number }) {
             type='email'
             variant='outlined'
             name='sourceEmail'
+            value={sourceEmail}
             onChange={(e: any) => setSourceEmail(e.target.value)}
             InputProps={{
               style: { color: '#11142d', background: '#c7e7ff' },
@@ -69,6 +158,7 @@ function MessagesSection({ mb, mt }: { mb?: number; mt?: number }) {
             type='password'
             variant='outlined'
             name='sourceEmailPassword'
+            value={sourceEmailPassword}
             onChange={(e: any) => setSourceEmailPassword(e.target.value)}
             InputProps={{
               style: { color: '#11142d', background: '#c7e7ff' },
@@ -85,6 +175,7 @@ function MessagesSection({ mb, mt }: { mb?: number; mt?: number }) {
             type='text'
             variant='outlined'
             name='emailSubject'
+            value={subject}
             onChange={(e: any) => setSubject(e.target.value)}
             InputProps={{
               style: { color: '#11142d', background: '#c7e7ff' },
@@ -101,6 +192,7 @@ function MessagesSection({ mb, mt }: { mb?: number; mt?: number }) {
             variant='outlined'
             type='text'
             name='emailContent'
+            value={content}
             multiline
             rows={7}
             onChange={(e: any) => setContent(e.target.value)}
@@ -109,10 +201,27 @@ function MessagesSection({ mb, mt }: { mb?: number; mt?: number }) {
             }}
           />
         </FormControl>
+        <FormControl>
+          <FormHelperText sx={style}>Time Limit in Hours</FormHelperText>
+          <TextField
+            fullWidth
+            id='timeLimit'
+            color='info'
+            required
+            type='number'
+            variant='outlined'
+            name='timeLimit'
+            value={timeLimit}
+            onChange={(e: any) => setTimeLimit(e.target.value)}
+            InputProps={{
+              style: { color: '#11142d', background: '#c7e7ff' },
+            }}
+          />
+        </FormControl>
         <Box style={{ textAlign: 'center' }} marginTop={6}>
           <CustomButton
             type='submit'
-            title={'Save Changes'}
+            title={createIsSucced ? 'Save Changes' : 'Create'}
             backgroundColor='#230563'
             color='#fcfcfc'
           ></CustomButton>

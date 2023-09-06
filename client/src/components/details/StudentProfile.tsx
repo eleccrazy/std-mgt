@@ -133,7 +133,9 @@ const StudentProfile = ({ type }: { type: string }) => {
             />
             <StudentInfoDisplay
               title='Address Information'
-              value={`${studentData?.city},  ${studentData?.area}`}
+              value={
+                studentData ? studentData.city + ', ' + studentData.area : ''
+              }
             />
           </Grid>
         </Box>

@@ -1,4 +1,4 @@
-import ProgramsSection from './ProgramsSection';
 import MessagesSection from './MessagesSection';
+import ProgramsSection from './ProgramsSection';
 
-export { ProgramsSection, MessagesSection };
+export { MessagesSection, ProgramsSection };

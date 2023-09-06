@@ -52,7 +52,11 @@ const ProgramsSection = ({ mb, mt }: { mb?: number; mt?: number }) => {
           );
         })}
         <Grid item xs={12} sm={6} md={4} lg={3} mt={2}>
-          <AddButton onClick={handleClick} />
+          <AddButton
+            onClick={handleClick}
+            backgroundColor='#230563'
+            hoverColor='#21365e'
+          />
         </Grid>
       </Grid>
       <CreateProgramDialog
