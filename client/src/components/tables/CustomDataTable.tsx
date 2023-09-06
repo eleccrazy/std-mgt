@@ -13,6 +13,7 @@ import { Box, Stack, Tooltip, Typography } from '@mui/material';
 import TablePagination from '@mui/material/TablePagination';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import CheckOutCircleOutlineIcon from '@mui/icons-material/HighlightOff';
 
 import AttendanceActionDialog from 'components/details/AttendanceActionDialog';
 import { useNotification, useNavigation } from '@refinedev/core';
@@ -141,9 +142,9 @@ export default function CustomDataTable({ rows }: any) {
         />
       </Stack>
 
-      <TableContainer component={Paper} sx={{ background: '#e6f5f7' }}>
+      <TableContainer component={Paper} sx={{ background: '#E3F0F9' }}>
         <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-          <TableHead sx={{ background: '#abebc9' }}>
+          <TableHead sx={{ background: '#92C4E7' }}>
             <TableRow>
               <TableCell>First Name</TableCell>
               <TableCell align='left' sx={{ fontWeight: 700 }}>
@@ -183,9 +184,43 @@ export default function CustomDataTable({ rows }: any) {
                     <TableCell align='left'>{row.phone}</TableCell>
                     <TableCell align='left'>{row.gender}</TableCell>
                     <TableCell align='left'>
-                      {row.attendanceId ? 'Checked In' : 'Checked Out'}
+                      {row.attendanceId ? 
+                          <Typography
+                            sx={{ color: 'green' }}
+                          >
+                            Checked In
+                          </Typography> : 
+                          <Typography
+                            sx={{ color: 'red' }}
+                          >
+                            Checked Out
+                          </Typography> }
                     </TableCell>
                     <TableCell align='center'>
+                      {row.attendanceId ? 
+                      <Tooltip
+                        title={
+                          <Typography
+                            sx={{ color: 'red', bgcolor: 'none' }}
+                          >
+                            Check-out Action
+                          </Typography>
+                        }
+                        placement='top'
+                        sx={{ color: 'red' }}
+                      >
+                        <IconButton
+                          onClick={() =>
+                            handleOpenDialog(
+                              row.id,
+                              row.attendanceId,
+                              row.isAlumni,
+                            )
+                          }
+                        >
+                          <CheckOutCircleOutlineIcon />
+                        </IconButton>
+                      </Tooltip> : 
                       <Tooltip
                         title={
                           <Typography
@@ -208,7 +243,8 @@ export default function CustomDataTable({ rows }: any) {
                         >
                           <CheckCircleOutlineIcon />
                         </IconButton>
-                      </Tooltip>
+                      </Tooltip>}
+                      
                       <Tooltip
                         title={
                           <Typography
@@ -218,7 +254,7 @@ export default function CustomDataTable({ rows }: any) {
                           </Typography>
                         }
                         placement='top'
-                        sx={{ color: '#4260f5' }}
+                        sx={{ color: '#174281' }}
                       >
                         <IconButton
                           onClick={() =>
@@ -235,7 +271,7 @@ export default function CustomDataTable({ rows }: any) {
         </Table>
         {filteredRows.length > 0 && (
           <TablePagination
-            sx={{ background: '#abebc9' }}
+            sx={{ background: '#92C4E7' }}
             rowsPerPageOptions={rowsPerPageOptions}
             component='div'
             count={filteredRows.length}

@@ -43,7 +43,7 @@ const AllStudents = () => {
           handleClick={() => {
             navigation.push('/students/create');
           }}
-          backgroundColor='#475be8'
+          backgroundColor='#174281'
           color='#fcfcfc'
           icon={<Add />}
         ></CustomButton>

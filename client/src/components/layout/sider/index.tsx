@@ -178,9 +178,9 @@ export const Sider: typeof DefaultSider = ({ render }) => {
                 py: isNested ? 1.25 : 1,
                 '&.Mui-selected': {
                   '&:hover': {
-                    backgroundColor: isSelected ? '#1e36e8' : 'transparent',
+                    backgroundColor: isSelected ? '#21365e' : 'transparent',
                   },
-                  backgroundColor: isSelected ? '#475be8' : 'transparent',
+                  backgroundColor: isSelected ? '#174281' : 'transparent',
                 },
                 justifyContent: 'center',
                 margin: '10px auto',
@@ -413,13 +413,13 @@ export const Sider: typeof DefaultSider = ({ render }) => {
           </Box>
           <Button
             sx={{
-              background: '#475BE8',
+              background: '#174281',
               color: 'primary.contrastText',
               textAlign: 'center',
               borderRadius: 0,
               borderTop: '1px solid #ffffff1a',
               '&:hover': {
-                background: '#1e36e8',
+                background: '#21365e',
               },
             }}
             fullWidth

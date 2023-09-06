@@ -118,7 +118,7 @@ const RegisterStudent = () => {
           handleClick={() => {
             handleOpen();
           }}
-          backgroundColor='#475be8'
+          backgroundColor='#174281'
           color='#fcfcfc'
           icon={<AppRegistration />}
         />

@@ -106,7 +106,7 @@ const ScannerPage = () => {
           borderRadius='15px'
         >
           <Box
-            bgcolor={'#2a1375'}
+            bgcolor={'#174281'}
             color='white'
             display='flex'
             justifyContent='center'

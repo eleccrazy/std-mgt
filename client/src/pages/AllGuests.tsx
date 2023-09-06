@@ -46,7 +46,7 @@ export const AllGuests = () => {
           handleClick={() => {
             navigation.push('/guests/create');
           }}
-          backgroundColor='#475be8'
+          backgroundColor='#174281'
           color='#fcfcfc'
           icon={<Add />}
         ></CustomButton>

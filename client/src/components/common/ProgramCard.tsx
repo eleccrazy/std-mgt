@@ -15,7 +15,10 @@ const ProgramCard = ({ id, name }: ProgramCardProps) => {
     push(`/programs/show?id=${id}`);
   };
   return (
-    <Card sx={{ maxWdth: 345, background: '#230563', height: 100 }}>
+    <Card sx={{ maxWdth: 345, background: '#174281', height: 100, 
+    "&:hover": {
+      background:'#21365e',
+    }, }}>
       <CardActionArea onClick={handleCardClick}>
         <CardContent>
           <Typography gutterBottom component='div' sx={{ color: '#ecebf0' }}>
