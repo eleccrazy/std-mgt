@@ -40,25 +40,25 @@ const Home = () => {
           title='Total Learners'
           value={stats?.totalLearners ? stats?.totalLearners : 0}
           series={[50, 50]}
-          colors={['#275be8', '#c4e8ef']}
+          colors={['#2B6EB2', '#92C4E7']}
         />
         <PieChart
           title='Total Guests'
           value={stats?.totalGuests ? stats?.totalGuests : 0}
           series={[50, 50]}
-          colors={['#275be8', '#c4e8ef']}
+          colors={['#2B6EB2', '#92C4E7']}
         />
         <PieChart
-          title='Current Attendees In Cap Stone'
+          title='Current Attendees: CapStone'
           value={0}
           series={[50, 50]}
-          colors={['#275be8', '#c4e8ef']}
+          colors={['#2B6EB2', '#92C4E7']}
         />
         <PieChart
-          title='Current Attendees In City Point'
+          title='Current Attendees: CityPoint'
           value={0}
           series={[50, 50]}
-          colors={['#275be8', '#c4e8ef']}
+          colors={['#2B6EB2', '#92C4E7']}
         />
       </Box>
       <Stack

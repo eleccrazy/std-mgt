@@ -78,9 +78,10 @@ const LoginPage: React.FC = () => {
               <Button
                 type='submit'
                 variant='contained'
-                color='primary'
                 fullWidth
-                sx={{ marginTop: 5 }}
+                sx={{ marginTop: 5, backgroundColor:'#174281', "&:hover": {
+                  background:'#6CADDC',
+                },}}
               >
                 Login
               </Button>

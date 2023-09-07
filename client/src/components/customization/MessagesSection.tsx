@@ -117,7 +117,7 @@ function MessagesSection({
   }, [createIsSucced]);
 
   return (
-    <Box boxShadow={2} p={2} sx={{ background: '#7cabcf' }} borderRadius={2}>
+    <Box boxShadow={2} p={2} sx={{ background: '#6CADDC' }} borderRadius={2}>
       <Typography variant='h5' sx={{ color: '#fff' }} p={2}>
         Customize Email Credentials, Subject, Content, and Time Limit
       </Typography>
@@ -222,7 +222,7 @@ function MessagesSection({
           <CustomButton
             type='submit'
             title={createIsSucced ? 'Save Changes' : 'Create'}
-            backgroundColor='#230563'
+            backgroundColor='#174281'
             color='#fcfcfc'
           ></CustomButton>
         </Box>

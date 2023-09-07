@@ -3,11 +3,11 @@ import { ApexOptions } from 'apexcharts';
 export const TotalRevenueSeries = [
   {
     name: 'Last Weak',
-    data: [183, 124, 115, 85, 143, 143, 96],
+    data: [95, 84, 72, 44, 108, 108, 47],
   },
   {
     name: 'Running Weak',
-    data: [95, 84, 72, 44, 108, 108, 47],
+    data: [183, 124, 115, 85, 143, 143, 96],
   },
 ];
 
@@ -18,7 +18,7 @@ export const TotalRevenueOptions: ApexOptions = {
       show: false,
     },
   },
-  colors: ['#475BE8', '#CFC8FF'],
+  colors: ['#92C4E7', '#2B6EB2'],
   plotOptions: {
     bar: {
       borderRadius: 4,
