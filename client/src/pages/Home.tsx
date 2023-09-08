@@ -53,12 +53,14 @@ const Home = () => {
           value={stats?.totalLearners ? stats?.totalLearners : 0}
           series={[50, 50]}
           colors={['#2B6EB2', '#92C4E7']}
+          type='fixed'
         />
         <PieChart
           title='Total Guests'
           value={stats?.totalGuests ? stats?.totalGuests : 0}
           series={[50, 50]}
           colors={['#2B6EB2', '#92C4E7']}
+          type='fixed'
         />
         {hubs &&
           hubs.map((hub) => {
@@ -69,6 +71,7 @@ const Home = () => {
                 value={0}
                 series={[50, 50]}
                 colors={['#275be8', '#c4e8ef']}
+                type='current'
               />
             );
           })}
