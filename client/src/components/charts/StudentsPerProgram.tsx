@@ -14,7 +14,7 @@ const ProgresBar = ({ title, color, percentage }: ProgressBarProps) => {
         <Typography fontSize={14} fontWeight={600} color='#11142d'>
           {title}
         </Typography>
-        <Typography fontSize={14} fontWeight={600} color='#475be8'>
+        <Typography fontSize={14} fontWeight={600} color='#174281'>
           {percentage}%
         </Typography>
       </Stack>

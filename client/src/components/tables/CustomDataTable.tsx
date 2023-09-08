@@ -185,23 +185,23 @@ export default function CustomDataTable({ rows }: any) {
                     <TableCell align='left'>{row.gender}</TableCell>
                     <TableCell align='left'>
                       {row.attendanceId ? 
-                          <Typography
-                            sx={{ color: 'green' }}
+                          <p
+                            style={{ color: 'green' }}
                           >
                             Checked In
-                          </Typography> : 
-                          <Typography
-                            sx={{ color: 'red' }}
+                          </p> : 
+                          <p
+                          style={{ color: 'red' }}
                           >
                             Checked Out
-                          </Typography> }
+                          </p> }
                     </TableCell>
                     <TableCell align='center'>
                       {row.attendanceId ? 
                       <Tooltip
                         title={
                           <Typography
-                            sx={{ color: 'red', bgcolor: 'none' }}
+                            sx={{ color: 'white', bgcolor: 'none' }}
                           >
                             Check-out Action
                           </Typography>
@@ -224,7 +224,7 @@ export default function CustomDataTable({ rows }: any) {
                       <Tooltip
                         title={
                           <Typography
-                            sx={{ color: '#03fca1', bgcolor: 'none' }}
+                            sx={{ color: '#white', bgcolor: 'none' }}
                           >
                             Check-in Action
                           </Typography>

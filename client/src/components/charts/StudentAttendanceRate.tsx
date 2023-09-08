@@ -18,16 +18,16 @@ const StudentAttendanceRate = () => {
         Student Attendance Rate
       </Typography>
       <Stack direction='row' gap={4} flexWrap={'wrap'} my='20px'>
-        <Typography fontSize={28} fontWeight={700} color='#11142d'>
+        <Typography fontSize={28} fontWeight={700} color='#174281'>
           470
         </Typography>
         <Stack>
-          <ArrowCircleUpRounded sx={{ color: '#475be8', fontSize: 25 }} />
+          <ArrowCircleUpRounded sx={{ color: '#2B6EB2', fontSize: 25 }} />
           <Stack>
-            <Typography fontSize={14} fontWeight={600} color='#475be8'>
+            <Typography fontSize={14} fontWeight={600} color='#2B6EB2'>
               7%
             </Typography>
-            <Typography fontSize={14} fontWeight={600} color='#475be8'>
+            <Typography fontSize={14} fontWeight={600} color='#2B6EB2'>
               Since last weak
             </Typography>
           </Stack>

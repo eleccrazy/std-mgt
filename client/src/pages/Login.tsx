@@ -3,6 +3,7 @@ import { useLogin } from '@refinedev/core';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { TextField, Button, Grid } from '@mui/material';
+import loginArt from '../assets/login.jpg';
 
 import { alx } from 'assets';
 
@@ -31,15 +32,23 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <Box component='div' sx={{ backgroundColor: '#FCFCFC' }}>
+    <Box component='div' sx={{height: '100vh', backgroundColor: '#FCFCFC' }}>
+      <div>
+        <img style={{position: 'absolute', height: '100vh', width: '100vw'}} src={loginArt} alt='Yariga Logo' />
+      </div>
       <Container
         component='main'
         maxWidth='xs'
         sx={{
           display: 'flex',
+          height: '100vh', 
+          opacity: 0.85,
           flexDirection: 'column',
           justifyContent: 'center',
-          height: '100vh',
+          padding: '20px',
+          backgroundColor: 'white',
+          zIndex: 1,
+          position: 'relative',
         }}
       >
         <Box
@@ -78,9 +87,10 @@ const LoginPage: React.FC = () => {
               <Button
                 type='submit'
                 variant='contained'
-                color='primary'
                 fullWidth
-                sx={{ marginTop: 5 }}
+                sx={{ marginTop: 5, backgroundColor:'#174281', "&:hover": {
+                  background:'#6CADDC',
+                },}}
               >
                 Login
               </Button>

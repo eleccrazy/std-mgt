@@ -52,13 +52,13 @@ const Home = () => {
           title='Total Learners'
           value={stats?.totalLearners ? stats?.totalLearners : 0}
           series={[50, 50]}
-          colors={['#275be8', '#c4e8ef']}
+          colors={['#2B6EB2', '#92C4E7']}
         />
         <PieChart
           title='Total Guests'
           value={stats?.totalGuests ? stats?.totalGuests : 0}
           series={[50, 50]}
-          colors={['#275be8', '#c4e8ef']}
+          colors={['#2B6EB2', '#92C4E7']}
         />
         {hubs &&
           hubs.map((hub) => {

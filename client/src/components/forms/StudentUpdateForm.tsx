@@ -268,7 +268,7 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
             <CustomButton
               type='submit'
               title={'Save Changes'}
-              backgroundColor='#475be8'
+              backgroundColor='#174281'
               color='#fcfcfc'
             ></CustomButton>
           </Box>
