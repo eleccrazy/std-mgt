@@ -9,7 +9,7 @@ import {
   StudentsPerProgram,
   StudentAttendanceRate,
 } from 'components';
-import { StudentStatsData } from 'interfaces/student';
+import { HubData, StudentStatsData } from 'interfaces/student';
 
 // Define base api endpoint
 const api = axios.create({
@@ -18,6 +18,8 @@ const api = axios.create({
 
 const Home = () => {
   const [stats, setStats] = useState<StudentStatsData | null>(null);
+  const [hubs, setHubs] = useState<HubData[]>([]);
+
   useEffect(() => {
     const getStats = async () => {
       try {
@@ -28,6 +30,16 @@ const Home = () => {
         console.log(error);
       }
     };
+    const getHubs = async () => {
+      try {
+        const response = await api.get('/hubs');
+        const { data } = response;
+        setHubs(data);
+      } catch (error: any) {
+        console.log(error);
+      }
+    };
+    getHubs();
     getStats();
   }, []);
   return (
@@ -48,18 +60,18 @@ const Home = () => {
           series={[50, 50]}
           colors={['#275be8', '#c4e8ef']}
         />
-        <PieChart
-          title='Current Attendees In Cap Stone'
-          value={0}
-          series={[50, 50]}
-          colors={['#275be8', '#c4e8ef']}
-        />
-        <PieChart
-          title='Current Attendees In City Point'
-          value={0}
-          series={[50, 50]}
-          colors={['#275be8', '#c4e8ef']}
-        />
+        {hubs &&
+          hubs.map((hub) => {
+            return (
+              <PieChart
+                key={hub.id}
+                title={`Current attendees in ${hub.name} `}
+                value={0}
+                series={[50, 50]}
+                colors={['#275be8', '#c4e8ef']}
+              />
+            );
+          })}
       </Box>
       <Stack
         mt='25px'

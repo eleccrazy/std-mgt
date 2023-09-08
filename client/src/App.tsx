@@ -123,6 +123,10 @@ function App() {
     },
   };
 
+  // Get the user from local storage
+  const user = localStorage.getItem('admin');
+  // Check if the user is admin with its role property
+  const isAdmin = user ? JSON.parse(user).role === 'admin' : false;
   return (
     <ColorModeContextProvider>
       <CssBaseline />

@@ -7,9 +7,6 @@ import PieChart from './charts/PieChart';
 import StudentAttendanceRate from './charts/StudentAttendanceRate';
 import StudentsPerProgram from './charts/StudentsPerProgram';
 
-// agent
-import AgentCard from './agent/AgentCard';
-
 // home
 import TopAgent from './home/TopAgent';
 
@@ -21,7 +18,6 @@ export {
   CustomButton,
   PieChart,
   StudentAttendanceRate,
-  AgentCard,
   TopAgent,
   StudentsPerProgram,
   StudentRegisterForm,

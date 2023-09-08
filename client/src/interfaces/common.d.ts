@@ -63,6 +63,12 @@ export interface CreateProgramDialogProps {
   programId?: string;
 }
 
+export interface CreateAccountDialogProps {
+  isOpened: boolean;
+  handleClose: () => void;
+  updateAccount: (account: AccountData) => void;
+}
+
 export interface ProgramType {
   id: string;
   name: string;
@@ -76,4 +82,23 @@ export interface EditDialogProps {
   handleClose: () => void;
   isProgram: boolean;
   name: string;
+}
+
+export interface HubType {
+  id: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface AccountData {
+  id?: string;
+  email: string;
+  password?: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  hub: HubType;
 }

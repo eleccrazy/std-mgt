@@ -141,6 +141,7 @@ function MessagesSection({
             type='email'
             variant='outlined'
             name='sourceEmail'
+            autoComplete='email'
             value={sourceEmail}
             onChange={(e: any) => setSourceEmail(e.target.value)}
             InputProps={{
@@ -158,6 +159,7 @@ function MessagesSection({
             type='password'
             variant='outlined'
             name='sourceEmailPassword'
+            autoComplete='current-password'
             value={sourceEmailPassword}
             onChange={(e: any) => setSourceEmailPassword(e.target.value)}
             InputProps={{

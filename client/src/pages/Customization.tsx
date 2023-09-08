@@ -5,7 +5,7 @@ import { ProgramsSection, MessagesSection } from 'components/customization';
 import { useEffect, useState } from 'react';
 import { useNotification } from '@refinedev/core';
 import axios from 'axios';
-import { Message } from '@mui/icons-material';
+import HubsSection from 'components/customization/HubsSection';
 
 const baseApi = axios.create({
   baseURL: 'http://localhost:3000/api/v1',
