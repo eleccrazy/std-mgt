@@ -12,13 +12,19 @@ interface ProgramCardProps {
 const ProgramCard = ({ id, name }: ProgramCardProps) => {
   const { push } = useNavigation();
   const handleCardClick = () => {
-    push(`/programs/show?id=${id}`);
+    push(`/customization/show?type=program&id=${id}`);
   };
   return (
-    <Card sx={{ maxWdth: 345, background: '#2B6EB2', height: 100, 
-    "&:hover": {
-      background:'#174281',
-    }, }}>
+    <Card
+      sx={{
+        maxWdth: 345,
+        background: '#2B6EB2',
+        height: 100,
+        '&:hover': {
+          background: '#174281',
+        },
+      }}
+    >
       <CardActionArea onClick={handleCardClick}>
         <CardContent>
           <Typography gutterBottom component='div' sx={{ color: '#ecebf0' }}>

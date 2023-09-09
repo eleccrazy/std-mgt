@@ -183,6 +183,7 @@ function App() {
             {
               name: 'customization',
               list: isAdmin ? Customization : undefined,
+              show: isAdmin ? ProgramDetails : undefined,
               icon: <RoomPreferencesIcon />,
             },
             {
@@ -196,10 +197,6 @@ function App() {
               options: { label: 'Account ' },
               list: isAdmin ? AccountPage : undefined,
               icon: <AccountCircleOutlined />,
-            },
-            {
-              name: 'programs',
-              show: ProgramDetails,
             },
           ]}
           Title={Title}
