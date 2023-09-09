@@ -1,3 +1,5 @@
+import { HubData } from './student';
+
 export interface CustomButtonProps {
   type?: string;
   title: string;
@@ -63,6 +65,12 @@ export interface CreateProgramDialogProps {
   programId?: string;
 }
 
+export interface CreateHubDialogProps {
+  isOpened: boolean;
+  handleClose: () => void;
+  updateHubs: (hub: HubType) => void;
+}
+
 export interface CreateAccountDialogProps {
   isOpened: boolean;
   handleClose: () => void;
@@ -81,6 +89,13 @@ export interface EditDialogProps {
   isOpened: boolean;
   handleClose: () => void;
   isProgram: boolean;
+  name: string;
+}
+
+export interface EditHubDialogProps {
+  id: string;
+  isOpened: boolean;
+  handleClose: () => void;
   name: string;
 }
 

@@ -25,7 +25,6 @@ const AccountPage = () => {
   };
 
   const updateAccount = (account: AccountData) => {
-    console.log(account);
     const updatedAccount = [...admins, account];
     setAdmins(updatedAccount);
   };

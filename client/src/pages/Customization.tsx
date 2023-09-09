@@ -33,6 +33,7 @@ const Customization = () => {
 
   return (
     <Box mb={5} display='flex' flexDirection='column' bgcolor='#ffffff' p={3}>
+      <HubsSection mb={3} />
       <ProgramsSection mb={3} />
       <MessagesSection setting={setting} />
     </Box>
