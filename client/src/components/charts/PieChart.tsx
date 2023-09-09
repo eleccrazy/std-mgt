@@ -1,20 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { PieChartProps } from 'interfaces/home';
-import { Typography, Stack, Box, Card, CardContent } from '@mui/material';
+import { Typography, Stack, Box } from '@mui/material';
 import './Chart.css';
+import CurrentAttendeesInfoDialog from 'components/home/CurrentAttendeesInfoDialog';
 
 const PieChart = ({ title, value, series, colors, type }: PieChartProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
-
   return (
     <Box
       id='chart'
@@ -30,8 +21,6 @@ const PieChart = ({ title, value, series, colors, type }: PieChartProps) => {
       borderRadius='15px'
       minHeight='110px'
       width='fit-content'
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       position='relative' // Added position relative to the Box component
     >
       <Stack direction='column'>
@@ -58,20 +47,6 @@ const PieChart = ({ title, value, series, colors, type }: PieChartProps) => {
           width='120px'
         ></ReactApexChart>
       </div>
-      {isHovered && type === 'current' && (
-        <Card
-          sx={{
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            width: '100%',
-            transform: `translateY(-50%)`,
-            zIndex: 1,
-          }}
-        >
-          <CardContent>Attendees Statistics</CardContent>
-        </Card>
-      )}
     </Box>
   );
 };

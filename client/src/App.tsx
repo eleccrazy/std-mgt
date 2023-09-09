@@ -24,6 +24,7 @@ import { ColorModeContextProvider } from 'contexts';
 
 import LoginPage from 'pages/Login';
 import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 import {
   Home,
@@ -57,6 +58,7 @@ axiosInstance.interceptors.request.use((request: any) => {
 });
 
 function App() {
+  const [isAdmin, setIsAdmin] = useState(false);
   const authProvider: AuthProvider = {
     login: async ({ email, password }: { email: string; password: string }) => {
       try {
@@ -79,6 +81,8 @@ function App() {
           // Save the authentication token and user data in local storage or state
           localStorage.setItem('token', token);
           localStorage.setItem('admin', JSON.stringify(admin));
+          // Check if the admin has admin previleges with its role property
+          setIsAdmin(admin.role === 'admin');
           return Promise.resolve();
         } else {
           // Login failed
@@ -122,11 +126,16 @@ function App() {
       }
     },
   };
-
-  // Get the user from local storage
+  // Get the user from the localstorage
   const user = localStorage.getItem('admin');
-  // Check if the user is admin with its role property
-  const isAdmin = user ? JSON.parse(user).role === 'admin' : false;
+  // Check if the user is an admin and set the value to the isAdmin variable.
+  useEffect(() => {
+    if (user) {
+      const admin = JSON.parse(user);
+      setIsAdmin(admin.role === 'admin');
+    }
+  }, [user]);
+
   return (
     <ColorModeContextProvider>
       <CssBaseline />
@@ -173,19 +182,19 @@ function App() {
             },
             {
               name: 'customization',
-              list: Customization,
+              list: isAdmin ? Customization : undefined,
               icon: <RoomPreferencesIcon />,
             },
             {
               name: 'scan',
               options: { label: 'Scanner' },
-              list: ScannerPage,
+              list: !isAdmin ? ScannerPage : undefined,
               icon: <DocumentScannerIcon />,
             },
             {
               name: 'account',
               options: { label: 'Account ' },
-              list: AccountPage,
+              list: isAdmin ? AccountPage : undefined,
               icon: <AccountCircleOutlined />,
             },
             {
