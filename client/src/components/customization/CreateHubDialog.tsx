@@ -38,7 +38,8 @@ function CreateHubDialog({
     try {
       const response = await baseApi.post('/hubs', { name });
       handleClose();
-      // Redirect it to the newely created program detail page if it is program.
+      // Update the hub
+      updateHubs(response.data);
       open?.({
         type: 'success',
         message: 'Success',

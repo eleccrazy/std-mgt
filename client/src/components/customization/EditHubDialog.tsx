@@ -28,6 +28,7 @@ function EditHubDialog({
   handleClose,
   id,
   name,
+  updateHubsOnUpdate,
 }: EditHubDialogProps) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -38,7 +39,7 @@ function EditHubDialog({
     e.preventDefault();
     try {
       const finalName = newName === '' ? name : newName;
-      await baseApi.patch(`/hubs/${id}`, {
+      const result = await baseApi.patch(`/hubs/${id}`, {
         name: finalName,
       });
       open?.({
@@ -47,7 +48,7 @@ function EditHubDialog({
         description: 'Hub Updated Successfully',
       });
       // Refresh the page
-      window.location.reload();
+      updateHubsOnUpdate(id, result.data);
     } catch (error: any) {
       open?.({
         type: 'error',

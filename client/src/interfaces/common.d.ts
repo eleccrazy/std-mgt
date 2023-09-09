@@ -97,6 +97,7 @@ export interface EditHubDialogProps {
   isOpened: boolean;
   handleClose: () => void;
   name: string;
+  updateHubsOnUpdate: (id: string, updatedHub: HubType) => void;
 }
 
 export interface HubType {

@@ -15,13 +15,20 @@ import { HubType } from 'interfaces/common';
 interface HubCardProps {
   id: string;
   name: string;
+  reduceHubs: (id: string) => void;
+  updateHubsOnUpdate: (id: string, updatedHub: HubType) => void;
 }
 
 const baseApi = axios.create({
   baseURL: 'http://localhost:3000/api/v1',
 });
 
-const HubCard = ({ id, name }: HubCardProps) => {
+const HubCard = ({
+  id,
+  name,
+  reduceHubs,
+  updateHubsOnUpdate,
+}: HubCardProps) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const { open } = useNotification();
@@ -52,7 +59,7 @@ const HubCard = ({ id, name }: HubCardProps) => {
         message: 'Success',
         description: 'Hub Deleted Successfully',
       });
-      window.location.reload();
+      reduceHubs(id);
     } catch (error: any) {
       open?.({
         type: 'error',
@@ -100,6 +107,7 @@ const HubCard = ({ id, name }: HubCardProps) => {
         handleClose={handleCloseDialog}
         id={id}
         name={name}
+        updateHubsOnUpdate={updateHubsOnUpdate}
       />
       <ConfirmationDialog
         dialogTitle='Are you sure you want to delete this Hub?'
