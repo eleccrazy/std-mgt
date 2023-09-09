@@ -57,7 +57,7 @@ const AccountList = ({ account }: { account: AccountData }) => {
         </Typography>
       </div>
       <IconButton>
-        <EditIcon />
+        <EditIcon sx={{color: 'white'}}/>
       </IconButton>
     </Card>
   );
