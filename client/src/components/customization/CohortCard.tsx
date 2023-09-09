@@ -67,7 +67,10 @@ const CohortCard = ({ id, name }: CohortCardProps) => {
 
   return (
     <div>
-      <Card sx={{ maxWidth: 345, background: '#230563', maxHeight: 100 }}>
+      <Card sx={{ maxWidth: 345, maxHeight: 100, background: '#2B6EB2', height: 100, 
+    "&:hover": {
+      background:'#174281',
+    }, }}>
         <CardContent>
           <Typography
             gutterBottom
@@ -88,7 +91,7 @@ const CohortCard = ({ id, name }: CohortCardProps) => {
                 color='inherit'
                 onClick={handleOpenConfirmDialog}
               >
-                <DeleteIcon style={{ color: '#a83252' }} />
+                <DeleteIcon style={{ color: '#d33f49' }} />
               </IconButton>
             </div>
           </Typography>

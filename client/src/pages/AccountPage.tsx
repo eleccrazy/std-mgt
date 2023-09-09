@@ -65,7 +65,7 @@ const AccountPage = () => {
             <div style={{ marginLeft: 'auto' }}>
               <AddButton
                 onClick={handleCreateAccountDialog}
-                backgroundColor='#230563'
+                backgroundColor='#2B6EB2'
                 hoverColor='#21365e'
               />
             </div>

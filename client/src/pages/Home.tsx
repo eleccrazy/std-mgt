@@ -68,9 +68,9 @@ const Home = () => {
               <PieChart
                 key={hub.id}
                 title={`Current attendees in ${hub.name} `}
-                value={0}
+                value={2}
                 series={[50, 50]}
-                colors={['#275be8', '#c4e8ef']}
+                colors={['#2B6EB2', '#92C4E7']}
                 type='current'
               />
             );

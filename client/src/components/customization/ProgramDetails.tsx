@@ -139,7 +139,7 @@ function ProgramDetails() {
         <Grid item xs={12} sm={6} md={4} lg={3} mt={2}>
           <AddButton
             onClick={handleClick}
-            backgroundColor='#230563'
+            backgroundColor='#2B6EB2'
             hoverColor='#21365e'
           />
         </Grid>

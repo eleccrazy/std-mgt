@@ -5,7 +5,7 @@ import { AccountData } from 'interfaces/common';
 const keyStyle = {
   fontWeight: 800,
   fontSize: 16,
-  color: '#000',
+  color: 'white',
   display: 'inline-block',
   minWidth: 80, // Set a minimum width for the keys
 };
@@ -23,7 +23,7 @@ const AccountList = ({ account }: { account: AccountData }) => {
       sx={{
         marginBottom: '8px',
         width: '100%',
-        backgroundColor: '#69a0c9',
+        backgroundColor: '#2B6EB2',
         boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
         display: 'flex',
         alignItems: 'center',
@@ -36,6 +36,7 @@ const AccountList = ({ account }: { account: AccountData }) => {
         style={{
           display: 'flex',
           flexDirection: 'column',
+          color: 'white'
         }}
       >
         <Typography variant='body1'>
@@ -56,7 +57,7 @@ const AccountList = ({ account }: { account: AccountData }) => {
         </Typography>
       </div>
       <IconButton>
-        <EditIcon />
+        <EditIcon sx={{color: 'white'}}/>
       </IconButton>
     </Card>
   );
