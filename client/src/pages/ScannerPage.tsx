@@ -3,7 +3,6 @@ import { QrReader } from 'react-qr-reader';
 import axios from 'axios';
 import { useNotification, useNavigation } from '@refinedev/core';
 import { Box, Stack, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import receptionArt from '../assets/ALX Reception Art.png';
 
 // Define base api endpoint
@@ -15,7 +14,9 @@ const ScannerPage = () => {
   const { open } = useNotification();
   const { push } = useNavigation();
   const scanCompleteRef = useRef(false); // Flag to track scan completion
-  const navigate = useNavigate();
+
+  const admin = localStorage.getItem('admin');
+  const user = admin ? JSON.parse(admin) : null;
 
   const handleScan = async (data: any) => {
     if (data && !scanCompleteRef.current) {
@@ -25,12 +26,14 @@ const ScannerPage = () => {
         // Get the student first
         const student = await api.get(`/students/${data}`);
         const { data: studentData } = student;
+        const hubId = user ? user?.hub.id : null;
         try {
           const message = studentData.attendanceId ? 'Out' : 'In';
           // If the student is checked in, check them out, otherwise check them in.
           const attendance = !studentData.attendanceId
             ? await api.post('attendances/check-in', {
                 studentId: studentData.id,
+                hubId: hubId,
               })
             : await api.patch(
                 `attendances/${studentData.attendanceId}/check-out`,
@@ -38,6 +41,7 @@ const ScannerPage = () => {
                   studentId: studentData.id,
                 },
               );
+          console.log(attendance.data);
           if (attendance.status === 201 || attendance.status === 200) {
             open?.({
               type: 'success',
@@ -95,7 +99,12 @@ const ScannerPage = () => {
           flexDirection='column'
           borderRadius='15px'
         >
-          <img alt="ALX Reception Art" src={receptionArt} width="100%" height="100%"/>
+          <img
+            alt='ALX Reception Art'
+            src={receptionArt}
+            width='100%'
+            height='100%'
+          />
         </Box>
         <Box
           p={4}

@@ -77,10 +77,47 @@ export default function CustomDataTable({ rows }: any) {
     setIsDialogOpen(false);
     // Attendance action goes here
     const message = attendanceId ? 'Out' : 'In';
+    const admin = localStorage.getItem('admin');
+    const user = admin ? JSON.parse(admin) : null;
+    if (user && user?.role === 'admin') {
+      open?.({
+        type: 'error',
+        message: 'Error',
+        description:
+          'Please login as an attendant to check-in and check-out attendees.',
+      });
+      return;
+    }
+
+    // Check if the checkout action is from the same hub that checked in it.
+    if (attendanceId) {
+      try {
+        const attendance = await api.get(`/attendances/${attendanceId}`);
+        if (attendance.data && attendance.data?.hub.name !== user?.hub.name) {
+          open?.({
+            type: 'error',
+            message: 'Error',
+            description: `You need have to log in with ${attendance.data?.hub.name} account to check-out this attendee.`,
+          });
+          return;
+        }
+      } catch (error: any) {
+        console.log(error);
+        open?.({
+          type: 'error',
+          message: 'Error',
+          description: error.response.data.error,
+        });
+      }
+    }
+
+    const hubId = user ? user?.hub.id : null;
+
     try {
       const data = !attendanceId
         ? await api.post('attendances/check-in', {
             studentId: id,
+            hubId: hubId,
           })
         : await api.patch(`attendances/${attendanceId}/check-out`, {
             studentId: id,
@@ -184,67 +221,63 @@ export default function CustomDataTable({ rows }: any) {
                     <TableCell align='left'>{row.phone}</TableCell>
                     <TableCell align='left'>{row.gender}</TableCell>
                     <TableCell align='left'>
-                      {row.attendanceId ? 
-                          <p
-                            style={{ color: 'green' }}
-                          >
-                            Checked In
-                          </p> : 
-                          <p
-                          style={{ color: 'red' }}
-                          >
-                            Checked Out
-                          </p> }
+                      {row.attendanceId ? (
+                        <p style={{ color: 'green' }}>Checked In</p>
+                      ) : (
+                        <p style={{ color: 'red' }}>Checked Out</p>
+                      )}
                     </TableCell>
                     <TableCell align='center'>
-                      {row.attendanceId ? 
-                      <Tooltip
-                        title={
-                          <Typography
-                            sx={{ color: 'white', bgcolor: 'none' }}
-                          >
-                            Check-out Action
-                          </Typography>
-                        }
-                        placement='top'
-                        sx={{ color: 'red' }}
-                      >
-                        <IconButton
-                          onClick={() =>
-                            handleOpenDialog(
-                              row.id,
-                              row.attendanceId,
-                              row.isAlumni,
-                            )
+                      {row.attendanceId ? (
+                        <Tooltip
+                          title={
+                            <Typography
+                              sx={{ color: 'white', bgcolor: 'none' }}
+                            >
+                              Check-out Action
+                            </Typography>
                           }
+                          placement='top'
+                          sx={{ color: 'red' }}
                         >
-                          <CheckOutCircleOutlineIcon />
-                        </IconButton>
-                      </Tooltip> : 
-                      <Tooltip
-                        title={
-                          <Typography
-                            sx={{ color: '#white', bgcolor: 'none' }}
+                          <IconButton
+                            onClick={() =>
+                              handleOpenDialog(
+                                row.id,
+                                row.attendanceId,
+                                row.isAlumni,
+                              )
+                            }
                           >
-                            Check-in Action
-                          </Typography>
-                        }
-                        placement='top'
-                        sx={{ color: 'green' }}
-                      >
-                        <IconButton
-                          onClick={() =>
-                            handleOpenDialog(
-                              row.id,
-                              row.attendanceId,
-                              row.isAlumni,
-                            )
+                            <CheckOutCircleOutlineIcon />
+                          </IconButton>
+                        </Tooltip>
+                      ) : (
+                        <Tooltip
+                          title={
+                            <Typography
+                              sx={{ color: '#white', bgcolor: 'none' }}
+                            >
+                              Check-in Action
+                            </Typography>
                           }
+                          placement='top'
+                          sx={{ color: 'green' }}
                         >
-                          <CheckCircleOutlineIcon />
-                        </IconButton>
-                      </Tooltip>}
-                      
+                          <IconButton
+                            onClick={() =>
+                              handleOpenDialog(
+                                row.id,
+                                row.attendanceId,
+                                row.isAlumni,
+                              )
+                            }
+                          >
+                            <CheckCircleOutlineIcon />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+
                       <Tooltip
                         title={
                           <Typography

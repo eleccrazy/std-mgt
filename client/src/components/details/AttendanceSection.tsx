@@ -16,7 +16,8 @@ import { useEffect, useState } from 'react';
 import { useNotification, useNavigation } from '@refinedev/core';
 import StudentData from 'interfaces/student';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { daDK } from '@mui/x-data-grid';
+import { HubType } from 'interfaces/common';
 
 // Define base api endpoint
 const api = axios.create({
@@ -55,18 +56,40 @@ const AttendanceSection = () => {
     currentWeekAttendances: string;
     currentWeekTotalHours: string;
   } | null>(null);
+  const [checkInStats, setCheckInStats] = useState(false);
+  const [hub, setHub] = useState<HubType | null>(null);
 
   const { open } = useNotification();
-  const navigate = useNavigate();
 
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get('id');
+
+  const admin = localStorage.getItem('admin');
+  const user = admin ? JSON.parse(admin) : null;
 
   useEffect(() => {
     async function getStudent() {
       try {
         const { data } = await api.get(`/students/${id}`);
         setStudent(data);
+        setCheckInStats(data.attendanceId !== null);
+        if (data.attendanceId) {
+          try {
+            const attendance = await api.get(
+              `/attendances/${data.attendanceId}`,
+            );
+            if (attendance.data) {
+              setHub(attendance.data?.hub.name);
+            }
+          } catch (error: any) {
+            console.log(error);
+            open?.({
+              type: 'error',
+              message: 'Error',
+              description: error.response.data.error,
+            });
+          }
+        }
       } catch (error: any) {
         open?.({
           type: 'error',
@@ -75,6 +98,12 @@ const AttendanceSection = () => {
         });
       }
     }
+
+    getStudent();
+  }, [checkInStats]);
+
+  // Using another useEffect to avoid unnecessery requests to backnd api as the checkInStats changing.
+  useEffect(() => {
     async function getStudentStats() {
       try {
         const { data } = await api.get(`/students/${id}/attendance-stats`);
@@ -87,7 +116,6 @@ const AttendanceSection = () => {
         });
       }
     }
-    getStudent();
     getStudentStats();
   }, []);
 
@@ -102,18 +130,40 @@ const AttendanceSection = () => {
   const handleAttendanceAction = async () => {
     setIsAttendanceDialgoOpen(false);
     // Attendance action goes here
-    const message = student?.attendanceId ? 'Out' : 'In';
+    const message = checkInStats ? 'Out' : 'In';
+    if (user && user?.role === 'admin') {
+      open?.({
+        type: 'error',
+        message: 'Error',
+        description:
+          'Please login as an attendant to check-in and check-out attendees.',
+      });
+      return;
+    }
+
+    const hubId = user ? user?.hub.id : null;
+    if (checkInStats) {
+      if (hub !== user?.hub.name) {
+        open?.({
+          type: 'error',
+          message: 'Error',
+          description: `You need have to log in with ${hub} account to check-out this attendee.`,
+        });
+      }
+      return;
+    }
     try {
-      const data = !student?.attendanceId
+      const data = !checkInStats
         ? await api.post('attendances/check-in', {
             studentId: id,
+            hubId: hubId,
           })
         : await api.patch(`attendances/${student?.attendanceId}/check-out`, {
             studentId: id,
           });
       if (data.status === 201 || data.status === 200) {
-        // Refresh the page
-        navigate(0);
+        setCheckInStats(data.status === 201);
+        setHub(data.data?.hub?.name);
         open?.({
           type: 'success',
           message: 'Success',
@@ -189,7 +239,9 @@ const AttendanceSection = () => {
             />
             <CustomAttendanceInfo
               title='Status'
-              value={student?.attendanceId ? 'Checked In' : 'Checked Out'}
+              value={
+                checkInStats && hub ? `Checked In @ ${hub}` : 'Checked Out'
+              }
             />
           </Grid>
         </Box>
