@@ -30,6 +30,9 @@ const AccountList = ({ account }: { account: AccountData }) => {
         justifyContent: 'space-between',
         padding: 3,
         marginTop: 3,
+        '&:hover': {
+          background: '#174281',
+        },
       }}
     >
       <div

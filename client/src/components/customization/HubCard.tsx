@@ -75,7 +75,9 @@ const HubCard = ({
 
   return (
     <div>
-      <Card sx={{ maxWidth: 345, background: '#174281', maxHeight: 100 }}>
+      <Card sx={{ maxWidth: 345, background: '#2B6EB2', maxHeight: 100, '&:hover': {
+          background: '#174281',
+        }, }}>
         <CardContent>
           <Typography
             gutterBottom
@@ -96,7 +98,7 @@ const HubCard = ({
                 color='inherit'
                 onClick={handleOpenConfirmDialog}
               >
-                <DeleteIcon style={{ color: '#a83252' }} />
+                <DeleteIcon style={{ color: '#d33f49' }} />
               </IconButton>
             </div>
           </Typography>
