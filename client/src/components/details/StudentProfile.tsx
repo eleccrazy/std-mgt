@@ -5,7 +5,6 @@ import {
   CardContent,
   Typography,
   CardHeader,
-  Stack,
 } from '@mui/material';
 import CustomButton from 'components/common/CustomButton';
 import EditIcon from '@mui/icons-material/Edit';
@@ -14,8 +13,9 @@ import QrCode2Icon from '@mui/icons-material/QrCode2';
 import QRDialoge from './QRDialog';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import StudentData from 'interfaces/student';
-import { useNavigation } from '@refinedev/core';
+import StudentData, { SettingData } from 'interfaces/student';
+import { useNavigation, useNotification } from '@refinedev/core';
+import CustomBackdrop from 'components/common/CustomBackdrop';
 
 const api = axios.create({
   baseURL: 'http://localhost:3000/api/v1',
@@ -54,13 +54,37 @@ const StudentProfile = ({ type }: { type: string }) => {
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get('id');
   const navigation = useNavigation();
+  const { open } = useNotification();
   const [studentData, setStudentData] = useState<StudentData | null>(null);
+  const [setting, setSetting] = useState<SettingData | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function getStudentData() {
-      const { data } = await api.get(`students/${id}`);
-      setStudentData(data);
+      try {
+        const { data } = await api.get(`students/${id}`);
+        setStudentData(data);
+      } catch (error: any) {
+        open?.({
+          type: 'error',
+          message: 'Error',
+          description: error.response.data.message,
+        });
+      }
     }
+    async function getSetting() {
+      try {
+        const response = await api.get('/settings');
+        setSetting(response.data.length > 0 ? response.data[0] : null);
+      } catch (error: any) {
+        open?.({
+          type: 'error',
+          message: 'Error',
+          description: error.response.data.message,
+        });
+      }
+    }
+    getSetting();
     getStudentData();
   }, []);
 
@@ -71,16 +95,32 @@ const StudentProfile = ({ type }: { type: string }) => {
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
   };
-  const handleSendingMail = () => {
+  const handleSendingMail = async () => {
     // Mail sending logic goes here
-    alert('Mail Sent');
+    try {
+      setIsLoading(false);
+      await api.post(`students/${id}/mail`);
+      setIsLoading(false);
+      setIsDialogOpen(false);
+      open?.({
+        type: 'success',
+        message: 'Success',
+        description: 'Mail Sent Successfully.',
+      });
+    } catch (error: any) {
+      open?.({
+        type: 'error',
+        message: 'Error',
+        description: error.response.data.message,
+      });
+    }
   };
 
   return (
     <Card sx={{ minWidth: 275, boxShadow: 'none' }}>
       <CardHeader
         title={
-          type === 'students' ? 'Student Information' : 'Guest Information'
+          type === 'learners' ? 'Learner Information' : 'Guest Information'
         }
         sx={{ display: 'flex', justifyContent: 'space-between' }}
         action={
@@ -157,6 +197,8 @@ const StudentProfile = ({ type }: { type: string }) => {
           onClose={handleCloseDialog}
           id={id as unknown as string}
           onSendMail={handleSendingMail}
+          setting={setting ? setting : null}
+          isLoading={isLoading}
         />
       </CardActions>
     </Card>

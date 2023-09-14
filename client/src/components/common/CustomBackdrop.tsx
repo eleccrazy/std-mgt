@@ -1,15 +1,12 @@
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useState } from 'react';
 
-const CustomBackdrop = () => {
-  const [open, setOpen] = useState(true);
-
+const CustomBackdrop = ({ isLoading }: { isLoading: boolean }) => {
   return (
     <div>
       <Backdrop
         sx={{ color: '#1a2cb8', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={open}
+        open={isLoading}
       >
         <CircularProgress color='inherit' />
       </Backdrop>

@@ -36,12 +36,12 @@ const AllStudents = () => {
     <Box>
       <Stack direction='row' justifyContent='space-between' alignItems='center'>
         <Typography fontSize={25} fontWeight={700} color='#11142d'>
-          All Registered Students
+          All Registered Learners
         </Typography>
         <CustomButton
-          title='Register Students'
+          title='Register Learners'
           handleClick={() => {
-            navigation.push('/students/create');
+            navigation.push('/learners/create');
           }}
           backgroundColor='#174281'
           color='#fcfcfc'

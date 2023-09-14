@@ -60,7 +60,7 @@ const StudentsPerProgram = ({
       borderRadius='15px'
     >
       <Typography fontSize={18} fontWeight={600} color='#11142d'>
-        Registered Students Per Program
+        Total Attendees Per Program
       </Typography>
       <Stack my='20px' direction='column' gap={4}>
         {programs &&

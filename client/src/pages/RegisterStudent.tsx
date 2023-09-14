@@ -111,7 +111,7 @@ const RegisterStudent = () => {
     <Box>
       <Stack direction='row' justifyContent='space-between' alignItems='center'>
         <Typography fontSize={25} fontWeight={700} color='#11142d'>
-          Register a Student
+          Register a New Learner
         </Typography>
         <CustomButton
           title='Register From Excel'

@@ -7,7 +7,8 @@ import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { Typography, Button, Box, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
-import StudentData from 'interfaces/student';
+import StudentData, { SettingData } from 'interfaces/student';
+import CustomBackdrop from 'components/common/CustomBackdrop';
 
 interface QRDialogeProps {
   open: boolean;
@@ -15,6 +16,8 @@ interface QRDialogeProps {
   onSendMail: () => void;
   id: string;
   studentData: StudentData | null;
+  setting: SettingData | null;
+  isLoading: boolean;
 }
 
 const Transition = React.forwardRef(function Transition(
@@ -32,18 +35,14 @@ const QRDialoge = ({
   id,
   onSendMail,
   studentData,
+  setting,
+  isLoading,
 }: QRDialogeProps) => {
   // Get the student QR code image from the backend
   const [qrCode, setQrCode] = useState('');
-  const [defaultSubject, setDefaultSubject] = useState('');
-  const [defaultContent, setDefaultConent] = useState('');
 
   useEffect(() => {
     setQrCode(`http://localhost:3000/api/v1/static/images/${id}.png`);
-    setDefaultSubject('QR Attendance Information');
-    setDefaultConent(
-      'Some sort of default content that is being sent to the student or guest. Some sort of default content that is being sent to the student or guest.',
-    );
   }, []);
   return (
     <Dialog
@@ -65,27 +64,29 @@ const QRDialoge = ({
         {/* Insert an image to the dialog */}
         <Box display='flex' flexDirection='row' alignItems='center'>
           {qrCode && <img src={qrCode} alt='QR Code' />}
-          <Box display='flex' flexDirection='column' gap={2} paddingTop={1}>
-            <TextField
-              id='outlined-read-only-input'
-              label='Subject:'
-              variant='outlined'
-              value={defaultSubject}
-              inputProps={{
-                readOnly: true,
-              }}
-            />
-            <TextField
-              id='outlined-multiline-static'
-              label='Content:'
-              defaultValue={defaultContent}
-              multiline
-              rows={4}
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-          </Box>
+          {setting && (
+            <Box display='flex' flexDirection='column' gap={2} paddingTop={1}>
+              <TextField
+                id='outlined-read-only-input'
+                label='Subject:'
+                variant='outlined'
+                value={setting.subject}
+                inputProps={{
+                  readOnly: true,
+                }}
+              />
+              <TextField
+                id='outlined-multiline-static'
+                label='Content:'
+                defaultValue={setting.content}
+                multiline
+                rows={4}
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+            </Box>
+          )}
         </Box>
       </DialogContent>
       <DialogActions>
@@ -96,6 +97,7 @@ const QRDialoge = ({
           Close
         </Button>
       </DialogActions>
+      <CustomBackdrop isLoading={isLoading} />
     </Dialog>
   );
 };

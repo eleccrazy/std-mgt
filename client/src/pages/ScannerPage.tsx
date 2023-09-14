@@ -41,7 +41,6 @@ const ScannerPage = () => {
                   studentId: studentData.id,
                 },
               );
-          console.log(attendance.data);
           if (attendance.status === 201 || attendance.status === 200) {
             open?.({
               type: 'success',
@@ -51,7 +50,7 @@ const ScannerPage = () => {
             push(
               studentData.isAlumni
                 ? `/guests/show?id=${studentData.id}`
-                : `/students/show?id=${studentData.id}`,
+                : `/learners/show?id=${studentData.id}`,
             );
           }
         } catch (error: any) {

@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useNotification } from '@refinedev/core';
 
 import {
   PieChart,
@@ -19,6 +20,8 @@ const api = axios.create({
 const Home = () => {
   const [stats, setStats] = useState<StudentStatsData | null>(null);
   const [hubs, setHubs] = useState<HubData[]>([]);
+  const [activeCount, setActiveCount] = useState<Record<string, number>>({});
+  const { open } = useNotification();
 
   useEffect(() => {
     const getStats = async () => {
@@ -27,7 +30,11 @@ const Home = () => {
         const { data } = response;
         setStats(data);
       } catch (error: any) {
-        console.log(error);
+        open?.({
+          type: 'error',
+          message: 'Error',
+          description: error.response.data.error,
+        });
       }
     };
     const getHubs = async () => {
@@ -36,11 +43,28 @@ const Home = () => {
         const { data } = response;
         setHubs(data);
       } catch (error: any) {
-        console.log(error);
+        open?.({
+          type: 'error',
+          message: 'Error',
+          description: error.response.data.error,
+        });
+      }
+    };
+    const getActiveStudents = async () => {
+      try {
+        const response = await api.get('/attendances/active');
+        setActiveCount(response.data);
+      } catch (error: any) {
+        open?.({
+          type: 'error',
+          message: 'Error',
+          description: error.response.data.error,
+        });
       }
     };
     getHubs();
     getStats();
+    getActiveStudents();
   }, []);
   return (
     <Box>
@@ -68,7 +92,7 @@ const Home = () => {
               <PieChart
                 key={hub.id}
                 title={`Current attendees in ${hub.name} `}
-                value={2}
+                value={activeCount[hub.name] ? activeCount[hub.name] : 0}
                 series={[50, 50]}
                 colors={['#2B6EB2', '#92C4E7']}
                 type='current'

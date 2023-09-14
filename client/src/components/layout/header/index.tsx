@@ -26,12 +26,17 @@ export const Header: React.FC = () => {
     setAnchorEl(null);
   };
 
+  const admin = localStorage.getItem('admin');
+  const userAdmin = admin ? JSON.parse(admin) : null;
+
   return (
     <AppBar
-      color='default'
       position='sticky'
-      elevation={1}
-      sx={{ backgroundColor:'rgba(255,255,255,.8)', color:'black', boarderBottom:'1px solid #D3D3D3'}}
+      elevation={0}
+      sx={{
+        backgroundColor: '#fff',
+        color: 'black',
+      }}
     >
       <Toolbar>
         <Stack
@@ -41,31 +46,13 @@ export const Header: React.FC = () => {
           alignItems='center'
         >
           <Typography variant='subtitle2'>
-            ALX Learner Tracking System
+            ALX Learner Tracking System{' '}
+            {userAdmin?.role === 'admin'
+              ? 'Admin'
+              : 'Attendant' + `@ ${userAdmin?.hub.name}`}
           </Typography>
-          <Stack direction='row' gap='16px' alignItems='center'>
-            {/* Settings button */}
-            <Tooltip title='Settings'>
-              <IconButton onClick={handleClick}>
-                <SettingsIcon />
-              </IconButton>
-            </Tooltip>
-            {/* Profile button */}
-            {showUserInfo && (
-              <>
-                <Avatar src={user?.avatar} alt={user?.name} />
-                <Typography variant='subtitle2'>{user?.name}</Typography>
-              </>
-            )}
-          </Stack>
         </Stack>
       </Toolbar>
-      {/* Settings menu */}
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <MenuItem onClick={handleClose}>Option 1</MenuItem>
-        <MenuItem onClick={handleClose}>Option 2</MenuItem>
-        <MenuItem onClick={handleClose}>Option 3</MenuItem>
-      </Menu>
     </AppBar>
   );
 };

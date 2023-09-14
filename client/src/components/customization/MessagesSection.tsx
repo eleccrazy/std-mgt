@@ -34,6 +34,8 @@ function MessagesSection({
     password?: string;
     subject: string;
     content: string;
+    host: string;
+    port: number;
     sourceEmail: string;
     timeLimit?: number;
   } | null;
@@ -47,6 +49,8 @@ function MessagesSection({
     setting ? setting.password : '',
   );
   const [timeLimit, setTimeLimit] = useState(setting ? setting.timeLimit : '');
+  const [host, setHost] = useState(setting ? setting.host : '');
+  const [port, setPort] = useState(setting ? setting.port : '');
   const [createIsSucced, setCreateIsSucced] = useState(false);
   const [id, setId] = useState(setting ? setting.id : null);
 
@@ -59,6 +63,8 @@ function MessagesSection({
       password: sourceEmailPassword,
       subject,
       content,
+      host,
+      port,
       timeLimit: parseInt(timeLimit as string),
     };
     // Check if we have a setting object, if we do, we are updating, otherwise we are creating
@@ -104,6 +110,8 @@ function MessagesSection({
       setSubject(setting.subject);
       setContent(setting.content);
       setTimeLimit(setting.timeLimit);
+      setHost(setting.host);
+      setPort(setting.port);
       setCreateIsSucced(true);
     }
   }, [setting]);
@@ -114,6 +122,8 @@ function MessagesSection({
     setSubject(subject);
     setContent(content);
     setTimeLimit(timeLimit);
+    setHost(host);
+    setPort(port);
   }, [createIsSucced]);
 
   return (
@@ -156,12 +166,46 @@ function MessagesSection({
             id='sourceEmailPassword'
             color='info'
             required
-            type='password'
+            type='text'
             variant='outlined'
             name='sourceEmailPassword'
             autoComplete='current-password'
             value={sourceEmailPassword}
             onChange={(e: any) => setSourceEmailPassword(e.target.value)}
+            InputProps={{
+              style: { color: '#11142d', background: '#c7e7ff' },
+            }}
+          />
+        </FormControl>
+        <FormControl>
+          <FormHelperText sx={style}>Source Email Host</FormHelperText>
+          <TextField
+            fullWidth
+            id='host'
+            color='info'
+            required
+            type='text'
+            variant='outlined'
+            name='host'
+            value={host}
+            onChange={(e: any) => setHost(e.target.value)}
+            InputProps={{
+              style: { color: '#11142d', background: '#c7e7ff' },
+            }}
+          />
+        </FormControl>
+        <FormControl>
+          <FormHelperText sx={style}>Source Email Port</FormHelperText>
+          <TextField
+            fullWidth
+            id='port'
+            color='info'
+            required
+            type='text'
+            variant='outlined'
+            name='port'
+            value={port}
+            onChange={(e: any) => setPort(e.target.value)}
             InputProps={{
               style: { color: '#11142d', background: '#c7e7ff' },
             }}

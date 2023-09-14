@@ -16,6 +16,17 @@ interface StudentData {
   updatedAt: string;
 }
 
+export interface SettingData {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  sourceEmail: string;
+  password: string;
+  content: string;
+  subject: string;
+  timeLimit: number;
+}
+
 export interface StudentDataRegister {
   firstName: string;
   lastName: string;
@@ -51,10 +62,10 @@ export interface CohortData {
 
 export interface StudentStatsData {
   totalStudents: number;
-    totalGuests: number;
-    totalLearners: number;
-    studentsPerProgram: { program: string; count: number }[];
-    perProgramPercent: { program: string; percent: number }[];
+  totalGuests: number;
+  totalLearners: number;
+  studentsPerProgram: { program: string; count: number }[];
+  perProgramPercent: { program: string; percent: number }[];
 }
 
 export default StudentData;

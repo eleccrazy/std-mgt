@@ -154,7 +154,7 @@ function App() {
               icon: <DashboardIcon />,
             },
             {
-              name: 'students',
+              name: 'learners',
               list: AllStudents,
               show: StudentDetails,
               create: RegisterStudent,

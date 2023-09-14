@@ -124,12 +124,12 @@ export default function CustomDataTable({ rows }: any) {
           });
       if (data.status === 201 || data.status === 200) {
         navigation.push(
-          isAlumni ? `/guests/show?id=${id}` : `/students/show?id=${id}`,
+          isAlumni ? `/guests/show?id=${id}` : `/learners/show?id=${id}`,
         );
         open?.({
           type: 'success',
           message: 'Success',
-          description: `Student Checked ${message} Successfully`,
+          description: `Learner Checked ${message} Successfully`,
         });
       }
     } catch (error: any) {
@@ -145,7 +145,7 @@ export default function CustomDataTable({ rows }: any) {
     if (isAlumni) {
       navigation.push(`/guests/show?id=${id}`);
     } else {
-      navigation.push(`/students/show?id=${id}`);
+      navigation.push(`/learners/show?id=${id}`);
     }
   };
 

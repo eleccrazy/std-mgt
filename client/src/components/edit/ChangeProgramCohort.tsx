@@ -76,7 +76,7 @@ function ChangeProgramCohort({
         isAlumni: !student.isAlumni,
       });
       if (response.status === 200) {
-        push(student.isAlumni ? '/students' : '/guests');
+        push(student.isAlumni ? '/learners' : '/guests');
       }
       open?.({
         type: 'success',
