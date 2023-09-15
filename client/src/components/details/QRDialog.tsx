@@ -8,8 +8,7 @@ import { TransitionProps } from '@mui/material/transitions';
 import { Typography, Button, Box, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import StudentData, { SettingData } from 'interfaces/student';
-import CustomBackdrop from 'components/common/CustomBackdrop';
-import CircularProgress from '@mui/material/CircularProgress';
+import CustomSpinner from 'components/common/CustomSpinner';
 
 interface QRDialogeProps {
   open: boolean;
@@ -45,9 +44,14 @@ const QRDialoge = ({
   useEffect(() => {
     setQrCode(`http://localhost:3000/api/v1/static/images/${id}.png`);
   }, []);
-  return (
-    <>
-    {isLoading ? <CircularProgress /> : null}
+  return isLoading ? (
+    <CustomSpinner
+      isLoading={isLoading}
+      color='#77f2b9'
+      size={40}
+      background='no'
+    />
+  ) : (
     <Dialog
       open={open}
       TransitionComponent={Transition}
@@ -100,9 +104,7 @@ const QRDialoge = ({
           Close
         </Button>
       </DialogActions>
-      <CustomBackdrop isLoading={isLoading} />
     </Dialog>
-    </>
   );
 };
 

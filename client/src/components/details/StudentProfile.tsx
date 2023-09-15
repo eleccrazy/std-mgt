@@ -15,7 +15,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import StudentData, { SettingData } from 'interfaces/student';
 import { useNavigation, useNotification } from '@refinedev/core';
-import CustomBackdrop from 'components/common/CustomBackdrop';
 
 const api = axios.create({
   baseURL: 'http://localhost:3000/api/v1',
@@ -99,9 +98,9 @@ const StudentProfile = ({ type }: { type: string }) => {
     // Mail sending logic goes here
     try {
       setIsLoading(true);
+      setIsDialogOpen(false);
       await api.post(`students/${id}/mail`);
       setIsLoading(false);
-      setIsDialogOpen(false);
       open?.({
         type: 'success',
         message: 'Success',
@@ -109,6 +108,7 @@ const StudentProfile = ({ type }: { type: string }) => {
       });
     } catch (error: any) {
       setIsLoading(false);
+      setIsDialogOpen(false);
       open?.({
         type: 'error',
         message: 'Error',
