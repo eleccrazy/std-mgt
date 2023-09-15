@@ -98,7 +98,7 @@ const StudentProfile = ({ type }: { type: string }) => {
   const handleSendingMail = async () => {
     // Mail sending logic goes here
     try {
-      setIsLoading(false);
+      setIsLoading(true);
       await api.post(`students/${id}/mail`);
       setIsLoading(false);
       setIsDialogOpen(false);
@@ -108,6 +108,7 @@ const StudentProfile = ({ type }: { type: string }) => {
         description: 'Mail Sent Successfully.',
       });
     } catch (error: any) {
+      setIsLoading(false);
       open?.({
         type: 'error',
         message: 'Error',

@@ -64,7 +64,7 @@ function MessagesSection({
       subject,
       content,
       host,
-      port,
+      port: parseInt(port as string),
       timeLimit: parseInt(timeLimit as string),
     };
     // Check if we have a setting object, if we do, we are updating, otherwise we are creating
