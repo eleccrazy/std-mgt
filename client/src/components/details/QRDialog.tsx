@@ -9,6 +9,7 @@ import { Typography, Button, Box, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import StudentData, { SettingData } from 'interfaces/student';
 import CustomBackdrop from 'components/common/CustomBackdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 interface QRDialogeProps {
   open: boolean;
@@ -45,6 +46,8 @@ const QRDialoge = ({
     setQrCode(`http://localhost:3000/api/v1/static/images/${id}.png`);
   }, []);
   return (
+    <>
+    {isLoading ? <CircularProgress /> : null}
     <Dialog
       open={open}
       TransitionComponent={Transition}
@@ -99,6 +102,7 @@ const QRDialoge = ({
       </DialogActions>
       <CustomBackdrop isLoading={isLoading} />
     </Dialog>
+    </>
   );
 };
 
