@@ -122,7 +122,7 @@ const RegisterStudent = () => {
           color='#fcfcfc'
           icon={<AppRegistration />}
         />
-        <ExcelDataUploadDialog open={excelOpen} onClose={handleClose} />
+        <ExcelDataUploadDialog excelOpen={excelOpen} onClose={handleClose} />
       </Stack>
       <StudentRegisterForm
         register={register}
