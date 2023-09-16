@@ -1,15 +1,9 @@
 import React from 'react';
 import { useGetIdentity } from '@refinedev/core';
 import AppBar from '@mui/material/AppBar';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import SettingsIcon from '@mui/icons-material/Settings';
 
 export const Header: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

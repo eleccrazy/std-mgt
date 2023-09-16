@@ -44,11 +44,13 @@ function ExcelDataUploadDialog({
   onClose,
   programs,
   cohorts,
+  isGuest,
 }: {
   excelOpen: boolean;
   onClose: () => void;
   programs: ProgramType[];
   cohorts: CohortType[];
+  isGuest: boolean;
 }) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [programId, setProgramId] = useState('');
@@ -75,11 +77,13 @@ function ExcelDataUploadDialog({
     // Send the excel file to the backend server.
     try {
       const formData = new FormData();
+      const isAlumni = isGuest ? 'yes' : 'no';
       formData.append('file', selectedFile);
       formData.append('programId', programId);
       formData.append('cohortId', cohortId);
+      formData.append('isAlumni', isAlumni);
 
-      console.log(formData.get('programId'));
+      console.log(formData.get('isAlumni'));
 
       const response = await api.post('/excel', formData, {
         headers: {

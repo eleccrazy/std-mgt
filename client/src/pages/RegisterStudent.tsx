@@ -127,6 +127,7 @@ const RegisterStudent = () => {
           onClose={handleClose}
           programs={programs}
           cohorts={cohorts}
+          isGuest={false}
         />
       </Stack>
       <StudentRegisterForm
