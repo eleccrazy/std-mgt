@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -8,8 +8,23 @@ import Slide from '@mui/material/Slide';
 import { Button, Grid } from '@mui/material';
 import { CloudUploadOutlined } from '@mui/icons-material';
 import axios from 'axios';
+import {
+  Box,
+  FormHelperText,
+  FormControl,
+  Select,
+  MenuItem,
+} from '@mui/material';
 
 import { useNotification } from '@refinedev/core';
+import { ProgramType, CohortType } from 'interfaces/common';
+
+const style = {
+  fontWeight: 500,
+  fontSize: 16,
+  margin: '10px 0',
+  color: '#11142d',
+};
 
 const api = axios.create({
   baseURL: `http://localhost:3000/api/v1/students`,
@@ -27,11 +42,18 @@ const Transition = React.forwardRef(function Transition(
 function ExcelDataUploadDialog({
   excelOpen,
   onClose,
+  programs,
+  cohorts,
 }: {
   excelOpen: boolean;
   onClose: () => void;
+  programs: ProgramType[];
+  cohorts: CohortType[];
 }) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [programId, setProgramId] = useState('');
+  const [cohortId, setCohortId] = useState('');
+  const [filteredCohorts, setFilteredCohorts] = useState<CohortType[]>([]);
   const { open } = useNotification();
   const handleFileInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -54,6 +76,11 @@ function ExcelDataUploadDialog({
     try {
       const formData = new FormData();
       formData.append('file', selectedFile);
+      formData.append('programId', programId);
+      formData.append('cohortId', cohortId);
+
+      console.log(formData.get('programId'));
+
       const response = await api.post('/excel', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -72,6 +99,14 @@ function ExcelDataUploadDialog({
       });
     }
   };
+
+  // Use the useEffect hook to change the value of the cohorts depending on the associated program
+  useEffect(() => {
+    const filtered = cohorts.filter(
+      (cohort: any) => cohort.program.id === programId,
+    );
+    setFilteredCohorts(filtered);
+  }, [programId]);
 
   return (
     <>
@@ -93,15 +128,77 @@ function ExcelDataUploadDialog({
               />
             </Grid>
             <Grid item xs={12}>
-              <Button
-                variant='contained'
-                color='primary'
-                startIcon={<CloudUploadOutlined />}
-                onClick={handleUploadClick}
-                disabled={!selectedFile}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2, 1fr)',
+                  gap: '20px',
+                }}
               >
-                Uplaod File
-              </Button>
+                <FormControl sx={{ flex: 1 }}>
+                  <FormHelperText style={style}>
+                    Select Program <span style={{ color: 'red' }}>*</span>
+                  </FormHelperText>
+                  <Select
+                    variant='outlined'
+                    color='info'
+                    displayEmpty
+                    required
+                    name='programId'
+                    defaultValue=''
+                    inputProps={{ 'aria-label': 'Without label' }}
+                    onChange={(e) => setProgramId(e.target.value)}
+                  >
+                    <MenuItem value='' disabled>
+                      Select Here
+                    </MenuItem>
+                    {programs.length > 0 &&
+                      programs.map((program: any, index) => (
+                        <MenuItem key={index} value={program.id}>
+                          {program.name}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+                <FormControl sx={{ flex: 1 }}>
+                  <FormHelperText style={style}>
+                    Select Cohort <span style={{ color: 'red' }}>*</span>
+                  </FormHelperText>
+                  <Select
+                    variant='outlined'
+                    color='info'
+                    displayEmpty
+                    required
+                    name='cohortId'
+                    defaultValue=''
+                    inputProps={{ 'aria-label': 'Without label' }}
+                    onChange={(e) => setCohortId(e.target.value)}
+                  >
+                    <MenuItem value='' disabled>
+                      Select Here
+                    </MenuItem>
+                    {filteredCohorts.length > 0 &&
+                      filteredCohorts.map((cohort: any, index) => (
+                        <MenuItem key={index} value={cohort.id}>
+                          {cohort.name}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </div>
+            </Grid>
+            <Grid item xs={12}>
+              <Box style={{ textAlign: 'center' }} marginTop={3}>
+                <Button
+                  variant='contained'
+                  color='primary'
+                  startIcon={<CloudUploadOutlined />}
+                  onClick={handleUploadClick}
+                  disabled={!selectedFile || !programId || !cohortId}
+                >
+                  Uplaod File
+                </Button>
+              </Box>
             </Grid>
           </Grid>
         </DialogContent>

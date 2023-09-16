@@ -107,6 +107,13 @@ export interface HubType {
   updatedAt: Date;
 }
 
+export interface CohortType {
+  id: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+  program?: ProgramType;
+}
 export interface AccountData {
   id?: string;
   email: string;
