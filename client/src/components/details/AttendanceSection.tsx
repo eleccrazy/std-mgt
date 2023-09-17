@@ -16,9 +16,10 @@ import { useEffect, useState } from 'react';
 import { useNotification, useNavigation } from '@refinedev/core';
 import StudentData from 'interfaces/student';
 import axios from 'axios';
-import { daDK } from '@mui/x-data-grid';
 import { HubType } from 'interfaces/common';
 import BASE_API_URL from 'config';
+import StudentAttendanceDetialsDialog from './StudentAttendanceDetailsDialog';
+import { AttendanceData } from './StudentAttendanceDetailsDialog';
 
 // Define base api endpoint
 const api = axios.create({
@@ -59,6 +60,8 @@ const AttendanceSection = () => {
   } | null>(null);
   const [checkInStats, setCheckInStats] = useState(false);
   const [hub, setHub] = useState<HubType | null>(null);
+  const [openDetails, setOpenDetails] = useState(false);
+  const [attendances, setAttendances] = useState<AttendanceData[]>([]);
 
   const { open } = useNotification();
 
@@ -67,6 +70,14 @@ const AttendanceSection = () => {
 
   const admin = localStorage.getItem('admin');
   const user = admin ? JSON.parse(admin) : null;
+
+  const handleGetMoreInfo = () => {
+    setOpenDetails(true);
+  };
+
+  const handleCloseDetails = () => {
+    setOpenDetails(false);
+  };
 
   useEffect(() => {
     async function getStudent() {
@@ -117,7 +128,22 @@ const AttendanceSection = () => {
         });
       }
     }
+
+    // Get all attendances of the student
+    async function getAllAttenanceRecords() {
+      try {
+        const { data } = await api.get(`/students/${id}/attendances`);
+        setAttendances(data);
+      } catch (error: any) {
+        open?.({
+          type: 'error',
+          message: 'Error',
+          description: error.response.data.error,
+        });
+      }
+    }
     getStudentStats();
+    getAllAttenanceRecords();
   }, []);
 
   // Handle attendance action dialog open and close
@@ -251,7 +277,11 @@ const AttendanceSection = () => {
         </Box>
       </CardContent>
       <CardActions>
-        <Button size='medium' style={{ textTransform: 'none' }}>
+        <Button
+          size='medium'
+          style={{ textTransform: 'none' }}
+          onClick={handleGetMoreInfo}
+        >
           Get More Information
         </Button>
       </CardActions>
@@ -261,6 +291,13 @@ const AttendanceSection = () => {
         id={id as unknown as string}
         onAttendanceAction={handleAttendanceAction}
       />
+      {attendances && (
+        <StudentAttendanceDetialsDialog
+          open={openDetails}
+          handleClose={handleCloseDetails}
+          attendances={attendances}
+        />
+      )}
     </Card>
   );
 };
