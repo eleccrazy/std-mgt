@@ -49,9 +49,9 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
     city: student ? student.city : '',
     area: student ? student.area : '',
     gender: student ? student.gender : '',
-    hubId: student ? student.hub.id : '',
+    hubId: student && student.hub ? student.hub.id : '',
   });
-  const [hubId, setHubId] = useState(student.hub.id);
+  const [hubId, setHubId] = useState(student.hub ? student.hub.id : '');
   const api = axios.create({
     baseURL: `http://localhost:3000/api/v1/students`,
   });
@@ -173,7 +173,6 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
                 fullWidth
                 id='outlined-basic'
                 color='info'
-                required
                 type='text'
                 variant='outlined'
                 name='city'
@@ -187,7 +186,6 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
                 fullWidth
                 id='outlined-basic'
                 color='info'
-                required
                 type='text'
                 variant='outlined'
                 name='area'
@@ -213,8 +211,7 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
                 color='info'
                 name='hubId'
                 displayEmpty
-                required
-                defaultValue={student ? student.hub.id : ''}
+                defaultValue={student && student.hub ? student.hub.id : ''}
                 inputProps={{ 'aria-label': 'Without label' }}
                 onChange={handleHubChange}
               >

@@ -6,8 +6,10 @@ import { TransitionProps } from '@mui/material/transitions';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { Button, Grid } from '@mui/material';
-import { CloudUploadOutlined } from '@mui/icons-material';
+import { CloudUploadOutlined, ReplyRounded } from '@mui/icons-material';
+import DownloadDialog from './DownloadDiaog';
 import axios from 'axios';
+import CustomSpinner from 'components/common/CustomSpinner';
 import {
   Box,
   FormHelperText,
@@ -16,7 +18,7 @@ import {
   MenuItem,
 } from '@mui/material';
 
-import { useNotification } from '@refinedev/core';
+import { useNotification, useNavigation } from '@refinedev/core';
 import { ProgramType, CohortType } from 'interfaces/common';
 
 const style = {
@@ -27,7 +29,7 @@ const style = {
 };
 
 const api = axios.create({
-  baseURL: `http://localhost:3000/api/v1/students`,
+  baseURL: `http://localhost:3000/api/v1`,
 });
 
 const Transition = React.forwardRef(function Transition(
@@ -56,7 +58,11 @@ function ExcelDataUploadDialog({
   const [programId, setProgramId] = useState('');
   const [cohortId, setCohortId] = useState('');
   const [filteredCohorts, setFilteredCohorts] = useState<CohortType[]>([]);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [reportFileName, setReportFilename] = useState('');
   const { open } = useNotification();
+  const { goBack } = useNavigation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const handleFileInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -66,6 +72,46 @@ function ExcelDataUploadDialog({
       alert('Please Select an Excel file.');
     } else {
       setSelectedFile(file);
+    }
+  };
+
+  const handleCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
+    goBack();
+  };
+
+  const handleReportDownload = async () => {
+    // Make an api call to download the report.
+    try {
+      const report = await api.get(`/static/reports/${reportFileName}`, {
+        responseType: 'blob', // Set the response type to 'blob' to receive binary data
+      });
+
+      const downloadUrl = URL.createObjectURL(new Blob([report.data]));
+
+      // Create a temporary link element and set its attributes
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.setAttribute('download', 'report.xlsx'); // Set the desired filename
+
+      // Simulate a click event on the link to trigger the download
+      link.click();
+
+      // Clean up the temporary URL
+      URL.revokeObjectURL(downloadUrl);
+      handleCloseConfirmDialog();
+      open?.({
+        type: 'success',
+        message: 'Success',
+        description:
+          'Registration completed. Please see the registration status from the report!',
+      });
+    } catch (error: any) {
+      open?.({
+        type: 'error',
+        message: 'Error',
+        description: error.response.data.message,
+      });
     }
   };
 
@@ -82,19 +128,17 @@ function ExcelDataUploadDialog({
       formData.append('programId', programId);
       formData.append('cohortId', cohortId);
       formData.append('isAlumni', isAlumni);
-
-      console.log(formData.get('isAlumni'));
-
-      const response = await api.post('/excel', formData, {
+      setIsSubmitting(true);
+      const response = await api.post('/students/excel', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      open?.({
-        type: 'success',
-        message: 'Success',
-        description: 'All students registered successfully!',
-      });
+      const reportName = response.data;
+      setIsSubmitting(false);
+      // Open a new confirmation dialog to download the excel registration status.
+      setOpenConfirmDialog(true);
+      setReportFilename(reportName.report);
     } catch (error: any) {
       open?.({
         type: 'error',
@@ -112,7 +156,14 @@ function ExcelDataUploadDialog({
     setFilteredCohorts(filtered);
   }, [programId]);
 
-  return (
+  return isSubmitting ? (
+    <CustomSpinner
+      isLoading={isSubmitting}
+      color='#77f2b9'
+      size={40}
+      background='no'
+    />
+  ) : (
     <>
       <Dialog
         open={excelOpen}
@@ -212,6 +263,16 @@ function ExcelDataUploadDialog({
           </Button>
         </DialogActions>
       </Dialog>
+      <DownloadDialog
+        open={openConfirmDialog}
+        handleClose={handleCloseConfirmDialog}
+        dialogTitle='Mass Registration Result'
+        dialogDescription='The mass registration process has completed. You can download the registration 
+        report to view the results. The report includes successful registration results and errors, if any. 
+        If any errors or issues were encountered during the mass registration, they will be listed accordingly 
+        in the report.'
+        handleConfirm={handleReportDownload}
+      />
     </>
   );
 }

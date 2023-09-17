@@ -162,7 +162,7 @@ const StudentProfile = ({ type }: { type: string }) => {
             />
             <StudentInfoDisplay
               title='Preferred Hub'
-              value={studentData?.hub.name}
+              value={studentData?.hub ? studentData.hub.name : 'Not Specified'}
             />
             <StudentInfoDisplay
               title='Email Address'
@@ -175,7 +175,9 @@ const StudentProfile = ({ type }: { type: string }) => {
             <StudentInfoDisplay
               title='Address Information'
               value={
-                studentData ? studentData.city + ', ' + studentData.area : ''
+                studentData?.city && studentData?.area
+                  ? studentData.city + ', ' + studentData.area
+                  : 'Not Specified'
               }
             />
           </Grid>
