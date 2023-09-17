@@ -217,7 +217,14 @@ export default function CustomDataTable({ rows }: any) {
                       {row.firstName}
                     </TableCell>
                     <TableCell align='left'>{row.lastName}</TableCell>
-                    <TableCell align='left'>{row.email}</TableCell>
+                    <TableCell
+                      align='left'
+                      style={{
+                        color: row.isEmailSent ? '#56a832' : 'inherit',
+                      }}
+                    >
+                      {row.email}
+                    </TableCell>
                     <TableCell align='left'>{row.phone}</TableCell>
                     <TableCell align='left'>{row.gender}</TableCell>
                     <TableCell align='left'>
