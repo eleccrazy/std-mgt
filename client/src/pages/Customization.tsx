@@ -6,9 +6,10 @@ import { useEffect, useState } from 'react';
 import { useNotification } from '@refinedev/core';
 import axios from 'axios';
 import HubsSection from 'components/customization/HubsSection';
+import BASE_API_URL from 'config';
 
 const baseApi = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: BASE_API_URL,
 });
 
 const Customization = () => {

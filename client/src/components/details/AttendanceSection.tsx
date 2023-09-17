@@ -18,10 +18,11 @@ import StudentData from 'interfaces/student';
 import axios from 'axios';
 import { daDK } from '@mui/x-data-grid';
 import { HubType } from 'interfaces/common';
+import BASE_API_URL from 'config';
 
 // Define base api endpoint
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: BASE_API_URL,
 });
 
 const CustomAttendanceInfo = ({

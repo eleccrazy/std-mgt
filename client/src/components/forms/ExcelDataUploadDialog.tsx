@@ -20,6 +20,7 @@ import {
 
 import { useNotification, useNavigation } from '@refinedev/core';
 import { ProgramType, CohortType } from 'interfaces/common';
+import BASE_API_URL from 'config';
 
 const style = {
   fontWeight: 500,
@@ -29,7 +30,7 @@ const style = {
 };
 
 const api = axios.create({
-  baseURL: `http://localhost:3000/api/v1`,
+  baseURL: BASE_API_URL,
 });
 
 const Transition = React.forwardRef(function Transition(

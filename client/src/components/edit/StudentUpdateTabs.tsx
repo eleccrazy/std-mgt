@@ -10,6 +10,7 @@ import StudentData from 'interfaces/student';
 import StudentUpdateForm from 'components/forms/StudentUpdateForm';
 import ChangeProgramCohort from './ChangeProgramCohort';
 import ReGenerateQRCode from './ReGenerateQRCode';
+import BASE_API_URL from 'config';
 
 function StudentUpdateTabs() {
   const [value, setValue] = useState('basic-info');
@@ -26,7 +27,7 @@ function StudentUpdateTabs() {
   };
   // Create the base axios api endpoint for fetching our data
   const api = axios.create({
-    baseURL: 'http://localhost:3000/api/v1',
+    baseURL: BASE_API_URL,
   });
 
   useEffect(() => {

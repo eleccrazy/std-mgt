@@ -43,6 +43,8 @@ import {
   ScannerPage,
 } from 'pages';
 
+import BASE_API_URL from './config';
+
 const axiosInstance = axios.create();
 axiosInstance.interceptors.request.use((request: any) => {
   const token = localStorage.getItem('token');
@@ -64,7 +66,7 @@ function App() {
       try {
         // Perform your login logic here, e.g., sending a request to the server
         const response = await fetch(
-          'http://localhost:3000/api/v1/admins/login',
+          `${BASE_API_URL}/admins/login`,
 
           {
             method: 'POST',
@@ -142,7 +144,7 @@ function App() {
       <GlobalStyles styles={{ html: { WebkitFontSmoothing: 'auto' } }} />
       <RefineSnackbarProvider>
         <Refine
-          dataProvider={dataProvider('http://localhost:3000/api/v1')}
+          dataProvider={dataProvider(BASE_API_URL)}
           notificationProvider={notificationProvider}
           ReadyPage={ReadyPage}
           catchAll={<ErrorComponent />}

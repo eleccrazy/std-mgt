@@ -7,8 +7,6 @@ import loginArt from '../assets/login.jpg';
 
 import { alx } from 'assets';
 
-import { CredentialResponse } from '../interfaces/google';
-
 const LoginPage: React.FC = () => {
   const { mutate: login } = useLogin<{ email: string; password: string }>({
     v3LegacyAuthProviderCompatible: true,
@@ -32,16 +30,20 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <Box component='div' sx={{height: '100vh', backgroundColor: '#FCFCFC' }}>
+    <Box component='div' sx={{ height: '100vh', backgroundColor: '#FCFCFC' }}>
       <div>
-        <img style={{position: 'absolute', height: '100vh', width: '100vw'}} src={loginArt} alt='Yariga Logo' />
+        <img
+          style={{ position: 'absolute', height: '100vh', width: '100vw' }}
+          src={loginArt}
+          alt='Yariga Logo'
+        />
       </div>
       <Container
         component='main'
         maxWidth='xs'
         sx={{
           display: 'flex',
-          height: '100vh', 
+          height: '100vh',
           opacity: 0.85,
           flexDirection: 'column',
           justifyContent: 'center',
@@ -88,9 +90,13 @@ const LoginPage: React.FC = () => {
                 type='submit'
                 variant='contained'
                 fullWidth
-                sx={{ marginTop: 5, backgroundColor:'#174281', "&:hover": {
-                  background:'#6CADDC',
-                },}}
+                sx={{
+                  marginTop: 5,
+                  backgroundColor: '#174281',
+                  '&:hover': {
+                    background: '#6CADDC',
+                  },
+                }}
               >
                 Login
               </Button>

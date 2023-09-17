@@ -7,13 +7,14 @@ import axios from 'axios';
 import CustomDataTable from 'components/tables/CustomDataTable';
 import StudentData from 'interfaces/student';
 import { useNotification } from '@refinedev/core';
+import BASE_API_URL from 'config';
 
 export const AllGuests = () => {
   const navigation = useNavigation();
 
   // Create the base axios api endpoint for fetching our data
   const api = axios.create({
-    baseURL: 'http://localhost:3000/api/v1',
+    baseURL: BASE_API_URL,
   });
 
   const [filteredData, setFilteredData] = useState<StudentData[]>([]);

@@ -19,12 +19,13 @@ import AttendanceActionDialog from 'components/details/AttendanceActionDialog';
 import { useNotification, useNavigation } from '@refinedev/core';
 
 import axios from 'axios';
+import BASE_API_URL from 'config';
 
 const rowsPerPageOptions = [10, 20, 30];
 
 // Define base api endpoint
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: BASE_API_URL,
 });
 
 export default function CustomDataTable({ rows }: any) {

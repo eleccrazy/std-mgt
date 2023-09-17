@@ -10,6 +10,7 @@ import CustomButton from 'components/common/CustomButton';
 import { FormEvent, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNotification } from '@refinedev/core';
+import BASE_API_URL from 'config';
 
 const style = {
   fontWeight: 800,
@@ -19,7 +20,7 @@ const style = {
 };
 
 const baseApi = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: BASE_API_URL,
 });
 
 function MessagesSection({

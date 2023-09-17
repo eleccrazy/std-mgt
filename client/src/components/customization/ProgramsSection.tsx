@@ -6,15 +6,15 @@ import axios from 'axios';
 import { ProgramType } from 'interfaces/common';
 import CreateProgramDialog from './CreateProgramDialog';
 import { useNavigate } from 'react-router-dom';
+import BASE_API_URL from 'config';
 
 const baseApi = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: BASE_API_URL,
 });
 
 const ProgramsSection = ({ mb, mt }: { mb?: number; mt?: number }) => {
   const [programs, setPrograms] = useState<ProgramType[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
-  const navigate = useNavigate();
   const handleClick = () => {
     setOpenDialog(true);
   };

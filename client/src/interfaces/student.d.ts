@@ -10,6 +10,7 @@ interface StudentData {
   area: string;
   attendanceId: string;
   program: ProgramData;
+  isEmailSent: boolean;
   hub: HubData;
   cohort: CohortData;
   createdAt: string;

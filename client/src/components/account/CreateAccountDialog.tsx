@@ -13,12 +13,11 @@ import {
   Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import CustomButton from 'components/common/CustomButton';
-import { FormEvent } from 'react';
 import axios from 'axios';
 import { useNotification } from '@refinedev/core';
 import { useNavigation } from '@refinedev/core';
 import CreateAccountForm from './CreateAccountForm';
+import BASE_API_URL from 'config';
 
 const style = {
   fontWeight: 800,
@@ -28,7 +27,7 @@ const style = {
 };
 
 const baseApi = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: BASE_API_URL,
 });
 
 function CreateAccountDialog({

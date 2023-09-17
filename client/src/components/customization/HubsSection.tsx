@@ -6,9 +6,10 @@ import { HubType } from 'interfaces/common';
 import CreateHubDialog from './CreateHubDialog';
 import HubCard from './HubCard';
 import { useNotification } from '@refinedev/core';
+import BASE_API_URL from 'config';
 
 const baseApi = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: BASE_API_URL,
 });
 
 const HubsSection = ({ mb, mt }: { mb?: number; mt?: number }) => {

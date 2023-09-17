@@ -15,9 +15,10 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import StudentData, { SettingData } from 'interfaces/student';
 import { useNavigation, useNotification } from '@refinedev/core';
+import BASE_API_URL from 'config';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: BASE_API_URL,
 });
 // Custom component for displaying student profile
 const StudentInfoDisplay = ({
@@ -61,7 +62,7 @@ const StudentProfile = ({ type }: { type: string }) => {
   useEffect(() => {
     async function getStudentData() {
       try {
-        const { data } = await api.get(`students/${id}`);
+        const { data } = await api.get(`/students/${id}`);
         setStudentData(data);
       } catch (error: any) {
         open?.({
@@ -167,6 +168,12 @@ const StudentProfile = ({ type }: { type: string }) => {
             <StudentInfoDisplay
               title='Email Address'
               value={studentData?.email}
+            />
+            <StudentInfoDisplay
+              title='Mail Status'
+              value={
+                studentData?.isEmailSent ? 'Delivered' : 'Not Delivered Yet'
+              }
             />
             <StudentInfoDisplay
               title='Phone Number'

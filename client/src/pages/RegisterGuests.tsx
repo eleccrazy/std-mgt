@@ -11,6 +11,7 @@ import axios from 'axios';
 import { useNotification } from '@refinedev/core';
 
 import ExcelDataUploadDialog from 'components/forms/ExcelDataUploadDialog';
+import BASE_API_URL from 'config';
 
 const RegisterGuests = () => {
   const navigation = useNavigation();
@@ -33,7 +34,7 @@ const RegisterGuests = () => {
 
   // Create the base axios api endpoint for fetching our data
   const api = axios.create({
-    baseURL: 'http://localhost:3000/api/v1',
+    baseURL: BASE_API_URL,
   });
 
   const onFinishHandler = async (data: FieldValues) => {

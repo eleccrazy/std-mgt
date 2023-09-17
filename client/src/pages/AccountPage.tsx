@@ -6,9 +6,10 @@ import { AccountData, HubType } from 'interfaces/common';
 import axios from 'axios';
 import { useNotification } from '@refinedev/core';
 import AccountList from 'components/account/AccountList';
+import BASE_API_URL from 'config';
 
 const baseApi = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: BASE_API_URL,
 });
 
 const AccountPage = () => {

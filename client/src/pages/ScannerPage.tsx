@@ -4,10 +4,11 @@ import axios from 'axios';
 import { useNotification, useNavigation } from '@refinedev/core';
 import { Box, Stack, Typography } from '@mui/material';
 import receptionArt from '../assets/ALX Reception Art.png';
+import BASE_API_URL from 'config';
 
 // Define base api endpoint
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: BASE_API_URL,
 });
 
 const ScannerPage = () => {

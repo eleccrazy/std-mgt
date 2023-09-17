@@ -16,6 +16,7 @@ import StudentData from 'interfaces/student';
 import CustomButton from 'components/common/CustomButton';
 import axios from 'axios';
 import { useNotification, useNavigation } from '@refinedev/core';
+import BASE_API_URL from 'config';
 
 type FormData = {
   firstName: string;
@@ -53,7 +54,7 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
   });
   const [hubId, setHubId] = useState(student.hub ? student.hub.id : '');
   const api = axios.create({
-    baseURL: `http://localhost:3000/api/v1/students`,
+    baseURL: BASE_API_URL,
   });
 
   const { open } = useNotification();
@@ -82,7 +83,7 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
     }, {} as Partial<FormData>);
     // Make an api call to the server to update the student data.
     try {
-      const response = await api.patch(`/${student?.id}`, {
+      const response = await api.patch(`/students/${student?.id}`, {
         ...filteredFormData,
       });
       if (response.status === 200) {
