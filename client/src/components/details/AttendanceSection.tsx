@@ -167,8 +167,6 @@ const AttendanceSection = () => {
       });
       return;
     }
-
-    const hubId = user ? user?.hub.id : null;
     if (checkInStats) {
       if (hub !== user?.hub.name) {
         open?.({
@@ -176,9 +174,10 @@ const AttendanceSection = () => {
           message: 'Error',
           description: `You need have to log in with ${hub} account to check-out this attendee.`,
         });
+        return;
       }
-      return;
     }
+    const hubId = user ? user?.hub.id : null;
     try {
       const data = !checkInStats
         ? await api.post('attendances/check-in', {
