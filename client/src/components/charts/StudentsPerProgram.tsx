@@ -5,15 +5,26 @@ interface ProgressBarProps {
   title: string;
   color: string;
   percentage: number;
+  count: number;
 }
 
-const ProgresBar = ({ title, color, percentage }: ProgressBarProps) => {
+const ProgresBar = ({ title, color, percentage, count }: ProgressBarProps) => {
   return (
     <Stack direction='column' gap={2}>
       <Stack direction='row' justifyContent='space-between'>
         <Typography fontSize={14} fontWeight={600} color='#11142d'>
           {title}
         </Typography>
+        {count > 0 && (
+          <Typography
+            fontSize={14}
+            fontWeight={600}
+            color='#11142d'
+            sx={{ textAlign: 'center' }}
+          >
+            {count}
+          </Typography>
+        )}
         <Typography fontSize={14} fontWeight={600} color='#174281'>
           {percentage}%
         </Typography>
@@ -39,16 +50,31 @@ const ProgresBar = ({ title, color, percentage }: ProgressBarProps) => {
 
 const StudentsPerProgram = ({
   perProgramPercent,
+  title,
+  studentsPerProgram,
 }: {
   perProgramPercent: { program: string; percent: number }[] | undefined;
+  studentsPerProgram?:
+    | {
+        program: string;
+        count: number;
+      }[]
+    | undefined;
+  title: string;
 }) => {
   const programs = perProgramPercent?.map((data, index) => {
+    const matchingProgram = studentsPerProgram?.find(
+      (program) => program.program === data.program,
+    );
+    const count = matchingProgram?.count || 0;
     return {
       name: data.program,
       percent: data.percent,
       color: colorInfo[index],
+      count: count,
     };
   });
+
   return (
     <Box
       p={4}
@@ -60,7 +86,7 @@ const StudentsPerProgram = ({
       borderRadius='15px'
     >
       <Typography fontSize={18} fontWeight={600} color='#11142d'>
-        Total Attendees Per Program
+        {title}
       </Typography>
       <Stack my='20px' direction='column' gap={4}>
         {programs &&
@@ -70,6 +96,7 @@ const StudentsPerProgram = ({
               title={program.name}
               color={program.color}
               percentage={program.percent}
+              count={program.count}
             />
           ))}
       </Stack>

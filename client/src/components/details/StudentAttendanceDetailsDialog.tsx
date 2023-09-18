@@ -22,10 +22,12 @@ function StudentAttendanceDetialsDialog({
   open,
   handleClose,
   attendances,
+  firstName,
 }: {
   open: boolean;
   handleClose: () => void;
   attendances: AttendanceData[];
+  firstName: string;
 }) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -36,8 +38,11 @@ function StudentAttendanceDetialsDialog({
       onClose={() => {}}
       aria-labelledby='responsive-dialog-title'
     >
-      <DialogTitle id='responsive-dialog-title'>
-        Student Attendance History
+      <DialogTitle
+        id='responsive-dialog-title'
+        sx={{ textAlign: 'center', color: '#0e344f' }}
+      >
+        {`${firstName}'s Attendance History`}
       </DialogTitle>
       <DialogContent>
         <DialogContentText>

@@ -5,7 +5,7 @@ const columns: GridColDef[] = [
   { field: 'date', headerName: 'Date', width: 130 },
   { field: 'checkInTime', headerName: 'Check In Time', width: 130 },
   { field: 'checkOutTime', headerName: 'Check Out Time', width: 130 },
-  { field: 'totalHoursSpent', headerName: 'Total Hours Spent', width: 130 },
+  { field: 'totalHoursSpent', headerName: 'Hours Spent', width: 130 },
 ];
 
 function AttendanceDataTable({ rows }: { rows: AttendanceData[] }) {

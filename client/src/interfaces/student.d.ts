@@ -69,4 +69,9 @@ export interface StudentStatsData {
   perProgramPercent: { program: string; percent: number }[];
 }
 
+export interface ActiveStatsData {
+  studentsPerProgram: { program: string; count: number }[];
+  perProgramPercent: { program: string; percent: number }[];
+}
+
 export default StudentData;

@@ -290,11 +290,12 @@ const AttendanceSection = () => {
         id={id as unknown as string}
         onAttendanceAction={handleAttendanceAction}
       />
-      {attendances && (
+      {attendances && student && (
         <StudentAttendanceDetialsDialog
           open={openDetails}
           handleClose={handleCloseDetails}
           attendances={attendances}
+          firstName={student.firstName}
         />
       )}
     </Card>
