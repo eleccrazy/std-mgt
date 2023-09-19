@@ -22,10 +22,22 @@ const AllStudents = () => {
   const [openDialog, setOpenDialog] = useState(false);
 
   async function checkOutStudents() {
+    setOpenDialog(false);
     try {
-      alert('Checked out');
-      setOpenDialog(false);
-    } catch (error: any) {}
+      const { data } = await api.post('/attendances/check-out');
+      navigation.push('/dashboard');
+      open?.({
+        type: 'success',
+        message: 'Success',
+        description: `${data.total} Student(s) Checked Out Successfully.`,
+      });
+    } catch (error: any) {
+      open?.({
+        type: 'error',
+        message: 'Error',
+        description: error.response.data.message,
+      });
+    }
   }
 
   const handleClose = () => {
