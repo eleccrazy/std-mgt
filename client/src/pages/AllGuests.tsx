@@ -27,7 +27,7 @@ export const AllGuests = () => {
     setOpenDialog(false);
     try {
       const { data } = await api.post('/attendances/check-out');
-      navigation.push('/dashboard');
+      navigation.replace('/dashboard');
       open?.({
         type: 'success',
         message: 'Success',
