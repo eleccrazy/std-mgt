@@ -23,8 +23,21 @@ const AllStudents = () => {
 
   async function checkOutStudents() {
     setOpenDialog(false);
+    const admin = localStorage.getItem('admin');
+    const user = admin ? JSON.parse(admin) : null;
+    const hubId = user?.hub?.id;
+    if (user && user?.role === 'admin') {
+      open?.({
+        type: 'error',
+        message: 'Error',
+        description: 'Please login as an attendant to check-out attendees.',
+      });
+      return;
+    }
     try {
-      const { data } = await api.post('/attendances/check-out');
+      const { data } = await api.post('/attendances/check-out', {
+        hubId: hubId,
+      });
       navigation.push('/dashboard');
       open?.({
         type: 'success',
