@@ -103,7 +103,6 @@ export default function CustomDataTable({ rows }: any) {
           return;
         }
       } catch (error: any) {
-        console.log(error);
         open?.({
           type: 'error',
           message: 'Error',
@@ -130,7 +129,7 @@ export default function CustomDataTable({ rows }: any) {
         open?.({
           type: 'success',
           message: 'Success',
-          description: `Learner Checked ${message} Successfully`,
+          description: `Student Checked ${message} Successfully`,
         });
       }
     } catch (error: any) {

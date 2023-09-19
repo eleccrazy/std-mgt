@@ -22,7 +22,7 @@ function ConfirmationDialog({
     <Dialog
       fullScreen={fullScreen}
       open={open}
-      onClose={handleClose}
+      onClose={() => {}}
       aria-labelledby='responsive-dialog-title'
     >
       <DialogTitle id='responsive-dialog-title'>{dialogTitle} </DialogTitle>
