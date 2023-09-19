@@ -48,7 +48,7 @@ const RegisterStudent = () => {
         isAlumni: false,
       });
       // Redirect to the students page
-      navigation.push('/students');
+      navigation.push('/learners');
       open?.({
         type: 'success',
         message: 'Success',
