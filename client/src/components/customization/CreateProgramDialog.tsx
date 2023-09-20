@@ -45,7 +45,9 @@ function CreateProgramDialog({
       );
       handleClose();
       // Redirect it to the newely created program detail page if it is program.
-      isProgram ? push(`/programs/show?id=${response.data.id}`) : goBack();
+      isProgram
+        ? push(`/customization/show?type=program&id=${response.data.id}`)
+        : goBack();
       open?.({
         type: 'success',
         message: 'Success',
