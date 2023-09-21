@@ -74,4 +74,36 @@ export interface ActiveStatsData {
   perProgramPercent: { program: string; percent: number }[];
 }
 
+export interface AttendanceStatsData {
+  lastWeek: {
+    sun: number;
+    mon: number;
+    tue: number;
+    wed: number;
+    thu: number;
+    fri: number;
+    sat: number;
+  };
+  currentWeek: {
+    sun: number;
+    mon: number;
+    tue: number;
+    wed: number;
+    thu: number;
+  };
+  attendanceDiff: {
+    sun: number;
+    mon: number;
+    tue: number;
+    wed: number;
+    thu: number;
+    fri: number | null;
+    sat: number | null;
+  };
+  currentWeekSum: number;
+  lastWeekSum: number;
+  totalDiff: number;
+  percentageRate: string;
+}
+
 export default StudentData;

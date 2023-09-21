@@ -10,7 +10,12 @@ import {
   StudentsPerProgram,
   StudentAttendanceRate,
 } from 'components';
-import { HubData, StudentStatsData, ActiveStatsData } from 'interfaces/student';
+import {
+  HubData,
+  StudentStatsData,
+  ActiveStatsData,
+  AttendanceStatsData,
+} from 'interfaces/student';
 import BASE_API_URL from 'config';
 
 // Define base api endpoint
@@ -23,6 +28,8 @@ const Home = () => {
   const [hubs, setHubs] = useState<HubData[]>([]);
   const [activeCount, setActiveCount] = useState<Record<string, number>>({});
   const [activeStats, setActiveStats] = useState<ActiveStatsData | null>(null);
+  const [attendanceStats, setAttendanceStats] =
+    useState<AttendanceStatsData | null>(null);
   const { open } = useNotification();
 
   useEffect(() => {
@@ -76,10 +83,23 @@ const Home = () => {
         });
       }
     };
+    const getAttendanceStats = async () => {
+      try {
+        const response = await api.get('/attendances/stats');
+        setAttendanceStats(response.data);
+      } catch (error: any) {
+        open?.({
+          type: 'error',
+          message: 'Error',
+          description: error.response.data.error,
+        });
+      }
+    };
     getHubs();
     getStats();
     getActiveStudents();
     getActiveStats();
+    getAttendanceStats();
   }, []);
   return (
     <Box>
@@ -121,7 +141,7 @@ const Home = () => {
               />
             );
           })}
-          
+
         {hubs &&
           hubs.map((hub) => {
             return (
@@ -142,7 +162,7 @@ const Home = () => {
         direction={{ xs: 'column', lg: 'row' }}
         gap={4}
       >
-        <StudentAttendanceRate />
+        {attendanceStats && <StudentAttendanceRate stats={attendanceStats} />}
         <StudentsPerProgram
           perProgramPercent={activeStats?.perProgramPercent}
           studentsPerProgram={activeStats?.studentsPerProgram}
