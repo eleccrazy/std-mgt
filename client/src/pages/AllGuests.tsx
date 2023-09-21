@@ -25,6 +25,17 @@ export const AllGuests = () => {
 
   async function checkOutStudents() {
     setOpenDialog(false);
+    const admin = localStorage.getItem('admin');
+    const user = admin ? JSON.parse(admin) : null;
+    const hubId = user?.hub?.id;
+    if (user && user?.role === 'admin') {
+      open?.({
+        type: 'error',
+        message: 'Error',
+        description: 'Please login as an attendant to check-out attendees.',
+      });
+      return;
+    }
     try {
       const { data } = await api.post('/attendances/check-out');
       navigation.replace('/dashboard');
@@ -71,17 +82,17 @@ export const AllGuests = () => {
         <Tooltip
           title={
             <Typography
-              sx={{ color: '#174281', bgcolor: 'none', background: 'none' }}
+              sx={{ color: '#FFF', bgcolor: 'none', background: 'none' }}
             >
               Checkout All Attendees
             </Typography>
           }
           placement='bottom'
-          color='none'
+          color='red'
         >
           <IconButton
             aria-label='delete'
-            sx={{ color: '#174281' }}
+            sx={{ color: 'red' }}
             onClick={() => {
               setOpenDialog(true);
             }}
