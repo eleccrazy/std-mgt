@@ -115,6 +115,26 @@ const Home = () => {
             );
           })}
       </Box>
+
+      <Box mt='20px' display='flex' flexWrap='wrap' gap={4}>
+        {hubs &&
+          hubs.map((hub) => {
+            return (
+              <PieChart
+                key={hub.id}
+                title={`Total Attendees Today in ${hub.name} `}
+                value={
+                  activeCount[`${hub.name}_total`]
+                    ? activeCount[`${hub.name}_total`]
+                    : 0
+                }
+                series={[50, 50]}
+                colors={['#2B6EB2', '#92C4E7']}
+                type='current'
+              />
+            );
+          })}
+      </Box>
       <Stack
         mt='25px'
         width='100%'
