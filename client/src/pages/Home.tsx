@@ -109,7 +109,7 @@ const Home = () => {
             return (
               <PieChart
                 key={hub.id}
-                title={`Total Attendees in ${hub.name} Today`}
+                title={`Todays Total Attendees in ${hub.name}`}
                 value={
                   activeCount[`${hub.name}_total`]
                     ? activeCount[`${hub.name}_total`]
@@ -127,7 +127,7 @@ const Home = () => {
             return (
               <PieChart
                 key={hub.id}
-                title={`Current attendees in ${hub.name} `}
+                title={`Currently checked-in attendees in ${hub.name} `}
                 value={activeCount[hub.name] ? activeCount[hub.name] : 0}
                 series={[50, 50]}
                 colors={['#177681', '#7FD6E2']}
