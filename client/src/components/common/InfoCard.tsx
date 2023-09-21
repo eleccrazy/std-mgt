@@ -7,7 +7,7 @@ const InfoCard = ({ title, value }: InfoCardProps) => {
       id='chart'
       flex={1}
       display='flex'
-      bgcolor='#f5fff0'
+      bgcolor='#E3F0F9'
       flexDirection='row'
       justifyContent='space-between'
       alignItems='center'

@@ -197,7 +197,7 @@ const StudentProfile = ({ type }: { type: string }) => {
             handleOpenDialog();
           }}
           backgroundColor='#f5f5f5'
-          color='#1e36e8'
+          color='#174281'
           icon={<QrCode2Icon />}
         />
         {/* Pass the state of the dialog to the QRDialog component */}

@@ -82,7 +82,7 @@ const AllStudents = () => {
         <Tooltip
           title={
             <Typography
-              sx={{ color: '#174281', bgcolor: 'none', background: 'none' }}
+              sx={{ color: '#FFF', bgcolor: 'none', background: 'none' }}
             >
               Checkout All Attendees
             </Typography>
@@ -92,7 +92,7 @@ const AllStudents = () => {
         >
           <IconButton
             aria-label='delete'
-            sx={{ color: '#174281' }}
+            sx={{ color: 'red' }}
             onClick={() => {
               setOpenDialog(true);
             }}

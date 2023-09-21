@@ -78,7 +78,7 @@ const AttendanceActionDialog = ({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Discard</Button>
+          <Button onClick={onClose}  sx={{ color: 'red' }}>Discard</Button>
           <Button onClick={onAttendanceAction}>Confirm</Button>
         </DialogActions>
       </Dialog>

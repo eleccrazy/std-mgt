@@ -101,19 +101,6 @@ const Home = () => {
           colors={['#2B6EB2', '#92C4E7']}
           type='fixed'
         />
-        {hubs &&
-          hubs.map((hub) => {
-            return (
-              <PieChart
-                key={hub.id}
-                title={`Current attendees in ${hub.name} `}
-                value={activeCount[hub.name] ? activeCount[hub.name] : 0}
-                series={[50, 50]}
-                colors={['#2B6EB2', '#92C4E7']}
-                type='current'
-              />
-            );
-          })}
       </Box>
 
       <Box mt='20px' display='flex' flexWrap='wrap' gap={4}>
@@ -122,14 +109,28 @@ const Home = () => {
             return (
               <PieChart
                 key={hub.id}
-                title={`Total Attendees Today in ${hub.name} `}
+                title={`Total Attendees in ${hub.name} Today`}
                 value={
                   activeCount[`${hub.name}_total`]
                     ? activeCount[`${hub.name}_total`]
                     : 0
                 }
                 series={[50, 50]}
-                colors={['#2B6EB2', '#92C4E7']}
+                colors={['#3949AB', '#9FA8DA']}
+                type='current'
+              />
+            );
+          })}
+          
+        {hubs &&
+          hubs.map((hub) => {
+            return (
+              <PieChart
+                key={hub.id}
+                title={`Current attendees in ${hub.name} `}
+                value={activeCount[hub.name] ? activeCount[hub.name] : 0}
+                series={[50, 50]}
+                colors={['#177681', '#7FD6E2']}
                 type='current'
               />
             );
@@ -143,8 +144,9 @@ const Home = () => {
       >
         <StudentAttendanceRate />
         <StudentsPerProgram
-          perProgramPercent={stats?.perProgramPercent}
-          title={'Total Registered Attendees Per Program'}
+          perProgramPercent={activeStats?.perProgramPercent}
+          studentsPerProgram={activeStats?.studentsPerProgram}
+          title={'Total Active Attendees Per Program In All Hubs'}
         />
       </Stack>
       <Stack
@@ -154,9 +156,8 @@ const Home = () => {
         gap={4}
       >
         <StudentsPerProgram
-          perProgramPercent={activeStats?.perProgramPercent}
-          studentsPerProgram={activeStats?.studentsPerProgram}
-          title={'Total Active Attendees Per Program In All Hubs'}
+          perProgramPercent={stats?.perProgramPercent}
+          title={'Total Registered Attendees Per Program'}
         />
       </Stack>
     </Box>
