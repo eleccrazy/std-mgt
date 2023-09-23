@@ -10,9 +10,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditDialog from './EditDialog';
 import ConfirmationDialog from 'components/common/ConfirmationDialog';
+import BASE_API_URL from 'config';
 
 const baseApi = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: BASE_API_URL,
 });
 
 function ProgramDetails() {

@@ -10,6 +10,7 @@ import ConfirmationDialog from 'components/common/ConfirmationDialog';
 import { useNotification } from '@refinedev/core';
 import axios from 'axios';
 import { useNavigation } from '@refinedev/core';
+import BASE_API_URL from 'config';
 
 interface CohortCardProps {
   id: string;
@@ -17,7 +18,7 @@ interface CohortCardProps {
 }
 
 const baseApi = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: BASE_API_URL,
 });
 
 const CohortCard = ({ id, name }: CohortCardProps) => {
@@ -67,10 +68,17 @@ const CohortCard = ({ id, name }: CohortCardProps) => {
 
   return (
     <div>
-      <Card sx={{ maxWidth: 345, maxHeight: 100, background: '#2B6EB2', height: 100, 
-    "&:hover": {
-      background:'#174281',
-    }, }}>
+      <Card
+        sx={{
+          maxWidth: 345,
+          maxHeight: 100,
+          background: '#2B6EB2',
+          height: 100,
+          '&:hover': {
+            background: '#174281',
+          },
+        }}
+      >
         <CardContent>
           <Typography
             gutterBottom
