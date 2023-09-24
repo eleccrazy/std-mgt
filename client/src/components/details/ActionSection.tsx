@@ -1,10 +1,8 @@
 import {
-  Box,
   Card,
   CardActions,
   CardContent,
   Button,
-  Typography,
   CardHeader,
 } from '@mui/material';
 

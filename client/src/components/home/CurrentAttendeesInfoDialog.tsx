@@ -1,24 +1,11 @@
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import { CreateAccountDialogProps, HubType } from 'interfaces/common';
-import {
-  FormControl,
-  FormHelperText,
-  TextField,
-  Box,
-  Typography,
-} from '@mui/material';
-import { useEffect, useState } from 'react';
-import CustomButton from 'components/common/CustomButton';
-import { FormEvent } from 'react';
 import axios from 'axios';
-import { useNotification } from '@refinedev/core';
-import { useNavigation } from '@refinedev/core';
+import BASE_API_URL from 'config';
 
 const style = {
   fontWeight: 800,
@@ -28,7 +15,7 @@ const style = {
 };
 
 const baseApi = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: BASE_API_URL,
 });
 
 interface CurrentAttendeesInfoDialogProps {
@@ -44,9 +31,6 @@ function CurrentAttendeesInfoDialog({
 }: CurrentAttendeesInfoDialogProps) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const [name, setName] = useState('');
-  const { open } = useNotification();
-  const { push, goBack } = useNavigation();
 
   return (
     <Dialog

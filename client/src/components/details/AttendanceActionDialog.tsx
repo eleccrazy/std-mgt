@@ -10,7 +10,7 @@ import { Typography, Button, Box, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import StudentData from 'interfaces/student';
-import { get } from 'http';
+import BASE_API_URL from 'config';
 
 interface AttendanceDialogProps {
   open: boolean;
@@ -21,7 +21,7 @@ interface AttendanceDialogProps {
 
 // Define base api endpoint
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: BASE_API_URL,
 });
 
 const Transition = React.forwardRef(function Transition(
@@ -78,7 +78,9 @@ const AttendanceActionDialog = ({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}  sx={{ color: 'red' }}>Discard</Button>
+          <Button onClick={onClose} sx={{ color: 'red' }}>
+            Discard
+          </Button>
           <Button onClick={onAttendanceAction}>Confirm</Button>
         </DialogActions>
       </Dialog>

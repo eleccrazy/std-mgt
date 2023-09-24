@@ -9,6 +9,7 @@ import { Typography, Button, Box, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import StudentData, { SettingData } from 'interfaces/student';
 import CustomSpinner from 'components/common/CustomSpinner';
+import BASE_API_URL from 'config';
 
 interface QRDialogeProps {
   open: boolean;
@@ -42,7 +43,7 @@ const QRDialoge = ({
   const [qrCode, setQrCode] = useState('');
 
   useEffect(() => {
-    setQrCode(`http://localhost:3000/api/v1/static/images/${id}.png`);
+    setQrCode(`${BASE_API_URL}/static/images/${id}.png`);
   }, []);
   return isLoading ? (
     <CustomSpinner

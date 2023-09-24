@@ -1,5 +1,5 @@
 import { AccountData, HubType } from 'interfaces/common';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FormEvent } from 'react';
 import {
   Box,
@@ -12,9 +12,9 @@ import {
 import CustomButton from 'components/common/CustomButton';
 import axios from 'axios';
 import { useNotification } from '@refinedev/core';
-
+import BASE_API_URL from 'config';
 const baseApi = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: BASE_API_URL,
 });
 
 const style = {

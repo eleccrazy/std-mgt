@@ -3,15 +3,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import Button from '@mui/material/Button';
 import { CreateAccountDialogProps, HubType } from 'interfaces/common';
-import {
-  FormControl,
-  FormHelperText,
-  TextField,
-  Box,
-  Typography,
-} from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNotification } from '@refinedev/core';
