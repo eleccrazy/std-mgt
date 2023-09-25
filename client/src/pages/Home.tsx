@@ -4,6 +4,7 @@ import Stack from '@mui/material/Stack';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNotification } from '@refinedev/core';
+import CustomSkeleton from 'components/common/CustomSkeleton';
 
 import {
   PieChart,
@@ -162,7 +163,11 @@ const Home = () => {
         direction={{ xs: 'column', lg: 'row' }}
         gap={4}
       >
-        {attendanceStats && <StudentAttendanceRate stats={attendanceStats} />}
+        <StudentsPerProgram
+          perProgramPercent={stats?.perProgramPercent}
+          studentsPerProgram={stats?.studentsPerProgram}
+          title={'Total Registered Attendees Per Program'}
+        />
         <StudentsPerProgram
           perProgramPercent={activeStats?.perProgramPercent}
           studentsPerProgram={activeStats?.studentsPerProgram}
@@ -171,14 +176,11 @@ const Home = () => {
       </Stack>
       <Stack
         mt='25px'
-        width='100%'
+        width='50%'
         direction={{ xs: 'column', lg: 'row' }}
         gap={4}
       >
-        <StudentsPerProgram
-          perProgramPercent={stats?.perProgramPercent}
-          title={'Total Registered Attendees Per Program'}
-        />
+        {attendanceStats && <StudentAttendanceRate stats={attendanceStats} />}
       </Stack>
     </Box>
   );

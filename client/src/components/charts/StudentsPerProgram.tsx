@@ -82,6 +82,7 @@ const StudentsPerProgram = ({
       id='chart'
       minWidth={490}
       display='flex'
+      flexGrow={1}
       flexDirection='column'
       borderRadius='15px'
     >

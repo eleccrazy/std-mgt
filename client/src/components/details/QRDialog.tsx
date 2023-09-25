@@ -98,7 +98,7 @@ const QRDialoge = ({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button variant='outlined' onClick={onSendMail}>
+        <Button variant='outlined' onClick={onSendMail} disabled>
           Mail it
         </Button>
         <Button variant='outlined' onClick={onClose}>
