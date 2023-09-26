@@ -11,6 +11,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditDialog from './EditDialog';
 import ConfirmationDialog from 'components/common/ConfirmationDialog';
 import BASE_API_URL from 'config';
+import { CohortType, ProgramType } from 'interfaces/common';
 
 const baseApi = axios.create({
   baseURL: BASE_API_URL,
@@ -49,6 +50,37 @@ function ProgramDetails() {
 
   const handleCloseConfirmDialog = () => {
     setOpenConfirmDialog(false);
+  };
+
+  // Function to update cohorts
+  const updateCohorts = (cohort: CohortType) => {
+    const updatedCohorts = [...cohorts, cohort];
+    setCohorts(updatedCohorts);
+  };
+
+  // Function to reduce cohorts on delete
+  const reduceCohorts = (id: string) => {
+    const updatedCohorts = cohorts.filter(
+      (cohort: CohortType) => cohort.id !== id,
+    );
+    setCohorts(updatedCohorts);
+  };
+
+  // Function to update cohorts when a cohort is updated
+  const updateCohortsOnUpdate = (id: string, updatedCohort: CohortType) => {
+    const updatedCohorts = cohorts.map((cohort: CohortType) => {
+      if (cohort.id === id) {
+        console.log(updatedCohort);
+        return updatedCohort;
+      }
+      return cohort;
+    });
+    setCohorts(updatedCohorts);
+  };
+
+  // Function to update the program when the program name is edited.
+  const updateProgram = (program: ProgramType) => {
+    setProgram(program);
   };
 
   const handleDeleteClick = async () => {
@@ -133,7 +165,12 @@ function ProgramDetails() {
         {cohorts.map((cohort: any) => {
           return (
             <Grid item xs={12} sm={6} md={4} lg={3} key={cohort.name}>
-              <CohortCard id={cohort.id} name={cohort.name} />
+              <CohortCard
+                id={cohort.id}
+                name={cohort.name}
+                updateCohortsOnDelete={reduceCohorts}
+                updateCohortsOnUpdate={updateCohortsOnUpdate}
+              />
             </Grid>
           );
         })}
@@ -150,6 +187,7 @@ function ProgramDetails() {
         handleClose={handleCloseDialog}
         isProgram={false}
         programId={id as unknown as string}
+        updateCohorts={updateCohorts}
       />
       <EditDialog
         isOpened={openEditDialog}
@@ -157,6 +195,7 @@ function ProgramDetails() {
         isProgram={true}
         id={id as unknown as string}
         name={program ? program.name : ''}
+        updateProgramsOnUpdate={updateProgram}
       />
       <ConfirmationDialog
         dialogTitle='Are you sure you want to delete this Program?'

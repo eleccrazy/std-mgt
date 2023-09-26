@@ -11,21 +11,28 @@ import { useNotification } from '@refinedev/core';
 import axios from 'axios';
 import { useNavigation } from '@refinedev/core';
 import BASE_API_URL from 'config';
+import { CohortType } from 'interfaces/common';
 
 interface CohortCardProps {
   id: string;
   name: string;
+  updateCohortsOnDelete: (id: string) => void;
+  updateCohortsOnUpdate: (id: string, updatedCohort: CohortType) => void;
 }
 
 const baseApi = axios.create({
   baseURL: BASE_API_URL,
 });
 
-const CohortCard = ({ id, name }: CohortCardProps) => {
+const CohortCard = ({
+  id,
+  name,
+  updateCohortsOnDelete,
+  updateCohortsOnUpdate,
+}: CohortCardProps) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const { open } = useNotification();
-  const { goBack } = useNavigation();
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
@@ -47,7 +54,7 @@ const CohortCard = ({ id, name }: CohortCardProps) => {
     try {
       await baseApi.delete(`/cohorts/${id}`);
       setOpenConfirmDialog(false);
-      goBack();
+      updateCohortsOnDelete(id);
       open?.({
         type: 'success',
         message: 'Success',
@@ -111,6 +118,7 @@ const CohortCard = ({ id, name }: CohortCardProps) => {
         isProgram={false}
         id={id}
         name={name}
+        updateCohortsOnUpdate={updateCohortsOnUpdate}
       />
       <ConfirmationDialog
         dialogTitle='Are you sure you want to delete this cohort?'

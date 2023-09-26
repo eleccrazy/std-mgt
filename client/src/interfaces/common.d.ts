@@ -63,6 +63,7 @@ export interface CreateProgramDialogProps {
   handleClose: () => void;
   isProgram: boolean;
   programId?: string;
+  updateCohorts?: (cohort: CohortType) => void;
 }
 
 export interface CreateHubDialogProps {
@@ -90,6 +91,8 @@ export interface EditDialogProps {
   handleClose: () => void;
   isProgram: boolean;
   name: string;
+  updateCohortsOnUpdate?: (id: string, updatedCohort: CohortType) => void;
+  updateProgramsOnUpdate?: (updatedProgram: ProgramType) => void;
 }
 
 export interface EditHubDialogProps {

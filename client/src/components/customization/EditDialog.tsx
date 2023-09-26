@@ -31,6 +31,8 @@ function EditDialog({
   isProgram,
   id,
   name,
+  updateCohortsOnUpdate,
+  updateProgramsOnUpdate,
 }: EditDialogProps) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -42,12 +44,16 @@ function EditDialog({
     e.preventDefault();
     try {
       const finalName = newName === '' ? name : newName;
-      await baseApi.patch(isProgram ? `/programs/${id}` : `/cohorts/${id}`, {
-        name: finalName,
-      });
+      const response = await baseApi.patch(
+        isProgram ? `/programs/${id}` : `/cohorts/${id}`,
+        {
+          name: finalName,
+        },
+      );
       handleClose();
-      // Go back to the list of programs page.
-      goBack();
+      isProgram
+        ? updateProgramsOnUpdate && updateProgramsOnUpdate(response.data)
+        : updateCohortsOnUpdate && updateCohortsOnUpdate(id, response.data);
       open?.({
         type: 'success',
         message: 'Success',
