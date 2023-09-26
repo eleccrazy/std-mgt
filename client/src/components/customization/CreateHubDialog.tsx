@@ -91,7 +91,7 @@ function CreateHubDialog({
             <CustomButton
               type='submit'
               title={'Create'}
-              backgroundColor='#230563'
+              backgroundColor='#2B6EB2'
               color='#fcfcfc'
             ></CustomButton>
           </Box>

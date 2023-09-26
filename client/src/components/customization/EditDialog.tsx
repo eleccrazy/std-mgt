@@ -109,7 +109,7 @@ function EditDialog({
             <CustomButton
               type='submit'
               title={'Save Changes'}
-              backgroundColor='#230563'
+              backgroundColor='#2B6EB2'
               color='#fcfcfc'
             ></CustomButton>
           </Box>
