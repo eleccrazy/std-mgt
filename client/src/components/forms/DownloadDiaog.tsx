@@ -25,9 +25,16 @@ function DownloadDialog({
       onClose={() => {}} // Prevent closing on escape key press
       aria-labelledby='responsive-dialog-title'
     >
-      <DialogTitle id='responsive-dialog-title'>{dialogTitle} </DialogTitle>
+      <DialogTitle
+        id='responsive-dialog-title'
+        sx={{ textAlign: 'center', fontWeight: 700 }}
+      >
+        {dialogTitle}{' '}
+      </DialogTitle>
       <DialogContent>
-        <DialogContentText>{dialogDescription}</DialogContentText>
+        <DialogContentText fontWeight={700} fontFamily={'sans-serif'}>
+          {dialogDescription}
+        </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleClose} sx={{ color: 'red' }}>
