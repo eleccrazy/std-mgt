@@ -12,6 +12,7 @@ import EditDialog from './EditDialog';
 import ConfirmationDialog from 'components/common/ConfirmationDialog';
 import BASE_API_URL from 'config';
 import { CohortType, ProgramType } from 'interfaces/common';
+import CohortCardSkeleton from 'components/skeletons/CohortCardSkeleton';
 
 const baseApi = axios.create({
   baseURL: BASE_API_URL,
@@ -23,6 +24,7 @@ function ProgramDetails() {
   const { open } = useNotification();
   const { goBack } = useNavigation();
   const [program, setProgram] = useState<any>(null);
+  const [isCompleted, setIsCompleted] = useState(false);
   const [cohorts, setCohorts] = useState<any>([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
@@ -122,6 +124,7 @@ function ProgramDetails() {
     async function getProgramCohorts() {
       try {
         const { data } = await baseApi.get(`programs/${id}/cohorts`);
+        setIsCompleted(true);
         setCohorts(data);
       } catch (error: any) {
         open?.({
@@ -162,24 +165,32 @@ function ProgramDetails() {
         </div>
       </Typography>
       <Grid container spacing={2}>
-        {cohorts.map((cohort: any) => {
-          return (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={cohort.name}>
-              <CohortCard
-                id={cohort.id}
-                name={cohort.name}
-                updateCohortsOnDelete={reduceCohorts}
-                updateCohortsOnUpdate={updateCohortsOnUpdate}
-              />
-            </Grid>
-          );
-        })}
+        {isCompleted
+          ? cohorts.map((cohort: any) => {
+              return (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={cohort.name}>
+                  <CohortCard
+                    id={cohort.id}
+                    name={cohort.name}
+                    updateCohortsOnDelete={reduceCohorts}
+                    updateCohortsOnUpdate={updateCohortsOnUpdate}
+                  />
+                </Grid>
+              );
+            })
+          : [1, 2].map((index) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                <CohortCardSkeleton />
+              </Grid>
+            ))}
         <Grid item xs={12} sm={6} md={4} lg={3} mt={2}>
-          <AddButton
-            onClick={handleClick}
-            backgroundColor='#2B6EB2'
-            hoverColor='#21365e'
-          />
+          {isCompleted && (
+            <AddButton
+              onClick={handleClick}
+              backgroundColor='#2B6EB2'
+              hoverColor='#21365e'
+            />
+          )}
         </Grid>
       </Grid>
       <CreateProgramDialog

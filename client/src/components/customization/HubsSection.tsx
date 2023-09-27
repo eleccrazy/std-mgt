@@ -7,6 +7,7 @@ import CreateHubDialog from './CreateHubDialog';
 import HubCard from './HubCard';
 import { useNotification } from '@refinedev/core';
 import BASE_API_URL from 'config';
+import HubCardSkeleton from 'components/skeletons/HubCardSkeleton';
 
 const baseApi = axios.create({
   baseURL: BASE_API_URL,
@@ -14,6 +15,7 @@ const baseApi = axios.create({
 
 const HubsSection = ({ mb, mt }: { mb?: number; mt?: number }) => {
   const [hubs, setHubs] = useState<HubType[]>([]);
+  const [isCompleted, setIsCompleted] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const { open } = useNotification();
   const handleClick = () => {
@@ -50,6 +52,7 @@ const HubsSection = ({ mb, mt }: { mb?: number; mt?: number }) => {
     async function getHubs() {
       try {
         const response = await baseApi.get('/hubs');
+        setIsCompleted(true);
         setHubs(response.data);
       } catch (error: any) {
         open?.({
@@ -73,24 +76,32 @@ const HubsSection = ({ mb, mt }: { mb?: number; mt?: number }) => {
         Manage Hubs
       </Typography>
       <Grid container spacing={2}>
-        {hubs.map((hub) => {
-          return (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={hub.name}>
-              <HubCard
-                id={hub.id}
-                name={hub.name}
-                reduceHubs={reduceHubs}
-                updateHubsOnUpdate={updateHubsOnUpdate}
-              />
-            </Grid>
-          );
-        })}
+        {isCompleted
+          ? hubs.map((hub) => {
+              return (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={hub.name}>
+                  <HubCard
+                    id={hub.id}
+                    name={hub.name}
+                    reduceHubs={reduceHubs}
+                    updateHubsOnUpdate={updateHubsOnUpdate}
+                  />
+                </Grid>
+              );
+            })
+          : [1, 2].map((index) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                <HubCardSkeleton />
+              </Grid>
+            ))}
         <Grid item xs={12} sm={6} md={4} lg={3} mt={2}>
-          <AddButton
-            onClick={handleClick}
-            backgroundColor='#2B6EB2'
-            hoverColor='#21365e'
-          />
+          {isCompleted && (
+            <AddButton
+              onClick={handleClick}
+              backgroundColor='#2B6EB2'
+              hoverColor='#21365e'
+            />
+          )}
         </Grid>
       </Grid>
       <CreateHubDialog

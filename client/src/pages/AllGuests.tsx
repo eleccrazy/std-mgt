@@ -10,6 +10,7 @@ import StudentData from 'interfaces/student';
 import { useNotification } from '@refinedev/core';
 import BASE_API_URL from 'config';
 import ConfirmationDialog from 'components/common/ConfirmationDialog';
+import CustomDataTableSkeleton from 'components/skeletons/CustomDataTableSkeleton';
 
 export const AllGuests = () => {
   const navigation = useNavigation();
@@ -20,6 +21,7 @@ export const AllGuests = () => {
   });
 
   const [filteredData, setFilteredData] = useState<StudentData[]>([]);
+  const [isCompleted, setIsCompleted] = useState(false);
   const { open } = useNotification();
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -61,6 +63,7 @@ export const AllGuests = () => {
     try {
       const response = await api.get('/students/guests');
       const studentData = response?.data;
+      setIsCompleted(true);
       setFilteredData(studentData);
     } catch (error: any) {
       open?.({
@@ -110,7 +113,11 @@ export const AllGuests = () => {
           icon={<Add />}
         ></CustomButton>
       </Stack>
-      <CustomDataTable rows={filteredData} />
+      {isCompleted ? (
+        <CustomDataTable rows={filteredData} />
+      ) : (
+        <CustomDataTableSkeleton />
+      )}
       <ConfirmationDialog
         open={openDialog}
         handleClose={handleClose}
