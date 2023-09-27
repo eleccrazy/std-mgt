@@ -4,7 +4,9 @@ import Stack from '@mui/material/Stack';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNotification } from '@refinedev/core';
-import CustomSkeleton from 'components/common/CustomSkeleton';
+import PieChartSkeleton from 'components/skeletons/PieChartSkeleton';
+import StudentsPerProgramSkeleton from 'components/skeletons/StudentsPerProgramSkeleton';
+import StudentAttendanceRateSkeleton from 'components/skeletons/StudentAttendanceRateSkeleton';
 
 import {
   PieChart,
@@ -108,24 +110,32 @@ const Home = () => {
         Dashboard
       </Typography>
       <Box mt='20px' display='flex' flexWrap='wrap' gap={4}>
-        <PieChart
-          title='Total Learners'
-          value={stats?.totalLearners ? stats?.totalLearners : 0}
-          series={[50, 50]}
-          colors={['#2B6EB2', '#92C4E7']}
-          type='fixed'
-        />
-        <PieChart
-          title='Total Guests'
-          value={stats?.totalGuests ? stats?.totalGuests : 0}
-          series={[50, 50]}
-          colors={['#2B6EB2', '#92C4E7']}
-          type='fixed'
-        />
+        {stats?.totalLearners ? (
+          <PieChart
+            title='Total Learners'
+            value={stats?.totalLearners ? stats?.totalLearners : 0}
+            series={[50, 50]}
+            colors={['#2B6EB2', '#92C4E7']}
+            type='fixed'
+          />
+        ) : (
+          <PieChartSkeleton width={160} />
+        )}
+        {stats?.totalGuests ? (
+          <PieChart
+            title='Total Guests'
+            value={stats?.totalGuests ? stats?.totalGuests : 0}
+            series={[50, 50]}
+            colors={['#2B6EB2', '#92C4E7']}
+            type='fixed'
+          />
+        ) : (
+          <PieChartSkeleton width={160} />
+        )}
       </Box>
 
       <Box mt='20px' display='flex' flexWrap='wrap' gap={4}>
-        {hubs &&
+        {hubs && hubs.length > 0 ? (
           hubs.map((hub) => {
             return (
               <PieChart
@@ -141,9 +151,14 @@ const Home = () => {
                 type='current'
               />
             );
-          })}
-
-        {hubs &&
+          })
+        ) : (
+          <>
+            <PieChartSkeleton width={230} />
+            <PieChartSkeleton width={230} />
+          </>
+        )}
+        {hubs && hubs.length > 0 ? (
           hubs.map((hub) => {
             return (
               <PieChart
@@ -155,7 +170,12 @@ const Home = () => {
                 type='current'
               />
             );
-          })}
+          })
+        ) : (
+          <>
+            <PieChartSkeleton width={230} />
+          </>
+        )}
       </Box>
       <Stack
         mt='25px'
@@ -163,16 +183,28 @@ const Home = () => {
         direction={{ xs: 'column', lg: 'row' }}
         gap={4}
       >
-        <StudentsPerProgram
-          perProgramPercent={stats?.perProgramPercent}
-          studentsPerProgram={stats?.studentsPerProgram}
-          title={'Total Registered Attendees Per Program'}
-        />
-        <StudentsPerProgram
-          perProgramPercent={activeStats?.perProgramPercent}
-          studentsPerProgram={activeStats?.studentsPerProgram}
-          title={'Total Active Attendees Per Program In All Hubs'}
-        />
+        {stats?.perProgramPercent &&
+        stats.studentsPerProgram &&
+        hubs.length > 0 ? (
+          <StudentsPerProgram
+            perProgramPercent={stats.perProgramPercent}
+            studentsPerProgram={stats.studentsPerProgram}
+            title={'Total Registered Attendees Per Program'}
+          />
+        ) : (
+          <StudentsPerProgramSkeleton />
+        )}
+        {activeStats?.perProgramPercent &&
+        activeStats.studentsPerProgram &&
+        hubs.length > 0 ? (
+          <StudentsPerProgram
+            perProgramPercent={activeStats.perProgramPercent}
+            studentsPerProgram={activeStats.studentsPerProgram}
+            title={'Total Active Attendees Per Program In All Hubs'}
+          />
+        ) : (
+          <StudentsPerProgramSkeleton />
+        )}
       </Stack>
       <Stack
         mt='25px'
@@ -180,7 +212,11 @@ const Home = () => {
         direction={{ xs: 'column', lg: 'row' }}
         gap={4}
       >
-        {attendanceStats && <StudentAttendanceRate stats={attendanceStats} />}
+        {attendanceStats ? (
+          <StudentAttendanceRate stats={attendanceStats} />
+        ) : (
+          <StudentAttendanceRateSkeleton />
+        )}
       </Stack>
     </Box>
   );

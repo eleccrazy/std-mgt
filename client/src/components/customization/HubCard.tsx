@@ -33,7 +33,6 @@ const HubCard = ({
   const [openDialog, setOpenDialog] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const { open } = useNotification();
-  const { goBack } = useNavigation();
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
