@@ -33,6 +33,11 @@ const Home = () => {
   const [activeStats, setActiveStats] = useState<ActiveStatsData | null>(null);
   const [attendanceStats, setAttendanceStats] =
     useState<AttendanceStatsData | null>(null);
+  const [checkStatsCompleted, setCheckStatsCompleted] = useState(false);
+  const [checkActiveStatsCompleted, setCheckActiveStatsCompleted] =
+    useState(false);
+  const [checkActiveCountCompleted, setCheckActiveCountCompleted] =
+    useState(false);
   const { open } = useNotification();
 
   useEffect(() => {
@@ -41,6 +46,7 @@ const Home = () => {
         const response = await api.get('/students/stats');
         const { data } = response;
         setStats(data);
+        setCheckStatsCompleted(true);
       } catch (error: any) {
         open?.({
           type: 'error',
@@ -53,6 +59,7 @@ const Home = () => {
       try {
         const response = await api.get('/students/active-students');
         setActiveStats(response.data);
+        setCheckActiveStatsCompleted(true);
       } catch (error: any) {
         open?.({
           type: 'error',
@@ -78,6 +85,7 @@ const Home = () => {
       try {
         const response = await api.get('/attendances/active');
         setActiveCount(response.data);
+        setCheckActiveCountCompleted(true);
       } catch (error: any) {
         open?.({
           type: 'error',
@@ -110,32 +118,33 @@ const Home = () => {
         Dashboard
       </Typography>
       <Box mt='20px' display='flex' flexWrap='wrap' gap={4}>
-        {stats?.totalLearners ? (
-          <PieChart
-            title='Total Learners'
-            value={stats?.totalLearners ? stats?.totalLearners : 0}
-            series={[50, 50]}
-            colors={['#2B6EB2', '#92C4E7']}
-            type='fixed'
-          />
+        {checkStatsCompleted ? (
+          <>
+            <PieChart
+              title='Total Learners'
+              value={stats?.totalLearners ? stats?.totalLearners : 0}
+              series={[50, 50]}
+              colors={['#2B6EB2', '#92C4E7']}
+              type='fixed'
+            />
+            <PieChart
+              title='Total Guests'
+              value={stats?.totalGuests ? stats?.totalGuests : 0}
+              series={[50, 50]}
+              colors={['#2B6EB2', '#92C4E7']}
+              type='fixed'
+            />
+          </>
         ) : (
-          <PieChartSkeleton width={160} />
-        )}
-        {stats?.totalGuests ? (
-          <PieChart
-            title='Total Guests'
-            value={stats?.totalGuests ? stats?.totalGuests : 0}
-            series={[50, 50]}
-            colors={['#2B6EB2', '#92C4E7']}
-            type='fixed'
-          />
-        ) : (
-          <PieChartSkeleton width={160} />
+          <>
+            <PieChartSkeleton width={160} />
+            <PieChartSkeleton width={160} />
+          </>
         )}
       </Box>
 
       <Box mt='20px' display='flex' flexWrap='wrap' gap={4}>
-        {hubs && hubs.length > 0 ? (
+        {checkActiveCountCompleted ? (
           hubs.map((hub) => {
             return (
               <PieChart
@@ -158,7 +167,7 @@ const Home = () => {
             <PieChartSkeleton width={230} />
           </>
         )}
-        {hubs && hubs.length > 0 ? (
+        {checkActiveCountCompleted ? (
           hubs.map((hub) => {
             return (
               <PieChart
@@ -183,23 +192,19 @@ const Home = () => {
         direction={{ xs: 'column', lg: 'row' }}
         gap={4}
       >
-        {stats?.perProgramPercent &&
-        stats.studentsPerProgram &&
-        hubs.length > 0 ? (
+        {checkStatsCompleted && checkActiveCountCompleted ? (
           <StudentsPerProgram
-            perProgramPercent={stats.perProgramPercent}
-            studentsPerProgram={stats.studentsPerProgram}
+            perProgramPercent={stats?.perProgramPercent}
+            studentsPerProgram={stats?.studentsPerProgram}
             title={'Total Registered Attendees Per Program'}
           />
         ) : (
           <StudentsPerProgramSkeleton />
         )}
-        {activeStats?.perProgramPercent &&
-        activeStats.studentsPerProgram &&
-        hubs.length > 0 ? (
+        {checkActiveStatsCompleted && checkActiveCountCompleted ? (
           <StudentsPerProgram
-            perProgramPercent={activeStats.perProgramPercent}
-            studentsPerProgram={activeStats.studentsPerProgram}
+            perProgramPercent={activeStats?.perProgramPercent}
+            studentsPerProgram={activeStats?.studentsPerProgram}
             title={'Total Active Attendees Per Program In All Hubs'}
           />
         ) : (
