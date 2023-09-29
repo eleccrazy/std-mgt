@@ -8,9 +8,6 @@ const ProgramCardSkeleton = () => {
         maxWidth: 345,
         background: '#2B6EB2',
         height: 100,
-        '&:hover': {
-          background: '#174281',
-        },
       }}
     >
       <CardContent>
