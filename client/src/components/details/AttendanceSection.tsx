@@ -20,6 +20,7 @@ import { HubType } from 'interfaces/common';
 import BASE_API_URL from 'config';
 import StudentAttendanceDetialsDialog from './StudentAttendanceDetailsDialog';
 import { AttendanceData } from './StudentAttendanceDetailsDialog';
+import AttendanceSectionSkeleton from 'components/skeletons/AttendanceSectionSkeleton';
 
 // Define base api endpoint
 const api = axios.create({
@@ -58,6 +59,7 @@ const AttendanceSection = () => {
     currentWeekAttendances: string;
     currentWeekTotalHours: string;
   } | null>(null);
+  const [isCompleted, setIsCompleted] = useState(false);
   const [checkInStats, setCheckInStats] = useState(false);
   const [hub, setHub] = useState<HubType | null>(null);
   const [openDetails, setOpenDetails] = useState(false);
@@ -94,7 +96,6 @@ const AttendanceSection = () => {
               setHub(attendance.data?.hub.name);
             }
           } catch (error: any) {
-            console.log(error);
             open?.({
               type: 'error',
               message: 'Error',
@@ -120,6 +121,7 @@ const AttendanceSection = () => {
       try {
         const { data } = await api.get(`/students/${id}/attendance-stats`);
         setStudentStats(data);
+        setIsCompleted(true);
       } catch (error: any) {
         open?.({
           type: 'error',
@@ -205,7 +207,7 @@ const AttendanceSection = () => {
     }
   };
 
-  return (
+  return isCompleted ? (
     <Card sx={{ minWidth: 275, boxShadow: 'none' }}>
       <CardHeader
         title='Attendance Information'
@@ -299,6 +301,8 @@ const AttendanceSection = () => {
         />
       )}
     </Card>
+  ) : (
+    <AttendanceSectionSkeleton />
   );
 };
 

@@ -16,6 +16,7 @@ import axios from 'axios';
 import StudentData, { SettingData } from 'interfaces/student';
 import { useNavigation, useNotification } from '@refinedev/core';
 import BASE_API_URL from 'config';
+import StudentProfileSkeleton from 'components/skeletons/StudentProfileSkeleton';
 
 const api = axios.create({
   baseURL: BASE_API_URL,
@@ -50,6 +51,7 @@ const StudentInfoDisplay = ({
 const StudentProfile = ({ type }: { type: string }) => {
   // Manage the state of the dialog
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get('id');
@@ -64,25 +66,14 @@ const StudentProfile = ({ type }: { type: string }) => {
       try {
         const { data } = await api.get(`/students/${id}`);
         setStudentData(data);
-      } catch (error: any) {
-        open?.({
-          type: 'error',
-          message: 'Error',
-          description: error.response.data.message,
-        });
-      }
+        setIsCompleted(true);
+      } catch (error: any) {}
     }
     async function getSetting() {
       try {
         const response = await api.get('/settings');
         setSetting(response.data.length > 0 ? response.data[0] : null);
-      } catch (error: any) {
-        open?.({
-          type: 'error',
-          message: 'Error',
-          description: error.response.data.message,
-        });
-      }
+      } catch (error: any) {}
     }
     getSetting();
     getStudentData();
@@ -118,7 +109,7 @@ const StudentProfile = ({ type }: { type: string }) => {
     }
   };
 
-  return (
+  return isCompleted ? (
     <Card sx={{ minWidth: 275, boxShadow: 'none' }}>
       <CardHeader
         title={
@@ -212,6 +203,8 @@ const StudentProfile = ({ type }: { type: string }) => {
         />
       </CardActions>
     </Card>
+  ) : (
+    <StudentProfileSkeleton />
   );
 };
 

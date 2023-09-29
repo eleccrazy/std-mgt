@@ -1,8 +1,4 @@
-import {
-  ActionSection,
-  AttendanceSection,
-  StudentProfile,
-} from 'components/details';
+import { AttendanceSection, StudentProfile } from 'components/details';
 import { Box } from '@mui/material';
 
 const GuestDetails = () => {
