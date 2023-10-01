@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useNotification } from '@refinedev/core';
 import AccountList from 'components/account/AccountList';
 import BASE_API_URL from 'config';
+import AccountPageSkeleton from 'components/skeletons/AccountPageSkeleton';
 
 const baseApi = axios.create({
   baseURL: BASE_API_URL,
@@ -16,6 +17,7 @@ const AccountPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const { open } = useNotification();
   const [admins, setAdmins] = useState<AccountData[]>([]);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const handleCreateAccountDialog = () => {
     setOpenDialog(true);
@@ -35,6 +37,7 @@ const AccountPage = () => {
       try {
         const rsponse = await baseApi.get('/admins');
         setAdmins(rsponse.data);
+        setIsCompleted(true);
       } catch (error: any) {
         open?.({
           type: 'error',
@@ -46,7 +49,7 @@ const AccountPage = () => {
     fetchAccounts();
   }, []);
 
-  return (
+  return isCompleted ? (
     <>
       <Box mb={5} display='flex' flexDirection='column' bgcolor='#ffffff' p={3}>
         <Box
@@ -85,6 +88,8 @@ const AccountPage = () => {
         updateAccount={updateAccount}
       />
     </>
+  ) : (
+    <AccountPageSkeleton />
   );
 };
 
