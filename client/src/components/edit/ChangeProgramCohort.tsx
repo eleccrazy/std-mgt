@@ -10,6 +10,7 @@ import {
   FormHelperText,
   MenuItem,
   Select,
+  Skeleton,
 } from '@mui/material';
 import CustomButton from 'components/common/CustomButton';
 import { SelectChangeEvent } from '@mui/material';
@@ -43,6 +44,8 @@ function ChangeProgramCohort({
   const [cohortId, setCohortId] = useState(student.cohort.id);
   const [programName, setProgramName] = useState('');
   const [cohortName, setCohortName] = useState('');
+  const [isProgramCompleted, setIsProgramCompleted] = useState(false);
+  const [isCohortCompleted, setIsCohortCompleted] = useState(false);
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -98,17 +101,15 @@ function ChangeProgramCohort({
       try {
         const cohort = await api.get(`/cohorts/${student.cohort.id}`);
         setCohortName(cohort.data.name);
-      } catch (error) {
-        console.log(error);
-      }
+        setIsCohortCompleted(true);
+      } catch (error) {}
     }
     async function getProgramName() {
       try {
         const program = await api.get(`/programs/${student.program.id}`);
         setProgramName(program.data.name);
-      } catch (error) {
-        console.log(error);
-      }
+        setIsProgramCompleted(true);
+      } catch (error) {}
     }
 
     getCohortName();
@@ -176,13 +177,27 @@ function ChangeProgramCohort({
           sx={{ textAlign: 'center' }}
         />
         <CardContent>
-          <Typography>
-            <span style={{ fontWeight: 700 }}>Programme: </span> {programName}
-          </Typography>
-          <Typography>
-            <span style={{ fontWeight: 700 }}>Cohort: </span>
-            {cohortName}
-          </Typography>
+          {isCohortCompleted && isProgramCompleted ? (
+            <>
+              <Typography>
+                <span style={{ fontWeight: 700 }}>Programme: </span>{' '}
+                {programName}
+              </Typography>
+              <Typography>
+                <span style={{ fontWeight: 700 }}>Cohort: </span>
+                {cohortName}
+              </Typography>
+            </>
+          ) : (
+            <>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <Skeleton style={{ width: 320 }} />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <Skeleton style={{ width: 150 }} />
+              </div>
+            </>
+          )}
         </CardContent>
         <CardContent sx={{ textAlign: 'right' }}>
           <CustomButton

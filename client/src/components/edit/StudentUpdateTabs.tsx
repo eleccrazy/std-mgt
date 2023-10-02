@@ -11,6 +11,7 @@ import StudentUpdateForm from 'components/forms/StudentUpdateForm';
 import ChangeProgramCohort from './ChangeProgramCohort';
 import ReGenerateQRCode from './ReGenerateQRCode';
 import BASE_API_URL from 'config';
+import StudentUpdateFormSkeleton from 'components/skeletons/StudentUpdateFormSkeleton';
 
 function StudentUpdateTabs() {
   const [value, setValue] = useState('basic-info');
@@ -36,9 +37,7 @@ function StudentUpdateTabs() {
       try {
         const response = await api.get('/hubs');
         setHubs(response.data);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     }
 
     // Get the student data
@@ -46,9 +45,7 @@ function StudentUpdateTabs() {
       try {
         const response = await api.get(`/students/${id}`);
         setStudent(response.data);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     }
 
     // Get all programs
@@ -56,9 +53,7 @@ function StudentUpdateTabs() {
       try {
         const response = await api.get('/programs');
         setPrograms(response.data);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     }
 
     // Get all cohorts
@@ -66,9 +61,7 @@ function StudentUpdateTabs() {
       try {
         const response = await api.get('/cohorts');
         setCohorts(response.data);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     }
     getPrograms();
     getCohorts();
@@ -132,22 +125,34 @@ function StudentUpdateTabs() {
         </TabList>
         <TabPanel value='basic-info'>
           <Box>
-            {student && <StudentUpdateForm student={student} hubs={hubs} />}
+            {student && cohorts.length > 0 && programs.length > 0 ? (
+              <StudentUpdateForm student={student} hubs={hubs} />
+            ) : (
+              <StudentUpdateFormSkeleton />
+            )}
           </Box>
         </TabPanel>
         <TabPanel value='program-cohort'>
           <Box>
-            {student && (
+            {student && cohorts.length > 0 && programs.length > 0 ? (
               <ChangeProgramCohort
                 programs={programs}
                 cohorts={cohorts}
                 student={student}
               />
+            ) : (
+              <StudentUpdateFormSkeleton />
             )}
           </Box>
         </TabPanel>
         <TabPanel value='generate-qr'>
-          <Box>{student && <ReGenerateQRCode />}</Box>
+          <Box>
+            {student && cohorts.length > 0 && programs.length > 0 ? (
+              <ReGenerateQRCode />
+            ) : (
+              <StudentUpdateFormSkeleton />
+            )}
+          </Box>
         </TabPanel>
       </Box>
     </TabContext>
