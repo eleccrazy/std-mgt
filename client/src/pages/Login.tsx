@@ -4,11 +4,15 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { TextField, Button, Grid } from '@mui/material';
 import loginArt from '../assets/login.jpg';
+import CustomSpinner from 'components/common/CustomSpinner';
 
 import { alx } from 'assets';
 
 const LoginPage: React.FC = () => {
-  const { mutate: login } = useLogin<{ email: string; password: string }>({
+  const { mutate: login, isLoading } = useLogin<{
+    email: string;
+    password: string;
+  }>({
     v3LegacyAuthProviderCompatible: true,
   });
 
@@ -104,6 +108,12 @@ const LoginPage: React.FC = () => {
           </Box>
         </Box>
       </Container>
+      <CustomSpinner
+        isLoading={isLoading}
+        color='#39914c'
+        size={40}
+        background='no'
+      />
     </Box>
   );
 };
