@@ -12,6 +12,8 @@ import ChangeProgramCohort from './ChangeProgramCohort';
 import ReGenerateQRCode from './ReGenerateQRCode';
 import BASE_API_URL from 'config';
 import StudentUpdateFormSkeleton from 'components/skeletons/StudentUpdateFormSkeleton';
+import ChangeProgramCohortSkeleton from '../skeletons/ChangeProgramCohortSkeleton';
+import ReGenerateQRCodeSkeleton from 'components/skeletons/ReGenerateQRCodeSkeleton';
 
 function StudentUpdateTabs() {
   const [value, setValue] = useState('basic-info');
@@ -141,7 +143,7 @@ function StudentUpdateTabs() {
                 student={student}
               />
             ) : (
-              <StudentUpdateFormSkeleton />
+              <ChangeProgramCohortSkeleton />
             )}
           </Box>
         </TabPanel>
@@ -150,7 +152,7 @@ function StudentUpdateTabs() {
             {student && cohorts.length > 0 && programs.length > 0 ? (
               <ReGenerateQRCode />
             ) : (
-              <StudentUpdateFormSkeleton />
+              <ReGenerateQRCodeSkeleton />
             )}
           </Box>
         </TabPanel>
