@@ -17,6 +17,7 @@ import CheckOutCircleOutlineIcon from '@mui/icons-material/HighlightOff';
 
 import AttendanceActionDialog from 'components/details/AttendanceActionDialog';
 import { useNotification, useNavigation } from '@refinedev/core';
+import CustomSpinner from 'components/common/CustomSpinner';
 
 import axios from 'axios';
 import BASE_API_URL from 'config';
@@ -34,6 +35,7 @@ export default function CustomDataTable({ rows }: any) {
   const [id, setId] = React.useState('');
   const [isAlumni, setIsAlumni] = React.useState(false);
   const [attendanceId, setAttendanceId] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const { open } = useNotification();
 
@@ -93,8 +95,10 @@ export default function CustomDataTable({ rows }: any) {
     // Check if the checkout action is from the same hub that checked in it.
     if (attendanceId) {
       try {
+        setIsLoading(true);
         const attendance = await api.get(`/attendances/${attendanceId}`);
         if (attendance.data && attendance.data?.hub.name !== user?.hub.name) {
+          setIsLoading(false);
           open?.({
             type: 'error',
             message: 'Error',
@@ -103,6 +107,7 @@ export default function CustomDataTable({ rows }: any) {
           return;
         }
       } catch (error: any) {
+        setIsLoading(false);
         open?.({
           type: 'error',
           message: 'Error',
@@ -114,6 +119,7 @@ export default function CustomDataTable({ rows }: any) {
     const hubId = user ? user?.hub.id : null;
 
     try {
+      setIsLoading(true);
       const data = !attendanceId
         ? await api.post('attendances/check-in', {
             studentId: id,
@@ -122,6 +128,7 @@ export default function CustomDataTable({ rows }: any) {
         : await api.patch(`attendances/${attendanceId}/check-out`, {
             studentId: id,
           });
+      setIsLoading(false);
       if (data.status === 201 || data.status === 200) {
         navigation.push(
           isAlumni ? `/guests/show?id=${id}` : `/learners/show?id=${id}`,
@@ -133,6 +140,7 @@ export default function CustomDataTable({ rows }: any) {
         });
       }
     } catch (error: any) {
+      setIsLoading(false);
       open?.({
         type: 'error',
         message: 'Error',
@@ -327,6 +335,12 @@ export default function CustomDataTable({ rows }: any) {
         open={isDialogOpen}
         onClose={handleCloseDialog}
         onAttendanceAction={handleAttendanceAction}
+      />
+      <CustomSpinner
+        isLoading={isLoading}
+        color='#174281'
+        size={40}
+        background='no'
       />
     </Box>
   );

@@ -11,6 +11,7 @@ import { useNotification } from '@refinedev/core';
 import BASE_API_URL from 'config';
 import ConfirmationDialog from 'components/common/ConfirmationDialog';
 import CustomDataTableSkeleton from 'components/skeletons/CustomDataTableSkeleton';
+import CustomSpinner from 'components/common/CustomSpinner';
 
 export const AllGuests = () => {
   const navigation = useNavigation();
@@ -22,6 +23,7 @@ export const AllGuests = () => {
 
   const [filteredData, setFilteredData] = useState<StudentData[]>([]);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { open } = useNotification();
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -39,7 +41,11 @@ export const AllGuests = () => {
       return;
     }
     try {
-      const { data } = await api.post('/attendances/check-out');
+      setIsLoading(true);
+      const { data } = await api.post('/attendances/check-out', {
+        hubId: hubId,
+      });
+      setIsLoading(false);
       navigation.replace('/dashboard');
       open?.({
         type: 'success',
@@ -47,6 +53,7 @@ export const AllGuests = () => {
         description: `${data.total} Student(s) Checked Out Successfully.`,
       });
     } catch (error: any) {
+      setIsLoading(false);
       open?.({
         type: 'error',
         message: 'Error',
@@ -126,6 +133,12 @@ export const AllGuests = () => {
         dialogDescription='Caution: Initiating this action will automatically check out all students who 
         neglected to check out using their QRCode. Please exercise extreme caution when executing this action, 
         as it cannot be undone. This operation should be performed with utmost care and consideration.'
+      />
+      <CustomSpinner
+        isLoading={isLoading}
+        color='#174281'
+        size={40}
+        background='no'
       />
     </Box>
   );
