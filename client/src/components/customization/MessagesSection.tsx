@@ -11,6 +11,7 @@ import { FormEvent, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNotification } from '@refinedev/core';
 import BASE_API_URL from 'config';
+import CustomSpinner from 'components/common/CustomSpinner';
 
 const style = {
   fontWeight: 800,
@@ -54,6 +55,7 @@ function MessagesSection({
   const [port, setPort] = useState(setting ? setting.port : '');
   const [createIsSucced, setCreateIsSucced] = useState(false);
   const [id, setId] = useState(setting ? setting.id : null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { open } = useNotification();
 
@@ -71,13 +73,16 @@ function MessagesSection({
     // Check if we have a setting object, if we do, we are updating, otherwise we are creating
     if (setting || id) {
       try {
+        setIsLoading(true);
         await baseApi.patch(`/settings/${setting ? setting.id : id}`, data);
+        setIsLoading(false);
         open?.({
           type: 'success',
           message: 'Success',
           description: 'Setting updated successfully',
         });
       } catch (error: any) {
+        setIsLoading(false);
         open?.({
           type: 'error',
           message: 'Error',
@@ -86,7 +91,9 @@ function MessagesSection({
       }
     } else {
       try {
+        setIsLoading(true);
         const response = await baseApi.post('/settings', data);
+        setIsLoading(false);
         setId(response.data.id);
         open?.({
           type: 'success',
@@ -95,6 +102,7 @@ function MessagesSection({
         });
         setCreateIsSucced(true);
       } catch (error: any) {
+        setIsLoading(false);
         open?.({
           type: 'error',
           message: 'Error',
@@ -274,6 +282,12 @@ function MessagesSection({
           ></CustomButton>
         </Box>
       </form>
+      <CustomSpinner
+        isLoading={isLoading}
+        color='#34eb9b'
+        size={40}
+        background='no'
+      />
     </Box>
   );
 }
