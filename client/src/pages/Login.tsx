@@ -66,7 +66,7 @@ const LoginPage: React.FC = () => {
           }}
         >
           <div>
-            <img src={alx} alt='Yariga Logo' />
+            <img src={alx} alt='ALX Logo' />
           </div>
           <Box mt={4}>
             <form onSubmit={handleSubmit}>
