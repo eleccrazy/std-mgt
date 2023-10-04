@@ -160,7 +160,7 @@ function ExcelDataUploadDialog({
   return isSubmitting ? (
     <CustomSpinner
       isLoading={isSubmitting}
-      color='#77f2b9'
+      color='#174281'
       size={40}
       background='no'
     />

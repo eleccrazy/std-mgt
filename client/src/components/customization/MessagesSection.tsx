@@ -284,7 +284,7 @@ function MessagesSection({
       </form>
       <CustomSpinner
         isLoading={isLoading}
-        color='#34eb9b'
+        color='#174281'
         size={40}
         background='no'
       />

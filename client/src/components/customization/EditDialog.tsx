@@ -127,7 +127,7 @@ function EditDialog({
       </Dialog>
       <CustomSpinner
         isLoading={isLoading}
-        color='#34cceb'
+        color='#174281'
         size={40}
         background='no'
       />

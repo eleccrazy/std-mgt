@@ -110,7 +110,7 @@ const LoginPage: React.FC = () => {
       </Container>
       <CustomSpinner
         isLoading={isLoading}
-        color='#39914c'
+        color='#174281'
         size={40}
         background='no'
       />
