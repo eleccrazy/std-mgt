@@ -17,6 +17,7 @@ import CustomButton from 'components/common/CustomButton';
 import axios from 'axios';
 import { useNotification, useNavigation } from '@refinedev/core';
 import BASE_API_URL from 'config';
+import CustomSpinner from 'components/common/CustomSpinner';
 
 type FormData = {
   firstName: string;
@@ -53,6 +54,7 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
     hubId: student && student.hub ? student.hub.id : '',
   });
   const [hubId, setHubId] = useState(student.hub ? student.hub.id : '');
+  const [isLoading, setIsLoading] = useState(false);
   const api = axios.create({
     baseURL: BASE_API_URL,
   });
@@ -83,9 +85,11 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
     }, {} as Partial<FormData>);
     // Make an api call to the server to update the student data.
     try {
+      setIsLoading(true);
       const response = await api.patch(`/students/${student?.id}`, {
         ...filteredFormData,
       });
+      setIsLoading(false);
       if (response.status === 200) {
         goBack();
       }
@@ -95,6 +99,7 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
         description: 'Successfully Updated',
       });
     } catch (error: any) {
+      setIsLoading(false);
       open?.({
         type: 'error',
         message: 'Error',
@@ -272,6 +277,12 @@ const StudentUpdateForm = ({ hubs, student }: StudentUpdateFormProps) => {
           </Box>
         </form>
       )}
+      <CustomSpinner
+        isLoading={isLoading}
+        color='#174281'
+        size={40}
+        background='no'
+      />
     </Box>
   );
 };

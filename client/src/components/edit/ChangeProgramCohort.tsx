@@ -21,6 +21,7 @@ import { useNotification, useNavigation } from '@refinedev/core';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import ConfirmationDialog from 'components/common/ConfirmationDialog';
 import BASE_API_URL from 'config';
+import CustomSpinner from 'components/common/CustomSpinner';
 
 interface ChangeProgramCohortProps {
   programs: string[];
@@ -46,6 +47,8 @@ function ChangeProgramCohort({
   const [cohortName, setCohortName] = useState('');
   const [isProgramCompleted, setIsProgramCompleted] = useState(false);
   const [isCohortCompleted, setIsCohortCompleted] = useState(false);
+  const [isChangingLoading, setIsChanginLoading] = useState(false);
+  const [isPromotingLoading, setIsPromotingLoading] = useState(false);
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -75,10 +78,13 @@ function ChangeProgramCohort({
 
   const handlePromote = async () => {
     setOpenDialog(false);
+
     try {
+      setIsPromotingLoading(true);
       const response = await api.patch(`/students/${student?.id}/promote`, {
         isAlumni: !student.isAlumni,
       });
+      setIsPromotingLoading(false);
       if (response.status === 200) {
         push(student.isAlumni ? '/learners' : '/guests');
       }
@@ -88,6 +94,7 @@ function ChangeProgramCohort({
         description: response.data.message,
       });
     } catch (error: any) {
+      setIsPromotingLoading(false);
       open?.({
         type: 'error',
         message: 'Error',
@@ -137,8 +144,10 @@ function ChangeProgramCohort({
       return acc;
     }, {} as Partial<FormData>);
     try {
+      setIsChanginLoading(true);
       const cohort = await api.get(`/cohorts/${cohortId}`);
       if (cohort.data.program.id !== programId) {
+        setIsChanginLoading(false);
         open?.({
           type: 'error',
           message: 'Error',
@@ -151,6 +160,7 @@ function ChangeProgramCohort({
             ...filteredFormData,
           },
         );
+        setIsChanginLoading(false);
         if (response.status === 200) {
           goBack();
         }
@@ -161,6 +171,7 @@ function ChangeProgramCohort({
         });
       }
     } catch (error: any) {
+      setIsChanginLoading(false);
       open?.({
         type: 'error',
         message: 'Error',
@@ -300,6 +311,12 @@ function ChangeProgramCohort({
           </Box>
         </CardContent>
       </Card>
+      <CustomSpinner
+        isLoading={isChangingLoading || isPromotingLoading}
+        color='#174281'
+        size={40}
+        background='no'
+      />
     </Box>
   );
 }

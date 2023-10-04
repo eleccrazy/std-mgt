@@ -47,7 +47,10 @@ const StudentAttendanceRate = ({ stats }: { stats: AttendanceStatsData }) => {
           )}
           <Stack>
             <Typography fontSize={14} fontWeight={600} color='#2B6EB2'>
-              {Math.abs(stats.percentageRate)}%
+              {stats.percentageRate !== 'Infinity'
+                ? Math.abs(parseInt(stats.percentageRate))
+                : 'Infinity'}
+              %
             </Typography>
             <Typography fontSize={14} fontWeight={600} color='#2B6EB2'>
               Since last weak
