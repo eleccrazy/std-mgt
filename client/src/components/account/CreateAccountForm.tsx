@@ -13,6 +13,8 @@ import CustomButton from 'components/common/CustomButton';
 import axios from 'axios';
 import { useNotification } from '@refinedev/core';
 import BASE_API_URL from 'config';
+import CustomSpinner from 'components/common/CustomSpinner';
+
 const baseApi = axios.create({
   baseURL: BASE_API_URL,
 });
@@ -45,6 +47,7 @@ const CreateAccountForm = ({
     hubId: '',
   });
   const { open } = useNotification();
+  const [isLoading, setIsLoading] = useState(false);
 
   // Handle form change events
   const handleChange = (e: any) => {
@@ -60,17 +63,20 @@ const CreateAccountForm = ({
     try {
       // Add a confirmPassword Field
       const data = { ...formData, confirmPassword: formData.password };
+      setIsLoading(true);
       // Handle account registration logic
       const admin = await baseApi.post('/admins/register', data);
+      setIsLoading(false);
+      closeDialog();
       // Update account list
       updateAccount(admin.data.admin);
-      closeDialog();
       open?.({
         type: 'success',
         message: 'Success',
         description: 'Account Created Succesfully',
       });
     } catch (error: any) {
+      setIsLoading(false);
       open?.({
         type: 'error',
         message: 'Error',
@@ -80,134 +86,142 @@ const CreateAccountForm = ({
   };
 
   return (
-    <Box borderRadius='25px' padding='20px' bgcolor='#ffffff'>
-      <form
-        style={{
-          marginTop: '20px',
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '20px',
-        }}
-        onSubmit={handleSubmit}
-      >
-        <div
+    <>
+      <Box borderRadius='25px' padding='20px' bgcolor='#ffffff'>
+        <form
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
+            marginTop: '20px',
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
             gap: '20px',
           }}
+          onSubmit={handleSubmit}
         >
-          <FormControl>
-            <FormHelperText sx={style}>
-              Email <span style={{ color: 'red' }}>*</span>
-            </FormHelperText>
-            <TextField
-              fullWidth
-              id='email'
-              color='info'
-              required
-              type='email'
-              variant='outlined'
-              name='email'
-              onChange={handleChange}
-            />
-          </FormControl>
-          <FormControl>
-            <FormHelperText sx={style}>
-              Password <span style={{ color: 'red' }}>*</span>
-            </FormHelperText>
-            <TextField
-              fullWidth
-              id='password'
-              color='info'
-              required
-              variant='outlined'
-              type='text'
-              name='password'
-              onChange={handleChange}
-            />
-          </FormControl>
-          <FormControl>
-            <FormHelperText sx={style}>First Name</FormHelperText>
-            <TextField
-              fullWidth
-              id='firstName'
-              color='info'
-              variant='outlined'
-              type='firstName'
-              name='firstName'
-              onChange={handleChange}
-            />
-          </FormControl>
-          <FormControl>
-            <FormHelperText sx={style}>Last Name</FormHelperText>
-            <TextField
-              fullWidth
-              id='lastName'
-              color='info'
-              type='text'
-              variant='outlined'
-              name='lastName'
-              onChange={handleChange}
-            />
-          </FormControl>
-          <FormControl sx={{ flex: 1 }}>
-            <FormHelperText style={style}>
-              Account Type <span style={{ color: 'red' }}>*</span>
-            </FormHelperText>
-            <Select
-              variant='outlined'
-              color='info'
-              displayEmpty
-              required
-              name='role'
-              defaultValue='admin'
-              inputProps={{ 'aria-label': 'Without label' }}
-              onChange={handleChange}
-            >
-              <MenuItem value='admin'>Admin</MenuItem>
-              <MenuItem value='attendant'>Attendant</MenuItem>
-            </Select>
-          </FormControl>
-          {formData.role === 'attendant' && (
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: '20px',
+            }}
+          >
+            <FormControl>
+              <FormHelperText sx={style}>
+                Email <span style={{ color: 'red' }}>*</span>
+              </FormHelperText>
+              <TextField
+                fullWidth
+                id='email'
+                color='info'
+                required
+                type='email'
+                variant='outlined'
+                name='email'
+                onChange={handleChange}
+              />
+            </FormControl>
+            <FormControl>
+              <FormHelperText sx={style}>
+                Password <span style={{ color: 'red' }}>*</span>
+              </FormHelperText>
+              <TextField
+                fullWidth
+                id='password'
+                color='info'
+                required
+                variant='outlined'
+                type='text'
+                name='password'
+                onChange={handleChange}
+              />
+            </FormControl>
+            <FormControl>
+              <FormHelperText sx={style}>First Name</FormHelperText>
+              <TextField
+                fullWidth
+                id='firstName'
+                color='info'
+                variant='outlined'
+                type='firstName'
+                name='firstName'
+                onChange={handleChange}
+              />
+            </FormControl>
+            <FormControl>
+              <FormHelperText sx={style}>Last Name</FormHelperText>
+              <TextField
+                fullWidth
+                id='lastName'
+                color='info'
+                type='text'
+                variant='outlined'
+                name='lastName'
+                onChange={handleChange}
+              />
+            </FormControl>
             <FormControl sx={{ flex: 1 }}>
               <FormHelperText style={style}>
-                Select Hub <span style={{ color: 'red' }}>*</span>
+                Account Type <span style={{ color: 'red' }}>*</span>
               </FormHelperText>
               <Select
                 variant='outlined'
                 color='info'
                 displayEmpty
                 required
-                defaultValue=''
-                name='hubId'
+                name='role'
+                defaultValue='admin'
                 inputProps={{ 'aria-label': 'Without label' }}
                 onChange={handleChange}
               >
-                <MenuItem value='' disabled>
-                  Select Here
-                </MenuItem>
-                {hubs.length > 0 &&
-                  hubs.map((hub: any, index) => (
-                    <MenuItem key={index} value={hub.id}>
-                      {hub.name}
-                    </MenuItem>
-                  ))}
+                <MenuItem value='admin'>Admin</MenuItem>
+                <MenuItem value='attendant'>Attendant</MenuItem>
               </Select>
             </FormControl>
-          )}
-        </div>
-        <Box style={{ textAlign: 'center' }} marginTop={6}>
-          <CustomButton
-            type='submit'
-            title={'Create Account'}
-            backgroundColor='#475be8'
-            color='#fcfcfc'
-          ></CustomButton>
-        </Box>
-      </form>
-    </Box>
+            {formData.role === 'attendant' && (
+              <FormControl sx={{ flex: 1 }}>
+                <FormHelperText style={style}>
+                  Select Hub <span style={{ color: 'red' }}>*</span>
+                </FormHelperText>
+                <Select
+                  variant='outlined'
+                  color='info'
+                  displayEmpty
+                  required
+                  defaultValue=''
+                  name='hubId'
+                  inputProps={{ 'aria-label': 'Without label' }}
+                  onChange={handleChange}
+                >
+                  <MenuItem value='' disabled>
+                    Select Here
+                  </MenuItem>
+                  {hubs.length > 0 &&
+                    hubs.map((hub: any, index) => (
+                      <MenuItem key={index} value={hub.id}>
+                        {hub.name}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
+            )}
+          </div>
+          <Box style={{ textAlign: 'center' }} marginTop={6}>
+            <CustomButton
+              type='submit'
+              title={'Create Account'}
+              backgroundColor='#475be8'
+              color='#fcfcfc'
+            ></CustomButton>
+          </Box>
+        </form>
+      </Box>
+      <CustomSpinner
+        isLoading={isLoading}
+        color='#34cceb'
+        size={40}
+        background='no'
+      />
+    </>
   );
 };
 

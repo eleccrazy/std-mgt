@@ -8,7 +8,6 @@ import { Box, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNotification } from '@refinedev/core';
-import { useNavigation } from '@refinedev/core';
 import CreateAccountForm from './CreateAccountForm';
 import BASE_API_URL from 'config';
 
@@ -30,9 +29,7 @@ function CreateAccountDialog({
 }: CreateAccountDialogProps) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const [name, setName] = useState('');
   const { open } = useNotification();
-  const { push, goBack } = useNavigation();
   const [hubs, setHubs] = useState<HubType[]>([]);
 
   useEffect(() => {
