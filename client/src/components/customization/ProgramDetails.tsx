@@ -13,6 +13,7 @@ import ConfirmationDialog from 'components/common/ConfirmationDialog';
 import BASE_API_URL from 'config';
 import { CohortType, ProgramType } from 'interfaces/common';
 import CohortCardSkeleton from 'components/skeletons/CohortCardSkeleton';
+import CustomSpinner from 'components/common/CustomSpinner';
 
 const baseApi = axios.create({
   baseURL: BASE_API_URL,
@@ -29,6 +30,7 @@ function ProgramDetails() {
   const [openDialog, setOpenDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = () => {
     setOpenDialog(true);
@@ -87,8 +89,10 @@ function ProgramDetails() {
 
   const handleDeleteClick = async () => {
     try {
-      await baseApi.delete(`/programs/${id}`);
       setOpenConfirmDialog(false);
+      setIsLoading(true);
+      await baseApi.delete(`/programs/${id}`);
+      setIsLoading(false);
       goBack();
       open?.({
         type: 'success',
@@ -96,6 +100,7 @@ function ProgramDetails() {
         description: 'Program Deleted Successfully',
       });
     } catch (error: any) {
+      setIsLoading(false);
       open?.({
         type: 'error',
         message: 'Error',
@@ -216,6 +221,12 @@ function ProgramDetails() {
         open={openConfirmDialog}
         handleClose={handleCloseConfirmDialog}
         handleConfirm={handleDeleteClick}
+      />
+      <CustomSpinner
+        isLoading={isLoading}
+        color='#34cceb'
+        size={40}
+        background='no'
       />
     </Box>
   );

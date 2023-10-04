@@ -9,9 +9,9 @@ import { useState } from 'react';
 import ConfirmationDialog from 'components/common/ConfirmationDialog';
 import { useNotification } from '@refinedev/core';
 import axios from 'axios';
-import { useNavigation } from '@refinedev/core';
 import { HubType } from 'interfaces/common';
 import BASE_API_URL from 'config';
+import CustomSpinner from 'components/common/CustomSpinner';
 
 interface HubCardProps {
   id: string;
@@ -33,6 +33,7 @@ const HubCard = ({
   const [openDialog, setOpenDialog] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const { open } = useNotification();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
@@ -52,8 +53,10 @@ const HubCard = ({
 
   const handleDeleteClick = async () => {
     try {
-      await baseApi.delete(`/hubs/${id}`);
       setOpenConfirmDialog(false);
+      setIsLoading(true);
+      await baseApi.delete(`/hubs/${id}`);
+      setIsLoading(false);
       open?.({
         type: 'success',
         message: 'Success',
@@ -61,6 +64,7 @@ const HubCard = ({
       });
       reduceHubs(id);
     } catch (error: any) {
+      setIsLoading(false);
       open?.({
         type: 'error',
         message: 'Error',
@@ -125,6 +129,12 @@ const HubCard = ({
         open={openConfirmDialog}
         handleClose={handleCloseConfirmDialog}
         handleConfirm={handleDeleteClick}
+      />
+      <CustomSpinner
+        isLoading={isLoading}
+        color='#34cceb'
+        size={40}
+        background='no'
       />
     </div>
   );

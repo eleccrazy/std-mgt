@@ -9,9 +9,9 @@ import { useState } from 'react';
 import ConfirmationDialog from 'components/common/ConfirmationDialog';
 import { useNotification } from '@refinedev/core';
 import axios from 'axios';
-import { useNavigation } from '@refinedev/core';
 import BASE_API_URL from 'config';
 import { CohortType } from 'interfaces/common';
+import CustomSpinner from 'components/common/CustomSpinner';
 
 interface CohortCardProps {
   id: string;
@@ -33,6 +33,7 @@ const CohortCard = ({
   const [openDialog, setOpenDialog] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const { open } = useNotification();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
@@ -52,8 +53,10 @@ const CohortCard = ({
 
   const handleDeleteClick = async () => {
     try {
-      await baseApi.delete(`/cohorts/${id}`);
       setOpenConfirmDialog(false);
+      setIsLoading(true);
+      await baseApi.delete(`/cohorts/${id}`);
+      setIsLoading(false);
       updateCohortsOnDelete(id);
       open?.({
         type: 'success',
@@ -61,6 +64,7 @@ const CohortCard = ({
         description: 'Cohort Deleted Successfully',
       });
     } catch (error: any) {
+      setIsLoading(false);
       open?.({
         type: 'error',
         message: 'Error',
@@ -127,6 +131,12 @@ const CohortCard = ({
         open={openConfirmDialog}
         handleClose={handleCloseConfirmDialog}
         handleConfirm={handleDeleteClick}
+      />
+      <CustomSpinner
+        isLoading={isLoading}
+        color='#34cceb'
+        size={40}
+        background='no'
       />
     </div>
   );

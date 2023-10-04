@@ -12,6 +12,7 @@ import { FormEvent } from 'react';
 import axios from 'axios';
 import { useNotification } from '@refinedev/core';
 import BASE_API_URL from 'config';
+import CustomSpinner from 'components/common/CustomSpinner';
 
 const style = {
   fontWeight: 800,
@@ -35,14 +36,18 @@ function EditHubDialog({
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [newName, setNewName] = useState('');
   const { open } = useNotification();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      handleClose();
+      setIsLoading(true);
       const finalName = newName === '' ? name : newName;
       const result = await baseApi.patch(`/hubs/${id}`, {
         name: finalName,
       });
+      setIsLoading(false);
       open?.({
         type: 'success',
         message: 'Success',
@@ -51,6 +56,7 @@ function EditHubDialog({
       // Refresh the page
       updateHubsOnUpdate(id, result.data);
     } catch (error: any) {
+      setIsLoading(false);
       open?.({
         type: 'error',
         message: 'Error',
@@ -60,54 +66,62 @@ function EditHubDialog({
   };
 
   return (
-    <Dialog
-      fullScreen={fullScreen}
-      open={isOpened}
-      onClose={handleClose}
-      aria-labelledby='responsive-dialog-title'
-    >
-      <DialogContent>
-        <form
-          style={{
-            width: '90%',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-          onSubmit={handleSubmit}
-        >
-          <FormControl>
-            <FormHelperText sx={style}>Hub Name: </FormHelperText>
-            <TextField
-              fullWidth
-              id='outlined-basic'
-              color='info'
-              required
-              type='text'
-              variant='outlined'
-              name='name'
-              defaultValue={name}
-              onChange={(e: any) => setNewName(e.target.value)}
-              InputProps={{
-                style: { color: '#11142d', background: '#c7e7ff' },
-              }}
-            />
-          </FormControl>
-          <Box style={{ textAlign: 'center' }} marginTop={6}>
-            <CustomButton
-              type='submit'
-              title={'Save Changes'}
-              backgroundColor='#2B6EB2'
-              color='#fcfcfc'
-            ></CustomButton>
-          </Box>
-        </form>
-      </DialogContent>
-      <DialogActions>
-        <Button autoFocus onClick={handleClose} sx={{ color: 'red' }}>
-          Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <>
+      <Dialog
+        fullScreen={fullScreen}
+        open={isOpened}
+        onClose={handleClose}
+        aria-labelledby='responsive-dialog-title'
+      >
+        <DialogContent>
+          <form
+            style={{
+              width: '90%',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+            onSubmit={handleSubmit}
+          >
+            <FormControl>
+              <FormHelperText sx={style}>Hub Name: </FormHelperText>
+              <TextField
+                fullWidth
+                id='outlined-basic'
+                color='info'
+                required
+                type='text'
+                variant='outlined'
+                name='name'
+                defaultValue={name}
+                onChange={(e: any) => setNewName(e.target.value)}
+                InputProps={{
+                  style: { color: '#11142d', background: '#c7e7ff' },
+                }}
+              />
+            </FormControl>
+            <Box style={{ textAlign: 'center' }} marginTop={6}>
+              <CustomButton
+                type='submit'
+                title={'Save Changes'}
+                backgroundColor='#2B6EB2'
+                color='#fcfcfc'
+              ></CustomButton>
+            </Box>
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleClose} sx={{ color: 'red' }}>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <CustomSpinner
+        isLoading={isLoading}
+        color='#34cceb'
+        size={40}
+        background='no'
+      />
+    </>
   );
 }
 
