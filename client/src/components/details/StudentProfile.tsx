@@ -5,6 +5,7 @@ import {
   CardContent,
   Typography,
   CardHeader,
+  Stack,
 } from '@mui/material';
 import CustomButton from 'components/common/CustomButton';
 import EditIcon from '@mui/icons-material/Edit';
@@ -17,6 +18,7 @@ import StudentData, { SettingData } from 'interfaces/student';
 import { useNavigation, useNotification } from '@refinedev/core';
 import BASE_API_URL from 'config';
 import StudentProfileSkeleton from 'components/skeletons/StudentProfileSkeleton';
+import ImageUploadComponent from './ImageUploadComponent';
 
 const api = axios.create({
   baseURL: BASE_API_URL,
@@ -30,7 +32,7 @@ const StudentInfoDisplay = ({
   value: string | undefined;
 }) => {
   return (
-    <Grid item xs={8}>
+    <Grid item xs={16}>
       <Typography fontSize={16}>
         <span
           style={{
@@ -129,57 +131,75 @@ const StudentProfile = ({ type }: { type: string }) => {
         }
       />
       <CardContent>
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid
-            container
-            spacing={2}
-            sx={{ display: 'flex', alignItems: 'center' }}
+        <Stack
+          mt='25px'
+          width='100%'
+          direction={{ xs: 'column', lg: 'row' }}
+          gap={2}
+        >
+          <Box sx={{ flexGrow: 1 }}>
+            <Grid
+              container
+              spacing={2}
+              sx={{ display: 'flex', alignItems: 'center' }}
+            >
+              <StudentInfoDisplay
+                title='First Name'
+                value={studentData?.firstName}
+              />
+              <StudentInfoDisplay
+                title='Last Name'
+                value={studentData?.lastName}
+              />
+              <StudentInfoDisplay title='Gender' value={studentData?.gender} />
+              <StudentInfoDisplay
+                title='Programme'
+                value={studentData?.program.name}
+              />
+              <StudentInfoDisplay
+                title='Cohort'
+                value={studentData?.cohort.name}
+              />
+              <StudentInfoDisplay
+                title='Preferred Hub'
+                value={
+                  studentData?.hub ? studentData.hub.name : 'Not Specified'
+                }
+              />
+              <StudentInfoDisplay
+                title='Email Address'
+                value={studentData?.email}
+              />
+              <StudentInfoDisplay
+                title='Mail Status'
+                value={
+                  studentData?.isEmailSent ? 'Delivered' : 'Not Delivered Yet'
+                }
+              />
+              <StudentInfoDisplay
+                title='Phone Number'
+                value={studentData?.phone}
+              />
+              <StudentInfoDisplay
+                title='Address Information'
+                value={
+                  studentData?.city && studentData?.area
+                    ? studentData.city + ', ' + studentData.area
+                    : 'Not Specified'
+                }
+              />
+            </Grid>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
-            <StudentInfoDisplay
-              title='First Name'
-              value={studentData?.firstName}
-            />
-            <StudentInfoDisplay
-              title='Last Name'
-              value={studentData?.lastName}
-            />
-            <StudentInfoDisplay title='Gender' value={studentData?.gender} />
-            <StudentInfoDisplay
-              title='Programme'
-              value={studentData?.program.name}
-            />
-            <StudentInfoDisplay
-              title='Cohort'
-              value={studentData?.cohort.name}
-            />
-            <StudentInfoDisplay
-              title='Preferred Hub'
-              value={studentData?.hub ? studentData.hub.name : 'Not Specified'}
-            />
-            <StudentInfoDisplay
-              title='Email Address'
-              value={studentData?.email}
-            />
-            <StudentInfoDisplay
-              title='Mail Status'
-              value={
-                studentData?.isEmailSent ? 'Delivered' : 'Not Delivered Yet'
-              }
-            />
-            <StudentInfoDisplay
-              title='Phone Number'
-              value={studentData?.phone}
-            />
-            <StudentInfoDisplay
-              title='Address Information'
-              value={
-                studentData?.city && studentData?.area
-                  ? studentData.city + ', ' + studentData.area
-                  : 'Not Specified'
-              }
-            />
-          </Grid>
-        </Box>
+            <ImageUploadComponent />
+          </Box>
+        </Stack>
       </CardContent>
       <CardActions>
         <CustomButton
